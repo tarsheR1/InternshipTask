@@ -1,10 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bQzzx0dSRns=",
+  "dgSpecHash": "eipYQC6j/pM=",
   "success": true,
-  "projectFilePath": "D:\\Учёба\\InternshipTask\\WebUI.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\matsk\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.21.0\\microsoft.visualstudio.azure.containers.tools.targets.1.21.0.nupkg.sha512"
-  ],
+  "projectFilePath": "D:\\Учёба\\InternshipTask\\InternshipTask.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }
