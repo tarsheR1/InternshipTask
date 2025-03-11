@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagementService", "Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketManagementService", "Microservices\TicketManagementService\TicketManagementService.csproj", "{FB0A29BF-FD28-42CB-B7A2-46FD681A13C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManagementService", "Microservices\WebApplication1\EventManagementService.csproj", "{E6BCF046-3921-45F6-92B5-96909CB21C95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManagementService", "Microservices\EventManagementService\EventManagementService.csproj", "{E6BCF046-3921-45F6-92B5-96909CB21C95}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService", "Microservices\NotificationService\NotificationService.csproj", "{1DB10050-E84D-4701-9B9C-18BE490231FD}"
 EndProject
