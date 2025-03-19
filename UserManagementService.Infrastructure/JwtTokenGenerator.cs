@@ -5,6 +5,10 @@ using System.Security.Claims;
 using System.Text;
 using UserManagementService.Core.Models;
 using UserManagementService.Infrastructure.Settings;
+<<<<<<< Updated upstream
+=======
+using 
+>>>>>>> Stashed changes
 
 namespace UserManagementService.Infrastructure
 {

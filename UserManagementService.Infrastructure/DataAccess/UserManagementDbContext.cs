@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+<<<<<<< Updated upstream
 using Microsoft.EntityFrameworkCore.Design;
 using UserManagementService.Domain.Models;
+=======
+using UserManagementService.Core.Models;
+>>>>>>> Stashed changes
 
 namespace UserManagementService.DataAccess
 {

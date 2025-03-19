@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Primitives;
 using System.Security.Claims;
 
-namespace EventManagementService.Presentation.Middlewares
+namespace EventManagementService.API.Middlewares
 {
     //TODO
     public class AuthMiddleware : IMiddleware

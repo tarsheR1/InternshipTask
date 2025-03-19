@@ -1,6 +1,11 @@
+<<<<<<< Updated upstream
 ﻿using System.Security.Claims;
 using System.Text;
 using UserManagementService.Application.Interfaces;
+=======
+﻿using UserManagementService.Application.Extensions;
+using UserManagementService.Core.Interfaces;
+>>>>>>> Stashed changes
 using UserManagementService.Core.Models;
 
 namespace UserManagementService.Application.Services
@@ -9,10 +14,23 @@ namespace UserManagementService.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenGenerator _tokenGenerator;
+<<<<<<< Updated upstream
 
         public AuthService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
+=======
+        private readonly IPasswordHasher _passwodHasher;
+
+        public AuthService(
+            IUserRepository userRepository, 
+            IPasswordHasher passwordHasher, 
+            IJwtTokenGenerator tokenGenerator)
+        {
+            _userRepository = userRepository;
+            _passwodHasher = passwordHasher;
+            _tokenGenerator = tokenGenerator;
+>>>>>>> Stashed changes
         }
 
         // PEREDELAT!!!!!!
@@ -28,11 +46,18 @@ namespace UserManagementService.Application.Services
             if (existingUser != null)
                 throw new ArgumentException("User with this email already exists");
 
+<<<<<<< Updated upstream
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
 
             var user = new User
             {
                 Id = Guid.NewGuid(),
+=======
+            var passwordHash = _passwodHasher.HashPassword(password);
+            User user = new User()
+            {
+                Id = Guid.NewGuid().NewCombGuid(),
+>>>>>>> Stashed changes
                 Email = email,
                 PasswordHash = passwordHash,
                 FirstName = firstName,
@@ -43,7 +68,11 @@ namespace UserManagementService.Application.Services
 
             await _userRepository.AddAsync(user);
 
+<<<<<<< Updated upstream
             return GenerateJwtToken(user);
+=======
+            return _tokenGenerator.GenerateToken(user);
+>>>>>>> Stashed changes
         }
 
         public async Task<string> LoginAsync(string email, string password)
@@ -55,6 +84,7 @@ namespace UserManagementService.Application.Services
             if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
                 throw new ArgumentException("Invalid password");
 
+<<<<<<< Updated upstream
             return GenerateJwtToken(user);
         }
 
@@ -80,6 +110,9 @@ namespace UserManagementService.Application.Services
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+=======
+            return _tokenGenerator.GenerateToken(user);
+>>>>>>> Stashed changes
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace EventManagementService.Presentation.Middlewares
+﻿namespace EventManagementService.API.Middlewares
 {
     public class ExceptionHandlingMiddleware 
     {

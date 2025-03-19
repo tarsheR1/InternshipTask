@@ -6,7 +6,7 @@ using EventManagementService.Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace EventManagementService.Presentation.Controllers
+namespace EventManagementService.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
