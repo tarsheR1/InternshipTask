@@ -1,0 +1,11 @@
+D:\Учёба\EventAggregatorProject\EventManagementService.Domain\bin\Debug\net8.0\EventManagementService.Domain.deps.json
+D:\Учёба\EventAggregatorProject\EventManagementService.Domain\bin\Debug\net8.0\EventManagementService.Domain.dll
+D:\Учёба\EventAggregatorProject\EventManagementService.Domain\bin\Debug\net8.0\EventManagementService.Domain.pdb
+D:\Учёба\EventAggregatorProject\EventManagementService.Domain\obj\Debug\net8.0\EventManagementService.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Учёба\EventAggregatorProject\EventManagementService.Domain\obj\Debug\net8.0\EventManagementService.Domain.AssemblyInfoInputs.cache
+D:\Учёба\EventAggregatorProject\EventManagementService.Domain\obj\Debug\net8.0\EventManagementService.Domain.AssemblyInfo.cs
+D:\Учёба\EventAggregatorProject\EventManagementService.Domain\obj\Debug\net8.0\EventManagementService.Domain.csproj.CoreCompileInputs.cache
+D:\Учёба\EventAggregatorProject\EventManagementService.Domain\obj\Debug\net8.0\EventManagementService.Domain.dll
+D:\Учёба\EventAggregatorProject\EventManagementService.Domain\obj\Debug\net8.0\refint\EventManagementService.Domain.dll
+D:\Учёба\EventAggregatorProject\EventManagementService.Domain\obj\Debug\net8.0\EventManagementService.Domain.pdb
+D:\Учёба\EventAggregatorProject\EventManagementService.Domain\obj\Debug\net8.0\ref\EventManagementService.Domain.dll

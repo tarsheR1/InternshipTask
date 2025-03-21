@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "D:\\\u0423\u0447\u0451\u0431\u0430\\EventAggregatorProject\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2B7A7FC2-DCDD-4AD8-93B8-95C611AB633A}|TicketManagementService.DataAccess\\TicketManagementService.DataAccess.csproj|d:\\\u0443\u0447\u0451\u0431\u0430\\eventaggregatorproject\\ticketmanagementservice.dataaccess\\ticketmanagementservice.dataaccess.csproj||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{2B7A7FC2-DCDD-4AD8-93B8-95C611AB633A}|TicketManagementService.DataAccess\\TicketManagementService.DataAccess.csproj|solutionrelative:ticketmanagementservice.dataaccess\\ticketmanagementservice.dataaccess.csproj||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\\u0423\u0447\u0451\u0431\u0430\\EventAggregatorProject\\TicketManagementService.DataAccess\\TicketManagementService.DataAccess.csproj||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:TicketManagementService.DataAccess\\TicketManagementService.DataAccess.csproj||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -29,16 +29,19 @@
               "Name": "ST:130:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "TicketManagementService.DataAccess",
+              "Title": "TicketManagementService.DataAccess.csproj",
               "DocumentMoniker": "D:\\\u0423\u0447\u0451\u0431\u0430\\EventAggregatorProject\\TicketManagementService.DataAccess\\TicketManagementService.DataAccess.csproj",
               "RelativeDocumentMoniker": "TicketManagementService.DataAccess\\TicketManagementService.DataAccess.csproj",
               "ToolTip": "D:\\\u0423\u0447\u0451\u0431\u0430\\EventAggregatorProject\\TicketManagementService.DataAccess\\TicketManagementService.DataAccess.csproj",
               "RelativeToolTip": "TicketManagementService.DataAccess\\TicketManagementService.DataAccess.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-03-21T15:22:15.82Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-21T15:22:15.82Z"
             },
             {
               "$type": "Bookmark",
