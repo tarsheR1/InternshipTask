@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "EventManagementService.Domain/1.0.0": {
+        "runtime": {
+          "EventManagementService.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "EventManagementService.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
