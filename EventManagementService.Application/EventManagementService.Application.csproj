@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
     <Folder Include="Exceptions\" />
   </ItemGroup>
 
@@ -16,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EventManagementMicroservice.Infrastructure\EventManagementMicroservice.Infrastructure.csproj" />
     <ProjectReference Include="..\EveventManagementService.Domain\EventManagementService.Domain.csproj" />
   </ItemGroup>
 

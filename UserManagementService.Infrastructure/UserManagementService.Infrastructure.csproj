@@ -18,9 +18,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UserManagementSerrvice.Core\UserManagementService.Core.csproj" />
-    <ProjectReference Include="..\UserManagementService.Appllication\UserManagementService.Appllication.csproj" />
+    <ProjectReference Include="..\UserManagementSerrvice.Core\UserManagementService.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\UserManagementService.Appllication\UserManagementService.BusinessLogicLayer.csproj" />
     <ProjectReference Include="..\UserManagementService.Core\UserManagementService.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DataAccess\" />
   </ItemGroup>
 
 </Project>
