@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\UserManagementLayer.BusinessLogicLayer\UserManagementLayer.BusinessLogicLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UserManagementLayer.BusinessLogicLayer\UserManagementLayer.BusinessLogicLayer.csproj" />
+    <Folder Include="DTO\Response\" />
+    <Folder Include="Middlewares\" />
   </ItemGroup>
 
 </Project>
