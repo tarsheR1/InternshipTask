@@ -1,7 +1,7 @@
-﻿using UserManagementService.BusinessLogicLayer.Models;
-using UserManagementService.BusinessLogicLayer.Models.Commands;
+﻿using UserManagementService.BusinessLogicLayer.Models.Commands;
+using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 
-namespace UserManagementService.BusinessLogicLayer.Services.Interfaces
+namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
 {
     public interface IUserService
     {

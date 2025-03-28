@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UserManagementService.DataAccessLayer.Entities
+namespace UserManagementService.BusinessLogicLayer.Models.Entities.Users
 {
     public class RefreshTokenEntity
     {

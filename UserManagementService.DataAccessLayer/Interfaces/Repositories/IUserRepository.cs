@@ -1,6 +1,6 @@
 ﻿using UserManagementService.DataAccessLayer.Entities;
 
-namespace UserManagementService.DataAccessLayer.Interfaces
+namespace UserManagementService.DataAccessLayer.Interfaces.Repositories
 {
     public interface IUserRepository
     {

@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagementService.Prese
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagementService.DataAccessLayer", "UserManagementService.DataAccessLayer\UserManagementService.DataAccessLayer.csproj", "{F1A2CF44-3030-499C-B5D8-753141D736C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagementLayer.BusinessLogicLayer", "UserManagementLayer.BusinessLogicLayer\UserManagementLayer.BusinessLogicLayer.csproj", "{CA5BCE78-322A-46CD-98A0-1BACFBC2814D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagementService.BusinessLogicLayer", "UserManagementLayer.BusinessLogicLayer\UserManagementService.BusinessLogicLayer.csproj", "{CA5BCE78-322A-46CD-98A0-1BACFBC2814D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketManagementService.API", "TicketManagementService.API\TicketManagementService.API.csproj", "{91E90AA3-8D00-4BD8-9D0D-AF9E5B1EE932}"
 EndProject

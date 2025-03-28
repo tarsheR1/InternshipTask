@@ -1,4 +1,4 @@
-﻿namespace UserManagementService.BusinessLogicLayer.Services.Interfaces
+﻿namespace UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure
 {
     public interface IPasswordHasher
     {

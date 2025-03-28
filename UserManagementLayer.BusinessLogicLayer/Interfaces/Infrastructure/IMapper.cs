@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UserManagementService.BusinessLogicLayer.Services.Interfaces
+namespace UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure
 {
     public interface IMapper
     {

@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UserManagementService.DataAccessLayer\UserManagementService.DataAccessLayer.csproj" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.7.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Queries\" />
+    <ProjectReference Include="..\UserManagementService.DataAccessLayer\UserManagementService.DataAccessLayer.csproj" />
   </ItemGroup>
 
 </Project>

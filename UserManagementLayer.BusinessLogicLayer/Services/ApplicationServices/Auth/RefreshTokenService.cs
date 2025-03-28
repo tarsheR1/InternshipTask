@@ -1,9 +1,9 @@
 ﻿using System.Security.Cryptography;
-using UserManagementService.BusinessLogicLayer.Services.Interfaces;
 using UserManagementService.DataAccessLayer.Entities;
-using UserManagementService.DataAccessLayer.Interfaces;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories;
+using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
 
-namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices
+namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {
     public class RefreshTokenService : IRefreshTokenService
     {
@@ -18,7 +18,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices
         public async Task<string> GenerateRefreshTokenAsync(Guid userId)
         {
             var tokenValue = GenerateSecureToken();
-
+            
             var token = new RefreshTokenEntity
             {
                 Token = tokenValue,

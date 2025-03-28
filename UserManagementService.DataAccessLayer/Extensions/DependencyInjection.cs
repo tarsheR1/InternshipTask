@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories;
+using UserManagementService.DataAccessLayer.Repositories;
 
 namespace UserManagementService.DataAccessLayer.Extensions
 {
-    class DependencyInjection
+    public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<UserRepository>(); 
+
+            return services;
+        }
     }
 }

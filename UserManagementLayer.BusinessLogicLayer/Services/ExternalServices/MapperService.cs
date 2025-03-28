@@ -1,5 +1,5 @@
 ﻿using Mapster;
-using UserManagementService.BusinessLogicLayer.Services.Interfaces;
+using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ExternalServices
 {

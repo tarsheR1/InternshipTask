@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UserManagementService.BusinessLogicLayer.Services.Interfaces;
 using UserManagementService.PresentationLayer.DTO.Request;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
+using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
+using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
+using UserManagementService.BusinessLogicLayer.Models.Responses;
+using System.Security;
 
 namespace UserManagementService.PresentationLayer.Controllers
 {
@@ -20,29 +23,106 @@ namespace UserManagementService.PresentationLayer.Controllers
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(
-            [FromBody] RegisterUserRequestDto request, 
+            [FromBody] RegisterUserRequestDto request,
             CancellationToken cancellationToken)
         {
-            var userRegistrationCommand = _mapper.Map<UserRegistrationCommand>(request);
-            var token = await _authService.RegisterAsync(userRegistrationCommand, cancellationToken);
-
-            return Ok(new { Token = token });  
-        }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequestDto request, CancellationToken cancellationToken)
-        {
-            var loginCommand = _mapper.Map<UserLoginCommand>(request);
-
             try
             {
-                var token = await _authService.LoginAsync(loginCommand, cancellationToken);
-                return Ok(new { Token = token });
+                var command = _mapper.Map<UserRegistrationCommand>(request);
+                var authResult = await _authService.RegisterAsync(command, cancellationToken);
+
+                var response = new AuthResponseDto
+                {
+                    AccessToken = authResult.AccessToken,
+                    RefreshToken = authResult.RefreshToken,
+                    ExpiresIn = (int)authResult.ExpiresAt.Subtract(DateTime.UtcNow).TotalSeconds
+                };
+
+                return Ok(response);
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new { ex.Message });
+                return BadRequest(new { Error = ex.Message });
             }
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(
+            [FromBody] LoginRequestDto request,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                var command = _mapper.Map<UserLoginCommand>(request);
+                var authResult = await _authService.LoginAsync(command, cancellationToken);
+
+                var response = new AuthResponseDto
+                {
+                    AccessToken = authResult.AccessToken,
+                    RefreshToken = authResult.RefreshToken,
+                    ExpiresIn = (int)authResult.ExpiresAt.Subtract(DateTime.UtcNow).TotalSeconds
+                };
+
+                return Ok(response);
+            }
+            catch (ArgumentException ex)
+            {
+                return Unauthorized(new { Error = ex.Message });
+            }
+        }
+
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken(
+            [FromBody] RefreshTokenRequestDto request,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                var authResult = await _authService.RefreshTokenAsync(request.RefreshToken, cancellationToken);
+
+                var response = new AuthResponseDto
+                {
+                    AccessToken = authResult.AccessToken,
+                    RefreshToken = authResult.RefreshToken,
+                    ExpiresIn = (int)authResult.ExpiresAt.Subtract(DateTime.UtcNow).TotalSeconds
+                };
+
+                return Ok(response);
+            }
+            catch (SecurityException ex)
+            {
+                return Unauthorized(new { Error = ex.Message });
+            }
+        }
+
+        [HttpPost("revoke-token")]
+        public async Task<IActionResult> RevokeToken(
+            [FromBody] RefreshTokenRequestDto request,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _authService.RevokeTokenAsync(request.RefreshToken, cancellationToken);
+                return NoContent();
+            }
+            catch (SecurityException ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
+    }
+
+    // DTO для запросов и ответов
+    public class RefreshTokenRequestDto
+    {
+        public string RefreshToken { get; set; }
+    }
+
+    public class AuthResponseDto
+    {
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
+        public int ExpiresIn { get; set; }
+        public string TokenType { get; } = "Bearer";
     }
 }

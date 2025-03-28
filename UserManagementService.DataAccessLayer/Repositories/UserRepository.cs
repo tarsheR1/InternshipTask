@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using UserManagementService.DataAccessLayer.Entities;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 using UserManagementService.DataAccessLayer.Persistence;
 
 namespace UserManagementService.DataAccessLayer.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly UserManagementDbContext _context;
 
@@ -13,7 +14,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task<UserEntity> GetByIdAsync(Guid userId)
+        public async Task<UserEntity> GetByIdAsync(Guid userId, CancellationToken cancellation)
         {
             return await _context.Users
                 .Include(u => u.UserRoles)
@@ -21,7 +22,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .FirstOrDefaultAsync(u => u.Id == userId);
         }
 
-        public async Task<UserEntity> GetByEmailAsync(string email)
+        public async Task<UserEntity> GetByEmailAsync(string email, CancellationToken cancellation)
         {
             return await _context.Users
                 .Include(u => u.UserRoles)
@@ -29,25 +30,25 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task AddAsync(UserEntity user)
+        public async Task AddAsync(UserEntity user, CancellationToken cancellation)
         {
-            await _context.Users.AddAsync(user);
+            await _context.Users.AddAsync(user, cancellation);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(UserEntity user)
+        public async Task UpdateAsync(UserEntity user, CancellationToken cancellation)
         {
             _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellation);
         }
 
-        public async Task DeleteAsync(UserEntity user)
+        public async Task DeleteAsync(UserEntity user, CancellationToken cancellation)
         {
             _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellation);
         }
 
-        public async Task<List<string>> GetUserRolesAsync(Guid userId)
+        public async Task<List<string>> GetUserRolesAsync(Guid userId, CancellationToken cancellation)
         {
             var user = await _context.Users
                 .Include(u => u.UserRoles)

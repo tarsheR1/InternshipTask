@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UserManagementService.BusinessLogicLayer.Services.Interfaces.Auth
+﻿namespace UserManagementService.BusinessLogicLayer.Interfaces.Auth
 {
     public interface IRefreshTokenService
     {
-        Task<string> GenerateRefreshTokenAsync(Guid userId);
-        Task<bool> ValidateRefreshTokenAsync(string token);
-        Task RevokeRefreshTokenAsync(string token);
+        Task<string> GenerateRefreshTokenAsync(Guid userId, CancellationToken cancellation);
+        Task<bool> ValidateRefreshTokenAsync(string token, CancellationToken cancellation);
+        Task RevokeRefreshTokenAsync(string token, CancellationToken cancellation);
     }
 }

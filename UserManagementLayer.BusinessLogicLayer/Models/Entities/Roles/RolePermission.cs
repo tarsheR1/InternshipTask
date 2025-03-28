@@ -1,4 +1,4 @@
-﻿namespace UserManagementService.BusinessLogicLayer.Models
+﻿namespace UserManagementService.BusinessLogicLayer.Models.Entities.Roles
 {
     public class RolePermission
     {

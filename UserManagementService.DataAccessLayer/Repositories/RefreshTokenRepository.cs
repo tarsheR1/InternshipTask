@@ -1,6 +1,6 @@
 ﻿using UserManagementService.DataAccessLayer.Persistence;
 using UserManagementService.DataAccessLayer.Entities;
-using UserManagementService.DataAccessLayer.Interfaces;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace UserManagementService.DataAccessLayer.Repositories
@@ -14,47 +14,47 @@ namespace UserManagementService.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task CreateAsync(RefreshTokenEntity token)
+        public async Task CreateAsync(RefreshTokenEntity token, CancellationToken cancellation)
         {
-            await _context.RefreshTokens.AddAsync(token);
+            await _context.RefreshTokens.AddAsync(token, cancellation);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<RefreshTokenEntity> GetByIdAsync(int id)
+        public async Task<RefreshTokenEntity> GetByIdAsync(Guid id, CancellationToken cancellation)
         {
             return await _context.RefreshTokens.FindAsync(id);
         }
 
-        public async Task<RefreshTokenEntity> GetByTokenAsync(string token)
+        public async Task<RefreshTokenEntity> GetByTokenAsync(string token, CancellationToken cancellation)
         {
             return await _context.RefreshTokens
                 .FirstOrDefaultAsync(x => x.Token == token);
         }
 
-        public async Task<IEnumerable<RefreshTokenEntity>> GetByUserIdAsync(Guid userId)
+        public async Task<IEnumerable<RefreshTokenEntity>> GetByUserIdAsync(Guid userId, CancellationToken cancellation)
         {
             return await _context.RefreshTokens
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
         }
 
-        public async Task UpdateAsync(RefreshTokenEntity token)
+        public async Task UpdateAsync(RefreshTokenEntity token, CancellationToken cancellation)
         {
             _context.RefreshTokens.Update(token);
             await _context.SaveChangesAsync();
         }
 
-        public async Task RevokeAsync(int id, DateTime revokedAt)
+        public async Task RevokeAsync(Guid id, DateTime revokedAt, CancellationToken cancellation)
         {
-            var token = await GetByIdAsync(id);
+            var token = await GetByIdAsync(id, cancellation);
             if (token != null)
             {
                 token.Revoked = revokedAt;
-                await UpdateAsync(token);
+                await UpdateAsync(token, cancellation);
             }
         }
 
-        public async Task<bool> ExistsActiveTokenAsync(Guid userId)
+        public async Task<bool> ExistsActiveTokenAsync(Guid userId, CancellationToken cancellation)
         {
             return await _context.RefreshTokens
                 .AnyAsync(x => x.UserId == userId &&
@@ -62,7 +62,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
                              x.Expires > DateTime.UtcNow);
         }
 
-        public async Task DeleteExpiredTokensAsync()
+        public async Task DeleteExpiredTokensAsync(CancellationToken cancellation)
         {
             var expiredTokens = _context.RefreshTokens
                 .Where(x => x.Expires < DateTime.UtcNow);

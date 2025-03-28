@@ -1,48 +1,53 @@
-﻿using UserManagementService.BusinessLogicLayer.Extensions;
-using UserManagementService.BusinessLogicLayer.Models;
+﻿using Microsoft.Extensions.Options;
+using System.Security;
+using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
+using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
-using UserManagementService.BusinessLogicLayer.Services.Interfaces;
-using UserManagementService.DataAccessLayer.Interfaces;
+using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
+using UserManagementService.BusinessLogicLayer.Models.Queries;
+using UserManagementService.BusinessLogicLayer.Models.Settings;
 using UserManagementService.DataAccessLayer.Entities;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 
-
-namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices
+namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {
     public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenGenerator _tokenGenerator;
-        private readonly IPasswordHasher _passwodHasher;
-        private readonly IMapper _mapper;
+        private readonly IPasswordHasher _passwordHasher;
         private readonly IRefreshTokenService _refreshTokenService;
-        private readonly TimeSpan _accessTokenLifetime = TimeSpan.FromMinutes(15);
+        private readonly IMapper _mapper;
+        private readonly JwtSettings _jwtSettings;
 
         public AuthService(
-            IRefreshTokenService refresh,
             IUserRepository userRepository,
             IJwtTokenGenerator tokenGenerator,
             IPasswordHasher passwordHasher,
+            IRefreshTokenService refreshTokenService,
+            IOptions<JwtSettings> jwtSettings,
             IMapper mapper)
         {
-            _refreshTokenService = refresh;
             _userRepository = userRepository;
-            _passwodHasher = passwordHasher;
             _tokenGenerator = tokenGenerator;
+            _passwordHasher = passwordHasher;
+            _refreshTokenService = refreshTokenService;
             _mapper = mapper;
+            _jwtSettings = jwtSettings.Value;
         }
-        
-        public async Task<string> RegisterAsync(UserRegistrationCommand request, CancellationToken cancellationToken)
+
+
+        public async Task<AuthResult> RegisterAsync(UserRegistrationCommand request, CancellationToken cancellation)
         {
-            var existingUser = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
+            var existingUser = await _userRepository.GetByEmailAsync(request.Email, cancellation);
             if (existingUser != null)
                 throw new ArgumentException("User with this email already exists");
 
-            var passwordHash = _passwodHasher.HashPassword(request.Password);
-            User user = new User()
+            var user = new User
             {
-                Id = Guid.NewGuid().NewCombGuid(),
+                Id = Guid.NewGuid(),
                 Email = request.Email,
-                PasswordHash = passwordHash,
+                PasswordHash = _passwordHasher.HashPassword(request.Password),
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 MiddleName = request.MiddleName,
@@ -50,22 +55,61 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices
             };
 
             var userEntity = _mapper.Map<UserEntity>(user);
-            await _userRepository.AddAsync(userEntity, cancellationToken);
+            await _userRepository.AddAsync(userEntity, cancellation);
 
-            return _tokenGenerator.GenerateToken(user);
+            var accessToken = _tokenGenerator.GenerateToken(user);
+            var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellation);
+
+            return new AuthResult(
+                accessToken, 
+                refreshToken,
+                DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes));
         }
 
-        public async Task<string> LoginAsync(UserLoginCommand loginRequest, CancellationToken cancellationToken)
-        {
-            var userEntity = await _userRepository.GetByEmailAsync(loginRequest.Email, cancellationToken);
-            if (userEntity == null)
-                throw new ArgumentException("User not found");
 
-            if (_passwodHasher.Verify(loginRequest.Password, userEntity.PasswordHash))
-                throw new ArgumentException("Invalid password");
+        public async Task<AuthResult> LoginAsync(UserLoginCommand request, CancellationToken cancellation)
+        {
+            var userEntity = await _userRepository.GetByEmailAsync(request.Email, cancellation);
+            if (userEntity == null || !_passwordHasher.Verify(request.Password, userEntity.PasswordHash))
+                throw new ArgumentException("Invalid email or password");
 
             var user = _mapper.Map<User>(userEntity);
-            return _tokenGenerator.GenerateToken(user);
+            var accessToken = _tokenGenerator.GenerateToken(user);
+            var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellation);
+
+            return new AuthResult(
+                accessToken,
+                refreshToken,
+                DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes));
+        }
+
+
+        public async Task<AuthResult> RefreshTokenAsync(
+            string refreshToken, 
+            Guid userId, 
+            CancellationToken cancellation)
+        {
+            if (!await _refreshTokenService.ValidateRefreshTokenAsync(refreshToken, cancellation))
+                throw new SecurityException("Invalid refresh token");
+
+            await _refreshTokenService.RevokeRefreshTokenAsync(refreshToken, cancellation);
+
+            var userEntity = await _userRepository.GetByIdAsync(userId, cancellation);
+            var user = _mapper.Map<User>(userEntity);
+
+            var newAccessToken = _tokenGenerator.GenerateToken(user);
+            var newRefreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellation);
+
+            return new AuthResult(
+                newAccessToken,
+                newRefreshToken,
+                DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes));
+        }
+
+
+        public async Task RevokeTokenAsync(string refreshToken, CancellationToken cancellation)
+        {
+            await _refreshTokenService.RevokeRefreshTokenAsync(refreshToken, cancellation);
         }
     }
 }

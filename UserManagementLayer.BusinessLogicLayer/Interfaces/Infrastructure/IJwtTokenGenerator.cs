@@ -1,6 +1,6 @@
-﻿using UserManagementService.BusinessLogicLayer.Models;
+﻿using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 
-namespace UserManagementService.BusinessLogicLayer.Services.Interfaces.Infrastructure
+namespace UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure
 {
     public interface IJwtTokenGenerator
     {

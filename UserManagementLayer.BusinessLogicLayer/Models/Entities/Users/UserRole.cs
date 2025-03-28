@@ -1,6 +1,6 @@
 ﻿using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 
-namespace UserManagementService.BusinessLogicLayer.Models
+namespace UserManagementService.BusinessLogicLayer.Models.Entities.Users
 {
     public class UserRole
     {
