@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UserManagementService.PresentationLayer.DTO.Request;
-using UserManagementService.BusinessLogicLayer.Services.Interfaces.Infrastructure;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UserManagementService.PresentationLayer.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Policy = "ModerateUsers")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

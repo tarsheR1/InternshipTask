@@ -12,8 +12,9 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddRepositories();
 
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+builder.Services.Configure<JwtSettings>(jwtSettings);
+    
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -28,6 +29,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ApproveEvent", policy =>
+        policy.RequireClaim("permission", "ApproveEvent"));
+
+    options.AddPolicy("ModerateEvents", policy =>
+        policy.RequireClaim("permission", "ModerateEvents"));
+
+    options.AddPolicy("BuyEventTicket", policy =>
+        policy.RequireClaim("permission", "BuyEventTicket"));
+
+    options.AddPolicy("ProposeEvent", policy =>
+        policy.RequireClaim("permission", "ProposeEvent"));
+
+    options.AddPolicy("ModerateUsers", policy =>
+        policy.RequireClaim("permission", "ModerateUsers"));
+    
+});
 
 var app = builder.Build();
 
