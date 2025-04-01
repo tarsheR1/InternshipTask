@@ -10,12 +10,12 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         private readonly IRefreshTokenRepository _tokenRepository;
         private readonly TimeSpan _tokenLifetime = TimeSpan.FromDays(30);
 
-        public RefreshTokenService(IRefreshTokenRepository tokenRepository)
+        public RefreshTokenService(IRefreshTokenRepository tokenRepository, CancellationToken cancellationToken)
         {
             _tokenRepository = tokenRepository;
         }
 
-        public async Task<string> GenerateRefreshTokenAsync(Guid userId)
+        public async Task<string> GenerateRefreshTokenAsync(Guid userId, CancellationToken cancellationToken)
         {
             var tokenValue = GenerateSecureToken();
             
@@ -27,26 +27,26 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 Expires = DateTime.UtcNow.Add(_tokenLifetime)
             };
 
-            await _tokenRepository.CreateAsync(token);
+            await _tokenRepository.CreateAsync(token, cancellationToken);
             return tokenValue;
         }
 
-        public async Task<bool> ValidateRefreshTokenAsync(string token)
+        public async Task<bool> ValidateRefreshTokenAsync(string token, CancellationToken cancellationToken)
         {
-            var storedToken = await _tokenRepository.GetByTokenAsync(token);
+            var storedToken = await _tokenRepository.GetByTokenAsync(token, cancellationToken);
 
             return storedToken != null &&
                    storedToken.Revoked == null &&
                    storedToken.Expires > DateTime.UtcNow;
         }
 
-        public async Task RevokeRefreshTokenAsync(string token)
+        public async Task RevokeRefreshTokenAsync(string token, CancellationToken cancellationToken)
         {
-            var storedToken = await _tokenRepository.GetByTokenAsync(token);
+            var storedToken = await _tokenRepository.GetByTokenAsync(token, cancellationToken);
             if (storedToken != null && storedToken.Revoked == null)
             {
                 storedToken.Revoked = DateTime.UtcNow;
-                await _tokenRepository.UpdateAsync(storedToken);
+                await _tokenRepository.UpdateAsync(storedToken, cancellationToken);
             }
         }
 

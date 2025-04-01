@@ -9,7 +9,7 @@ namespace UserManagementService.DataAccessLayer.Extensions
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-            services.AddScoped<UserRepository>(); 
+            services.AddScoped<IUserRepository, UserRepository>(); 
 
             return services;
         }

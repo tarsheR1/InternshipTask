@@ -5,9 +5,12 @@ namespace UserManagementService.BusinessLogicLayer.Interfaces.Auth
 {
     public interface IAuthService
     {
-        Task<string> RegisterAsync(UserRegistrationCommand registerRequest, CancellationToken cancellationToken);
-        Task<string> LoginAsync(UserLoginCommand loginRequest, CancellationToken cancellationToken);
-        Task RevokeTokenAsync(AuthResult authResult, CancellationToken cancellation);
-        Task<AuthResult> RefreshTokenAsync(AuthResult authResult, CancellationToken cancellation);
+        Task<AuthResult> RegisterAsync(UserRegistrationCommand registerRequest, CancellationToken cancellationToken);
+
+        Task<AuthResult> LoginAsync(UserLoginCommand loginRequest, CancellationToken cancellationToken);
+
+        Task RevokeTokenAsync(string refreshToken, CancellationToken cancellation);
+
+        Task<AuthResult> RefreshTokenAsync(string refreshToken, Guid userId, CancellationToken cancellation);
     }
 };

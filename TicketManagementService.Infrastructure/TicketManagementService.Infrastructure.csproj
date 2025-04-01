@@ -7,7 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EventManagementService.Domain\EventManagementService.Domain.csproj" />
+    <PackageReference Include="MongoDB.Driver" Version="3.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Persistance\DbContext\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TicketManagementService.Domain\TicketManagementService.Domain.csproj" />
   </ItemGroup>
 
 </Project>
