@@ -56,7 +56,6 @@ namespace UserManagementService.BusinessLogicLayer.Services.ExternalServices
                 }
             }
 
-
             return claims;
         }
 

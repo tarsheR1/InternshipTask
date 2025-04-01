@@ -46,7 +46,6 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("ModerateUsers", policy =>
         policy.RequireClaim("permission", "ModerateUsers"));
-    
 });
 
 var app = builder.Build();
