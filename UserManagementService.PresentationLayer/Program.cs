@@ -2,12 +2,15 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using UserManagementService.BusinessLogicLayer.Models.Settings;
+using UserManagementService.DataAccessLayer.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
+
+builder.Services.AddRepositories();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 

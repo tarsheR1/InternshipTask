@@ -46,10 +46,16 @@ namespace UserManagementService.BusinessLogicLayer.Services.ExternalServices
                 new Claim(ClaimTypes.Email, user.Email) 
             };
 
-            foreach (var role in user.UserRoles.Select(ur => ur.Role))
+            foreach (var userRole in user.UserRoles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role.Name));
+                claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+
+                foreach (var rolePermission in userRole.Role.RolePermissions)
+                {
+                    claims.Add(new Claim("permission", rolePermission.Permission.Name));
+                }
             }
+
 
             return claims;
         }
