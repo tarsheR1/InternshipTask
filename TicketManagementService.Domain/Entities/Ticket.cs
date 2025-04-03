@@ -1,64 +1,55 @@
-﻿using TicketManagementService.Domain.Common;
-using TicketManagementService.Domain.Enums;
+﻿using TicketManagementService.Domain.Enums;
+using TicketManagementService.Domain.Common;
+using TicketManagementService.Domain.Events;
 using TicketManagementService.Domain.Exceptions;
 
 namespace TicketManagementService.Domain.Entities
 {
-    public class Ticket : BaseEntity
+    public class Ticket : BaseEntity<Guid>
     {
-        public string EventId { get; }        
-        public string Type { get; }             
-        public string Code { get; }            
-
+        public Guid EventId { get; private set; }
+        public Guid UserId { get; private set; }
+        public string TicketType { get; private set; }
         public TicketStatus Status { get; private set; }
-        public string? OrderId { get; private set; } 
-        public string? UserId { get; private set; } 
+        public DateTime CreatedAt { get; private set; }
+        public DateTime? ExpiresAt { get; private set; }
 
-        public decimal Price { get; }
-        public DateTime CreatedAt { get; }
-        public DateTime? UpdatedAt { get; private set; }
+        private Ticket() { }
 
-        private Ticket() { } 
-
-        public Ticket(string eventId, string type, decimal price, string code)
+        public Ticket(
+            Guid eventId,
+            Guid userId,
+            string ticketType,
+            DateTime createdAt,
+            DateTime? expiresAt)
         {
+            Id = Guid.NewGuid();
             EventId = eventId;
-            Type = type;
-            Price = price;
-            Code = code;
-            Status = TicketStatus.Available;
-            CreatedAt = DateTime.UtcNow;
-        }
-
-        public void Reserve(string userId, string orderId)
-        {
-            if (Status != TicketStatus.Available)
-                throw new DomainException("Ticket is already reserved!");
-
-            Status = TicketStatus.Reserved;
             UserId = userId;
-            OrderId = orderId;
-            UpdatedAt = DateTime.UtcNow;
+            TicketType = ticketType;
+            Status = TicketStatus.Reserved;
+            CreatedAt = createdAt;
+            ExpiresAt = expiresAt;
+
+            AddDomainEvent(new TicketReservedEvent(Id, userId));
         }
 
-        public void ConfirmPurchase()
+        public void ConfirmPayment()
         {
             if (Status != TicketStatus.Reserved)
-                throw new DomainException("Only reserved ticket can be confirmed!");
+                throw new InvalidTicketStatusException(Status);
 
-            Status = TicketStatus.Sold;
-            UpdatedAt = DateTime.UtcNow;
+            Status = TicketStatus.Paid;
+            ExpiresAt = null; // Отменяем таймер резервации
         }
 
-        public void CancelReservation()
+        public void Cancel()
         {
-            if (Status != TicketStatus.Reserved)
-                throw new DomainException("Is not allowed to cancel no-reserved ticket!");
+            if (Status == TicketStatus.Cancelled)
+                throw new InvalidTicketStatusException(Status);
 
-            Status = TicketStatus.Available;
-            UserId = null;
-            OrderId = null;
-            UpdatedAt = DateTime.UtcNow;
+            Status = TicketStatus.Cancelled;
+            AddDomainEvent(new TicketCancelledEvent(Id, EventId, TicketType));
         }
     }
 }

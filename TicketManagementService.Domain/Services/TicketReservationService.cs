@@ -1,39 +1,47 @@
 ﻿using TicketManagementService.Domain.Entities;
-using TicketManagementService.Domain.Exceptions;
 using TicketManagementService.Domain.Interfaces.Repositories;
 
 namespace TicketManagementService.Domain.Services;
 
 public class TicketReservationService
 {
+    private readonly ITicketInventoryRepository _inventoryRepository;
     private readonly ITicketRepository _ticketRepository;
-    private readonly IEventCacheRepository _eventCacheRepository;
 
     public TicketReservationService(
-        ITicketRepository ticketRepository,
-        IEventCacheRepository eventCacheRepository)
+        ITicketInventoryRepository inventoryRepository,
+        ITicketRepository ticketRepository)
     {
+        _inventoryRepository = inventoryRepository;
         _ticketRepository = ticketRepository;
-        _eventCacheRepository = eventCacheRepository;
     }
 
-    public async Task<Order> ReserveTicketsAsync(
-        string userId,
-        string eventId,
-        int ticketCount)
+    public async Task<Ticket> ReserveTicketAsync(
+        Guid eventId,
+        Guid userId,
+        string ticketType,
+        int quantity,
+        CancellationToken cancellationToken)
     {
-        var @event = await _eventCacheRepository.GetByEventIdAsync(eventId);
-        if (@event == null)
-            throw new DomainException("Event do not exist");
+        var inventory = await _inventoryRepository.GetByEventAndTypeAsync(
+            eventId, 
+            ticketType, 
+            cancellationToken);
 
-        var availableTickets = await _ticketRepository.GetAvailableByEventIdAsync(eventId);
-        if (availableTickets.Count < ticketCount)
-            throw new DomainException("Not enough tickets");
+        if (inventory == null)
+            throw new ArgumentException("Wrong type of tickets.");
 
-        var ticketsToReserve = availableTickets.Take(ticketCount).ToList();
-        foreach (var ticket in ticketsToReserve)
-            ticket.Reserve(userId, Guid.NewGuid().ToString());
+        inventory.ReserveTickets(quantity);
+        await _inventoryRepository.UpdateInventoryAsync(inventory, cancellationToken);
 
-        return new Order(userId, ticketsToReserve);
+        var ticket = new Ticket(
+            eventId,
+            userId,
+            ticketType,
+            DateTime.UtcNow,
+            DateTime.UtcNow.AddMinutes(15));
+
+        await _ticketRepository.AddAsync(ticket, cancellationToken);
+        return ticket;
     }
 }
