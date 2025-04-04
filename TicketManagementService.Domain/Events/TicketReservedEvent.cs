@@ -6,7 +6,7 @@ namespace TicketManagementService.Domain.Events
     {
         public Guid TicketId { get; }
         public Guid UserId { get; }
-        public DateTime OccurredOn { get; } = DateTime.UtcNow;
+        public DateTime OccurredOn { get; } = DateTime.UtcNow;  
 
         public TicketReservedEvent(Guid ticketId, Guid userId)
         {

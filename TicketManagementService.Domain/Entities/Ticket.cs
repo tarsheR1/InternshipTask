@@ -40,7 +40,7 @@ namespace TicketManagementService.Domain.Entities
                 throw new InvalidTicketStatusException(Status);
 
             Status = TicketStatus.Paid;
-            ExpiresAt = null; // Отменяем таймер резервации
+            ExpiresAt = null; 
         }
 
         public void Cancel()

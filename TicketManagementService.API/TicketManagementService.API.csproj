@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EventManagementService.Application\EventManagementService.Application.csproj" />
-    <ProjectReference Include="..\EventManagementService.Infrastructure\EventManagementService.Infrastructure.csproj" />
+    <ProjectReference Include="..\TicketManagementService.Application\TicketManagementService.Application.csproj" />
+    <ProjectReference Include="..\TicketManagementService.Domain\TicketManagementService.Domain.csproj" />
   </ItemGroup>
 
 </Project>

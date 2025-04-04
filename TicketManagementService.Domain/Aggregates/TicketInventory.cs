@@ -1,14 +1,22 @@
-﻿using TicketManagementService.Domain.Exceptions;
+﻿using TicketManagementService.Domain.Common;
+using TicketManagementService.Domain.Events;
+using TicketManagementService.Domain.Exceptions;
 
 namespace TicketManagementService.Domain.Aggregates
 {
     public class TicketInventory 
     {
+        private readonly List<DomainEvent> _domainEvents = new();
+
         public Guid EventId { get; private set; }
         public string TicketType { get; private set; }
         public int TotalQuantity { get; private set; }
         public int AvailableQuantity { get; private set; }
         public int ReservedQuantity { get; private set; }
+
+        public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+        public void ClearDomainEvents() => _domainEvents.Clear();
+
 
         private TicketInventory() { }
 
@@ -21,13 +29,18 @@ namespace TicketManagementService.Domain.Aggregates
             ReservedQuantity = 0;
         }
 
-        public void ReserveTickets(int quantity)
+        public void ReserveTickets(int quantity, Guid userId)
         {
             if (AvailableQuantity < quantity)
                 throw new TicketsSoldOutException(TicketType);
 
             AvailableQuantity -= quantity;
             ReservedQuantity += quantity;
+
+            _domainEvents.Add(new TicketReservedEvent(
+                ticketId: Guid.NewGuid(), 
+                userId: userId
+            ));
         }
 
         public void ReleaseTickets(int quantity)
@@ -47,5 +60,11 @@ namespace TicketManagementService.Domain.Aggregates
             TotalQuantity = newTotal;
             AvailableQuantity = newTotal - ReservedQuantity;
         }
+
+        public void UpdateTicketType(string newTicketType)
+        {
+            TicketType = newTicketType;
+        }
+
     }
 }
