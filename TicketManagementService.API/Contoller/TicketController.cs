@@ -3,6 +3,7 @@ using MediatR;
 using TicketManagementService.Application.Commands;
 using TicketManagementService.Application.Queries;
 using Microsoft.AspNetCore.Authorization;
+using TicketManagementService.Domain.Aggregates;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -26,15 +27,8 @@ public class TicketsController : ControllerBase
     [HttpPost("reserve")]
     public async Task<IActionResult> ReserveTickets([FromBody] ReserveTicketsCommand command)
     {
-        try
-        {
             await _mediator.Send(command);
             return Ok();
-        }
-        catch (TicketsSoldOutException ex)
-        {
-            return Conflict(ex.Message);
-        }
     }
 
     [HttpPost("release")]

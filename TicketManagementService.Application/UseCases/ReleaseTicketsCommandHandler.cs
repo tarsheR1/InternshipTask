@@ -31,9 +31,9 @@ namespace TicketManagementService.Application.UseCases
 
             await _writeRepository.UpdateAsync(inventory);
 
-            foreach (var domainEvent in inventory.DomainEvents)
+            foreach (var ticketsCreated in inventory.DomainEvents)
             {
-                await _eventPublisher.Publish(domainEvent);
+                await _eventPublisher.Publish(ticketsCreated);
             }
 
             return Unit.Value;
