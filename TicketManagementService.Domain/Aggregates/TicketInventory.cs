@@ -31,7 +31,7 @@ namespace TicketManagementService.Domain.Aggregates
 
         public void ReserveTicket(Guid ticketId, Guid userId)
         {
-            if (AvailableQuantity < quantity)
+            if (AvailableQuantity <  1)
                 throw new InvalidTicketOperationException();
 
             AvailableQuantity++;
@@ -55,7 +55,7 @@ namespace TicketManagementService.Domain.Aggregates
         public void UpdateTotalQuantity(int newTotal)
         {
             if (newTotal < (TotalQuantity - AvailableQuantity))
-                throw new TicketsSoldOutException("");
+                throw new TicketsSoldOutException(TicketType, AvailableQuantity);
 
             TotalQuantity = newTotal;
             AvailableQuantity = newTotal - ReservedQuantity;
