@@ -2,7 +2,8 @@
 using TicketManagementService.Application.Commands;
 using TicketManagementService.Domain.Exceptions;
 using TicketManagementService.Domain.Interfaces;
-using TicketManagementService.Domain.Interfaces.Repositories;
+using TicketManagementService.Domain.Interfaces.Repositories.Read;
+using TicketManagementService.Domain.Interfaces.Repositories.Write;
 
 
 namespace TicketManagementService.Application.UseCases

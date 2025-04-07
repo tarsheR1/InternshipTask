@@ -1,10 +1,11 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+using TicketManagementService.Infrastructure.Settings;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.AddAu
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("ApproveEvent", policy =>
@@ -28,15 +29,15 @@ var app = builder.Build();
 
 var mongoDbSettings = builder.Configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
 
-// Регистрация MongoDB клиента
 builder.Services.AddSingleton<IMongoClient>(sp =>
     new MongoClient(mongoDbSettings.ConnectionString));
 
-// Регистрация базы данных
-builder.Services.AddScoped<IMongoDatabase>(sp =>
-    sp.GetRequiredService<IMongoClient>().GetDatabase(mongoDbSettings.DatabaseName));
-
-// Configure the HTTP request pipeline.
+builder.Services.AddScoped<IMongoDatabase>(serviceProvider =>
+{
+    var client = serviceProvider.GetRequiredService<IMongoClient>();
+    var settings = serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value;
+    return client.GetDatabase(settings.DatabaseName);
+});
 
 app.UseHttpsRedirection();
 

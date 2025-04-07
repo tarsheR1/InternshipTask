@@ -1,19 +1,20 @@
 ﻿using MediatR;
 using TicketManagementService.Application.Commands;
-using TicketManagementService.Domain.Interfaces.Repositories;
 using TicketManagementService.Domain.Interfaces;
+using TicketManagementService.Domain.Interfaces.Repositories.Read;
+using TicketManagementService.Domain.Interfaces.Repositories.Write;
 
 namespace TicketManagementService.Application.UseCases
 {
-    public class ReleaseTicketsCommandHandler : IRequestHandler<ReleaseTicketsCommand, Unit>
+    public class ReleaseTicketsCommandHandler : IRequestHandler<ReleaseTicketCommand, Unit>
     {
-        private readonly ITicketInventoryReadRepository _readRepository;
-        private readonly ITicketInventoryWriteRepository _writeRepository;
+        private readonly ITicketReadRepository _readRepository;
+        private readonly ITicketWriteRepository _writeRepository;
         private readonly IEventPublisher _eventPublisher;
 
         public ReleaseTicketsCommandHandler(
-            ITicketInventoryReadRepository readRepository,
-            ITicketInventoryWriteRepository writeRepository,
+            ITicketReadRepository readRepository,
+            ITicketWriteRepository writeRepository,
             IEventPublisher eventPublisher)
         {
             _readRepository = readRepository;
@@ -21,14 +22,16 @@ namespace TicketManagementService.Application.UseCases
             _eventPublisher = eventPublisher;
         }
 
-        public async Task<Unit> Handle(ReleaseTicketsCommand command, CancellationToken ct)
+        public async Task<Unit> Handle(ReleaseTicketCommand command, CancellationToken cancellationToken)
         {
-            var inventory = await _readRepository.GetAvailabilityAsync(command.EventId, command.TicketType);
-            if (inventory == null)
+            var ticketExists = await _readRepository.ExistsAsync(command.TicketId, cancellationToken);
+            if (ticketExists == false)
+            {
                 //throw new TicketInventoryNotFoundException(command.EventId, command.TicketType);
 
-            inventory.ReleaseTickets(command.Quantity);
+            }
 
+            _writeRepository.DeleteAsync(command.TicketId, cancellationToken);
             await _writeRepository.UpdateAsync(inventory);
 
             foreach (var ticketsCreated in inventory.DomainEvents)

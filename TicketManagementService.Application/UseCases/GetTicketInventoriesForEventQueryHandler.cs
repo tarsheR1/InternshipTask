@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using TicketManagementService.Application.Queries;
 using TicketManagementService.Domain.Aggregates;
-using TicketManagementService.Domain.Interfaces.Repositories;
+using TicketManagementService.Domain.Interfaces.Repositories.Read;
 
 namespace TicketManagementService.Application.UseCases
 {

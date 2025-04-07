@@ -2,9 +2,7 @@
 
 namespace TicketManagementService.Application.Commands
 {
-    public record ReleaseTicketsCommand(
-    Guid EventId,
-    string TicketType,
-    int Quantity
+    public record ReleaseTicketCommand(
+    Guid TicketId
     ) : IRequest<Unit>;
 }

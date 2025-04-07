@@ -2,11 +2,11 @@
 {
     public class TicketsSoldOutException : DomainException
     {
-        public TicketsSoldOutException(string ticketType)
+        public TicketsSoldOutException(string ticketType, int quantity)
             : base(
                 code: "tickets.sold_out",
-                message: $"Билеты типа '{ticketType}' распроданы",
-                details: $"Попробуйте выбрать другой тип билета или мероприятие")
+                message: $"Билетов типа '{ticketType}' недостаточно",
+                details: $"Измените количесвто или выберите другой тип билетов")
         {
         }
     }

@@ -1,8 +1,9 @@
-﻿using TicketManagementService.Domain.Interfaces.Repositories;
-using TicketManagementService.Domain.Interfaces;
+﻿using TicketManagementService.Domain.Interfaces;
 using TicketManagementService.Application.Commands;
 using MediatR;
 using System.Runtime.Intrinsics.Arm;
+using TicketManagementService.Domain.Interfaces.Repositories.Read;
+using TicketManagementService.Domain.Interfaces.Repositories.Write;
 
 namespace TicketManagementService.Application.UseCases
 {

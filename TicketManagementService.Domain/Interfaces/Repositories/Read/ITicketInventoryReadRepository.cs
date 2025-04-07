@@ -1,6 +1,6 @@
 ﻿using TicketManagementService.Domain.Aggregates;
 
-namespace TicketManagementService.Domain.Interfaces.Repositories
+namespace TicketManagementService.Domain.Interfaces.Repositories.Read
 {
     public interface ITicketInventoryReadRepository
     {

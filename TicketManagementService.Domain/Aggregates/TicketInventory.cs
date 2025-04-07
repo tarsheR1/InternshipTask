@@ -29,13 +29,13 @@ namespace TicketManagementService.Domain.Aggregates
             ReservedQuantity = 0;
         }
 
-        public void ReserveTickets(int quantity, Guid userId)
+        public void ReserveTicket(Guid ticketId, Guid userId)
         {
             if (AvailableQuantity < quantity)
-                throw new TicketsSoldOutException(TicketType);
+                throw new InvalidTicketOperationException();
 
-            AvailableQuantity -= quantity;
-            ReservedQuantity += quantity;
+            AvailableQuantity++;
+            ReservedQuantity--;
 
             _domainEvents.Add(new TicketReservedEvent(
                 ticketId: Guid.NewGuid(), 
