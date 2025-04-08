@@ -1,8 +1,8 @@
 ﻿namespace UserManagementService.PresentationLayer.DTO.Response
 {
-    public record AuthResponse(
+    public record AuthResponseDto(
     string AccessToken,
     string RefreshToken,
-    int ExpiresInSeconds,
+    int ExpiresInMinutes,
     string TokenType = "Bearer");
 }

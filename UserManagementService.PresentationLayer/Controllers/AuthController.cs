@@ -3,8 +3,9 @@ using UserManagementService.PresentationLayer.DTO.Request;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
-using UserManagementService.BusinessLogicLayer.Models.Responses;
 using System.Security;
+using UserManagementService.PresentationLayer.DTO.Response;
+using UserManagementService.BusinessLogicLayer.Models.Queries;
 
 namespace UserManagementService.PresentationLayer.Controllers
 {
@@ -21,7 +22,7 @@ namespace UserManagementService.PresentationLayer.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("register")]
+        [HttpPost("registrations")]
         public async Task<IActionResult> Register(
             [FromBody] RegisterUserRequestDto request,
             CancellationToken cancellationToken)
@@ -29,14 +30,13 @@ namespace UserManagementService.PresentationLayer.Controllers
             try
             {
                 var command = _mapper.Map<UserRegistrationCommand>(request);
-                var authResult = await _authService.RegisterAsync(command, cancellationToken);
+                AuthResult authResult = await _authService.RegisterAsync(command, cancellationToken);
 
-                var response = new AuthResponseDto
-                {
-                    AccessToken = authResult.AccessToken,
-                    RefreshToken = authResult.RefreshToken,
-                    ExpiresIn = (int)authResult.ExpiresAt.Subtract(DateTime.UtcNow).TotalSeconds
-                };
+                var response = new AuthResponseDto(
+                    AccessToken: authResult.AccessToken,
+                    RefreshToken: authResult.RefreshToken,
+                    ExpiresInMinutes: (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalMinutes
+                );
 
                 return Ok(response);
             }
@@ -46,7 +46,7 @@ namespace UserManagementService.PresentationLayer.Controllers
             }
         }
 
-        [HttpPost("login")]
+        [HttpPost("sessions")]
         public async Task<IActionResult> Login(
             [FromBody] LoginRequestDto request,
             CancellationToken cancellationToken)
@@ -56,12 +56,11 @@ namespace UserManagementService.PresentationLayer.Controllers
                 var command = _mapper.Map<UserLoginCommand>(request);
                 var authResult = await _authService.LoginAsync(command, cancellationToken);
 
-                var response = new AuthResponseDto
-                {
-                    AccessToken = authResult.AccessToken,
-                    RefreshToken = authResult.RefreshToken,
-                    ExpiresIn = (int)authResult.ExpiresAt.Subtract(DateTime.UtcNow).TotalSeconds
-                };
+                var response = new AuthResponseDto(
+                    AccessToken: authResult.AccessToken,
+                    RefreshToken: authResult.RefreshToken,
+                    ExpiresInMinutes: (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalMinutes
+                );
 
                 return Ok(response);
             }
@@ -71,21 +70,21 @@ namespace UserManagementService.PresentationLayer.Controllers
             }
         }
 
-        [HttpPost("refresh-token")]
+        [HttpPost("tokens/refresh")]
         public async Task<IActionResult> RefreshToken(
             [FromBody] RefreshTokenRequestDto request,
             CancellationToken cancellationToken)
         {
             try
             {
-                var authResult = await _authService.RefreshTokenAsync(request.RefreshToken, cancellationToken);
+                
+                var authResult = await _authService.RefreshTokenAsync(request.RefreshToken, request.userId, cancellationToken);
 
-                var response = new AuthResponseDto
-                {
-                    AccessToken = authResult.AccessToken,
-                    RefreshToken = authResult.RefreshToken,
-                    ExpiresIn = (int)authResult.ExpiresAt.Subtract(DateTime.UtcNow).TotalSeconds
-                };
+                var response = new AuthResponseDto(
+                    AccessToken: authResult.AccessToken,
+                    RefreshToken: authResult.RefreshToken,
+                    ExpiresInMinutes: (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalMinutes
+                );
 
                 return Ok(response);
             }
@@ -95,7 +94,7 @@ namespace UserManagementService.PresentationLayer.Controllers
             }
         }
 
-        [HttpPost("revoke-token")]
+        [HttpPost("tokens/revoked")]
         public async Task<IActionResult> RevokeToken(
             [FromBody] RefreshTokenRequestDto request,
             CancellationToken cancellationToken)
@@ -110,19 +109,5 @@ namespace UserManagementService.PresentationLayer.Controllers
                 return BadRequest(new { Error = ex.Message });
             }
         }
-    }
-
-    // DTO для запросов и ответов
-    public class RefreshTokenRequestDto
-    {
-        public string RefreshToken { get; set; }
-    }
-
-    public class AuthResponseDto
-    {
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
-        public int ExpiresIn { get; set; }
-        public string TokenType { get; } = "Bearer";
     }
 }
