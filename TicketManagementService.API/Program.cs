@@ -8,20 +8,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("ApproveEvent", policy =>
-        policy.RequireClaim("permission", "ApproveEvent"));
+    options.AddPolicy("BuyTicket", policy =>
+        policy.RequireClaim("permission", "BuyTicket"));
 
-    options.AddPolicy("ModerateEvents", policy =>
+    options.AddPolicy("ManageTickets", policy =>
         policy.RequireClaim("permission", "ModerateEvents"));
-
-    options.AddPolicy("BuyEventTicket", policy =>
-        policy.RequireClaim("permission", "BuyEventTicket"));
-
-    options.AddPolicy("ProposeEvent", policy =>
-        policy.RequireClaim("permission", "ProposeEvent"));
-
-    options.AddPolicy("ModerateUsers", policy =>
-        policy.RequireClaim("permission", "ModerateUsers"));
 });
 
 
