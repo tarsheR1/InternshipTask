@@ -24,15 +24,15 @@ public class TicketsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("reserve")]
+    [HttpPost("tickets/reservations")]
     public async Task<IActionResult> ReserveTickets([FromBody] ReserveTicketsCommand command)
     {
-            await _mediator.Send(command);
-            return Ok();
+        await _mediator.Send(command);
+        return Ok();
     }
 
-    [HttpPost("release")]
-    public async Task<IActionResult> ReleaseTickets([FromBody] ReleaseTicketsCommand command)
+    [HttpDelete("tickets/reservations/{reservationId}")]
+    public async Task<IActionResult> ReleaseTickets([FromBody] ReleaseTicketCommand command)
     {
         await _mediator.Send(command);
         return Ok();

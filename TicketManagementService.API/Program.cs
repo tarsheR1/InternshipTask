@@ -1,17 +1,40 @@
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using MongoDB.Driver;
 using TicketManagementService.Infrastructure.Settings;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using TicketManagementService.Infrastructure.Extensions;
+using TicketManagementService.Application.UseCases;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+// Database
+var mongoDbSettings = builder.Configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
+
+builder.Services.AddScoped<IMongoClient>(sp =>
+    new MongoClient(mongoDbSettings.ConnectionString));
+
+builder.Services.AddScoped<IMongoDatabase>(serviceProvider =>
+{
+    var client = serviceProvider.GetRequiredService<IMongoClient>();
+    var settings = serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value;
+    return client.GetDatabase(settings.DatabaseName);
+});
+
+
+builder.Services.AddRepositories();
+
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(ReserveTicketsCommandHandler).Assembly));
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 builder.Services.Configure<JwtSettings>(jwtSettings);
 
-builder.Services.AddAuthentication(JwtBearer.AuthenticationScheme)
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -39,17 +62,6 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
-var mongoDbSettings = builder.Configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
-
-builder.Services.AddSingleton<IMongoClient>(sp =>
-    new MongoClient(mongoDbSettings.ConnectionString));
-
-builder.Services.AddScoped<IMongoDatabase>(serviceProvider =>
-{
-    var client = serviceProvider.GetRequiredService<IMongoClient>();
-    var settings = serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-    return client.GetDatabase(settings.DatabaseName);
-});
 
 app.UseHttpsRedirection();
 
