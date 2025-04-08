@@ -30,7 +30,7 @@ namespace TicketManagementService.Application.UseCases
             if (inventory == null)
                 //Прописать Exception
             // throw new DomainException()
-            inventory.ReserveTickets(command.Quantity, command.UserId);
+            inventory.ReserveTicket(Guid.NewGuid(), command.UserId);
             await _writeRepository.UpdateAsync(inventory);
 
             foreach (var domainEvent in inventory.DomainEvents)
