@@ -32,12 +32,8 @@ namespace TicketManagementService.Application.UseCases
             }
 
             _writeRepository.DeleteAsync(command.TicketId, cancellationToken);
-            await _writeRepository.UpdateAsync(inventory);
 
-            foreach (var ticketsCreated in inventory.DomainEvents)
-            {
-                await _eventPublisher.Publish(ticketsCreated);
-            }
+            // RETURN TICKET
 
             return Unit.Value;
         }
