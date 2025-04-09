@@ -12,7 +12,7 @@ namespace UserManagementService.DataAccessLayer.Persistence
         public DbSet<RolePermissionEntity> RolePermissions { get; set; }
         public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
 
-        UserManagementDbContext(DbContextOptions<UserManagementDbContext> contextOptions) : base(contextOptions)
+        public UserManagementDbContext(DbContextOptions<UserManagementDbContext> contextOptions) : base(contextOptions)
         {
 
         }
