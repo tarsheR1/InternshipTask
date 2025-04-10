@@ -3,9 +3,7 @@ using UserManagementService.PresentationLayer.DTO.Request;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
-using System.Security;
 using UserManagementService.PresentationLayer.DTO.Response;
-using UserManagementService.BusinessLogicLayer.Models.Queries;
 
 namespace UserManagementService.PresentationLayer.Controllers
 {
@@ -27,23 +25,15 @@ namespace UserManagementService.PresentationLayer.Controllers
             [FromBody] RegisterUserRequestDto request,
             CancellationToken cancellationToken)
         {
-            try
-            {
-                var command = _mapper.Map<UserRegistrationCommand>(request);
-                AuthResult authResult = await _authService.RegisterAsync(command, cancellationToken);
+            var command = _mapper.Map<UserRegistrationCommand>(request);
 
-                var response = new AuthResponseDto(
-                    AccessToken: authResult.AccessToken,
-                    RefreshToken: authResult.RefreshToken,
-                    ExpiresInMinutes: (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalMinutes
-                );
+            var authResult = await _authService.RegisterAsync(command, cancellationToken);
 
-                return Ok(response);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { Error = ex.Message });
-            }
+            var response = new AuthResponseDto(
+                AccessToken: authResult.AccessToken,
+                RefreshToken: authResult.RefreshToken);
+
+            return Ok(response);
         }
 
         [HttpPost("sessions")]
@@ -51,23 +41,15 @@ namespace UserManagementService.PresentationLayer.Controllers
             [FromBody] LoginRequestDto request,
             CancellationToken cancellationToken)
         {
-            try
-            {
-                var command = _mapper.Map<UserLoginCommand>(request);
-                var authResult = await _authService.LoginAsync(command, cancellationToken);
+            var command = _mapper.Map<UserLoginCommand>(request);
 
-                var response = new AuthResponseDto(
-                    AccessToken: authResult.AccessToken,
-                    RefreshToken: authResult.RefreshToken,
-                    ExpiresInMinutes: (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalMinutes
-                );
+            var authResult = await _authService.LoginAsync(command, cancellationToken);
 
-                return Ok(response);
-            }
-            catch (ArgumentException ex)
-            {
-                return Unauthorized(new { Error = ex.Message });
-            }
+            var response = new AuthResponseDto(
+                AccessToken: authResult.AccessToken,
+                RefreshToken: authResult.RefreshToken);
+
+            return Ok(response);  
         }
 
         [HttpPost("tokens/refresh")]
@@ -75,23 +57,13 @@ namespace UserManagementService.PresentationLayer.Controllers
             [FromBody] RefreshTokenRequestDto request,
             CancellationToken cancellationToken)
         {
-            try
-            {
-                
-                var authResult = await _authService.RefreshTokenAsync(request.RefreshToken, request.userId, cancellationToken);
+            var authResult = await _authService.RefreshTokenAsync(request.RefreshToken, request.userId, cancellationToken);
 
-                var response = new AuthResponseDto(
-                    AccessToken: authResult.AccessToken,
-                    RefreshToken: authResult.RefreshToken,
-                    ExpiresInMinutes: (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalMinutes
-                );
+            var response = new AuthResponseDto(
+                AccessToken: authResult.AccessToken,
+                RefreshToken: authResult.RefreshToken);
 
-                return Ok(response);
-            }
-            catch (SecurityException ex)
-            {
-                return Unauthorized(new { Error = ex.Message });
-            }
+            return Ok(response);
         }
 
         [HttpPost("tokens/revoked")]
@@ -99,15 +71,9 @@ namespace UserManagementService.PresentationLayer.Controllers
             [FromBody] RefreshTokenRequestDto request,
             CancellationToken cancellationToken)
         {
-            try
-            {
-                await _authService.RevokeTokenAsync(request.RefreshToken, cancellationToken);
-                return NoContent();
-            }
-            catch (SecurityException ex)
-            {
-                return BadRequest(new { Error = ex.Message });
-            }
+            await _authService.RevokeTokenAsync(request.RefreshToken, cancellationToken);
+
+            return NoContent();
         }
     }
 }

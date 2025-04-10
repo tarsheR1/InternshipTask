@@ -4,6 +4,7 @@ using System.Text;
 using UserManagementService.BusinessLogicLayer.Models.Settings;
 using UserManagementService.BusinessLogicLayer.Extensions;
 using UserManagementService.DataAccessLayer.Extensions;
+using UserManagementService.PresentationLayer.Middlewares;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -64,7 +65,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(builder => 
+builder.AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod());
+
 app.UseRouting();
+
+app.UseGlobalErrorHandling();
+
 app.UseAuthentication();
 app.UseAuthorization();
 

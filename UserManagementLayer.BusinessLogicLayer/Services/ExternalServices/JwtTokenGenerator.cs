@@ -18,10 +18,10 @@ namespace UserManagementService.BusinessLogicLayer.Services.ExternalServices
             _jwtSettings = jwtSettings?.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
 
                 if (string.IsNullOrWhiteSpace(_jwtSettings.Secret))
-                throw new ArgumentException("JWT Secret is not configured");
+                throw new ArgumentException("JWT не настроен");
 
             if (_jwtSettings.ExpiryMinutes <= 0)
-                throw new ArgumentException("JWT ExpiryMinutes must be positive");
+                throw new ArgumentException("JWT ExpiryMinutes должен быть положительным");
         }
 
         public string GenerateToken(User user)

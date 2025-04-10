@@ -25,10 +25,6 @@ namespace UserManagementService.PresentationLayer.Controllers
         public async Task<IActionResult> GetUserById(Guid userId, CancellationToken cancellationToken)
         {   
             var user = await _userService.GetUserByIdAsync(userId, cancellationToken);
-            if (user == null)
-            {
-                return NotFound("User not found.");
-            }
 
             return Ok(user);            
         }

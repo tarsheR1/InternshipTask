@@ -2,6 +2,7 @@
 using UserManagementService.DataAccessLayer.Entities;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
+using UserManagementService.BusinessLogicLayer.Exceptions.Token;    
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {
@@ -18,7 +19,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         public async Task<string> GenerateRefreshTokenAsync(Guid userId, CancellationToken cancellationToken)
         {
             var tokenValue = GenerateSecureToken();
-            
+
             var token = new RefreshTokenEntity
             {
                 Token = tokenValue,
@@ -33,8 +34,10 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         public async Task<bool> ValidateRefreshTokenAsync(string token, CancellationToken cancellationToken)
         {
-            var storedToken = await _tokenRepository.GetByTokenAsync(token, cancellationToken);
+            if (string.IsNullOrWhiteSpace(token))
+                throw new InvalidTokenException("Token cannot be empty");
 
+            var storedToken = await _tokenRepository.GetByTokenAsync(token, cancellationToken);
             return storedToken != null &&
                    storedToken.Revoked == null &&
                    storedToken.Expires > DateTime.UtcNow;
@@ -42,12 +45,19 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         public async Task RevokeRefreshTokenAsync(string token, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(token))
+                throw new InvalidTokenException("Token не может быть пустым");
+
             var storedToken = await _tokenRepository.GetByTokenAsync(token, cancellationToken);
-            if (storedToken != null && storedToken.Revoked == null)
-            {
-                storedToken.Revoked = DateTime.UtcNow;
-                await _tokenRepository.UpdateAsync(storedToken, cancellationToken);
-            }
+
+            if (storedToken == null)
+                throw new TokenNotFoundException("Refresh token не найден");
+
+            if (storedToken.Revoked != null)
+                throw new TokenAlreadyRevokedException("Refresh Token уже отозван");
+
+            storedToken.Revoked = DateTime.UtcNow;
+            await _tokenRepository.UpdateAsync(storedToken, cancellationToken);
         }
 
         private static string GenerateSecureToken()
