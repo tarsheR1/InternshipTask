@@ -1,16 +1,31 @@
-﻿namespace UserManagementService.BusinessLogicLayer.Models.Entities.Users
+﻿using Mapster;
+using UserManagementService.DataAccessLayer.Entities;
+
+namespace UserManagementService.BusinessLogicLayer.Models.Entities.Users
 {
     public class User
     {
-        public Guid Id { get; set; } 
-        public string Email { get; set; }            
-        public string PasswordHash { get; set; }      
-        public string FirstName { get; set; }         
-        public string LastName { get; set; }          
-        public string MiddleName { get; set; }        
-        public string Phone { get; set; }             
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
-
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public string Email { get; set; } = string.Empty;
+        public string PasswordHash { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string? MiddleName { get; set; }
+        public string? Phone { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+
+        public User() { }
+
+        public UserEntity ToEntity()
+        {
+            var config = new TypeAdapterConfig();
+            config.NewConfig<User, UserEntity>()
+                .Map(dest => dest.UserRoles, src => src.UserRoles.Adapt<ICollection<UserRoleEntity>>());
+
+            return this.Adapt<UserEntity>(config);
+        }
+
     }
+
 }

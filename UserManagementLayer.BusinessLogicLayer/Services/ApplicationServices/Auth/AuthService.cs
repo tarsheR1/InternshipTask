@@ -4,9 +4,10 @@ using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Exceptions.Auth;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
-using UserManagementService.DataAccessLayer.Entities;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 using UserManagementService.BusinessLogicLayer.Models.Queries;
+using AutoMapper;
+using UserManagementService.DataAccessLayer.Entities;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {
@@ -16,14 +17,14 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         private readonly IJwtTokenGenerator _tokenGenerator;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IRefreshTokenService _refreshTokenService;
-        private readonly IMapper _mapper;
+        private readonly AutoMapper.IMapper _mapper;
 
         public AuthService(
             IUserRepository userRepository,
             IJwtTokenGenerator tokenGenerator,
             IPasswordHasher passwordHasher,
             IRefreshTokenService refreshTokenService,
-            IMapper mapper)
+            AutoMapper.IMapper mapper)
         {
             _userRepository = userRepository;
             _tokenGenerator = tokenGenerator;
@@ -49,11 +50,13 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 Phone = request.Phone
             };
 
-            var accessToken = _tokenGenerator.GenerateToken(user);
-            var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellationToken);
+            // TODO: ADD BASE ROLE FOR USER
 
             var userEntity = _mapper.Map<UserEntity>(user);
             await _userRepository.AddAsync(userEntity, cancellationToken);
+
+            var accessToken = _tokenGenerator.GenerateToken(user);
+            var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellationToken);
 
             return new AuthResult(accessToken, refreshToken);
         }

@@ -5,23 +5,21 @@ namespace UserManagementService.BusinessLogicLayer.Services.ExternalServices
 {
     public class MapperService : IMapper
     {
-        private readonly IMapper _mapper;
 
-        public MapperService(TypeAdapterConfig config)
+        private readonly MapsterMapper.IMapper _mapster;
+
+        public MapperService(MapsterMapper.IMapper mapster)
         {
-            _mapper = new MapperService(config);
+            _mapster = mapster;
         }
 
         public TDestination Map<TDestination>(object source)
-            => _mapper.Map<TDestination>(source);
+            => _mapster.Map<TDestination>(source);
 
         public TDestination Map<TSource, TDestination>(TSource source)
-            => _mapper.Map<TSource, TDestination>(source);
+            => _mapster.Map<TSource, TDestination>(source);
 
         public TDestination Map<TSource, TDestination>(TSource source, TDestination destination)
-            => _mapper.Map(source, destination);
-
-        public IQueryable<TDestination> ProjectTo<TDestination>(IQueryable source)
-            => _mapper.ProjectTo<TDestination>(source);
+            => _mapster.Map(source, destination);
     }
 }

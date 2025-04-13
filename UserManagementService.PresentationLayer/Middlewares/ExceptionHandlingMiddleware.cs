@@ -51,12 +51,4 @@ namespace UserManagementService.PresentationLayer.Middlewares
             });
         }
     }
-
-    public static class ErrorHandlingMiddlewareExtensions
-    {
-        public static IApplicationBuilder UseGlobalErrorHandling(this IApplicationBuilder app)
-        {
-            return app.UseMiddleware<ErrorHandlingMiddleware>();
-        }
-    }
 }

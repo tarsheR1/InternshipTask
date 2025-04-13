@@ -4,7 +4,10 @@ using System.Text;
 using UserManagementService.BusinessLogicLayer.Models.Settings;
 using UserManagementService.BusinessLogicLayer.Extensions;
 using UserManagementService.DataAccessLayer.Extensions;
-using UserManagementService.PresentationLayer.Middlewares;
+using UserManagementService.PresentationLayer.Extensions;
+using MapsterMapper;
+using AutoMapper;
+using UserManagementService.BusinessLogicLayer.Services.ExternalServices.Mapping;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,10 +15,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowAll", policy => {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+}); 
 
 builder.Services.AddDataAccessLayer(builder.Configuration);
 
 builder.Services.AddBusinessLogicLayer(builder.Configuration);
+
+MapsterConfig.Configure();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 builder.Services.Configure<JwtSettings>(jwtSettings);
@@ -55,6 +67,9 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAutoMapper(typeof(UserProfile));
+builder.Services.AddScoped<MapsterMapper.IMapper, MapsterMapper.Mapper>(); 
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -65,12 +80,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(builder => 
-builder.AllowAnyOrigin()
-    .AllowAnyHeader()
-    .AllowAnyMethod());
-
 app.UseRouting();
+
+app.UseCors("AllowAll");
+//app.UseCors(builder =>
+//builder.AllowAnyOrigin()
+//    .AllowAnyHeader()
+//    .AllowAnyMethod());
+
 
 app.UseGlobalErrorHandling();
 
