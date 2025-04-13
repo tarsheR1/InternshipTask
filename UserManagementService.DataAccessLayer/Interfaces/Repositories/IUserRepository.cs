@@ -8,12 +8,12 @@ namespace UserManagementService.DataAccessLayer.Interfaces.Repositories
 
         Task<UserEntity> GetByEmailAsync(string email, CancellationToken cancellationToken);
 
+        Task<List<string>> GetUserRolesAsync(Guid userId, CancellationToken cancellationToken);
+
         Task AddAsync(UserEntity user, CancellationToken cancellationToken);
 
         Task UpdateAsync(UserEntity user, CancellationToken cancellationToken);
 
         Task DeleteAsync(UserEntity user, CancellationToken cancellationToken);
-
-        Task<List<string>> GetUserRolesAsync(Guid userId, CancellationToken cancellationToken);
     }
 }

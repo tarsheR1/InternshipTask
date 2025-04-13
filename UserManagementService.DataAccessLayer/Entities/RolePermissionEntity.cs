@@ -13,5 +13,4 @@ namespace UserManagementService.DataAccessLayer.Entities
         public int PermissionId { get; set; }
         public PermissionEntity Permission { get; set; }
     }
-
 }

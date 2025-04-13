@@ -50,8 +50,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 Phone = request.Phone
             };
 
-            // TODO: ADD BASE ROLE FOR USER
-
+            
             var userEntity = _mapper.Map<UserEntity>(user);
             await _userRepository.AddAsync(userEntity, cancellationToken);
 

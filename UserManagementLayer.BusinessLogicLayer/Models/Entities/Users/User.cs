@@ -16,16 +16,5 @@ namespace UserManagementService.BusinessLogicLayer.Models.Entities.Users
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
         public User() { }
-
-        public UserEntity ToEntity()
-        {
-            var config = new TypeAdapterConfig();
-            config.NewConfig<User, UserEntity>()
-                .Map(dest => dest.UserRoles, src => src.UserRoles.Adapt<ICollection<UserRoleEntity>>());
-
-            return this.Adapt<UserEntity>(config);
-        }
-
     }
-
 }

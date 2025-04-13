@@ -23,5 +23,4 @@ namespace UserManagementService.DataAccessLayer.Entities
         [Column("revoked")]
         public DateTime? Revoked { get; set; }
     }
-
 }

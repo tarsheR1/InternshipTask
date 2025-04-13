@@ -1,5 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using UserManagementService.DataAccessLayer.Entities;
+﻿using UserManagementService.DataAccessLayer.Entities;
 
 namespace UserManagementService.DataAccessLayer.Interfaces.Repositories
 {
