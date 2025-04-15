@@ -14,7 +14,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task<RolePermissionEntity> GetAsync(int roleId, int permissionId)
+        public async Task<RolePermissionEntity> GetAsync(int roleId, int permissionId, CancellationToken cancellationToken = default)
         {
             return await _context.RolePermissions
                 .Include(rp => rp.Role)
@@ -22,35 +22,35 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .FirstOrDefaultAsync(rp => rp.RoleId == roleId && rp.PermissionId == permissionId);
         }
 
-        public async Task<IEnumerable<RolePermissionEntity>> GetAllAsync()
+        public async Task<IEnumerable<RolePermissionEntity>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return await _context.RolePermissions
                 .Include(rp => rp.Role)
                 .Include(rp => rp.Permission)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
-
-        public async Task AddAsync(RolePermissionEntity rolePermission)
+         
+        public async Task AddAsync(RolePermissionEntity rolePermission, CancellationToken cancellationToken = default)
         {
             await _context.RolePermissions.AddAsync(rolePermission);
         }
 
-        public async Task DeleteAsync(int roleId, int permissionId)
+        public async Task DeleteAsync(int roleId, int permissionId, CancellationToken cancellationToken = default)
         {
-            var entity = await GetAsync(roleId, permissionId);
+            var entity = await GetAsync(roleId, permissionId, cancellationToken);
             if (entity != null)
             {
-                _context.RolePermissions.Remove(entity);
+                _context.RolePermissions.Remove(entity, cancellationToken);
             }
         }
 
-        public async Task<bool> ExistsAsync(int roleId, int permissionId)
+        public async Task<bool> ExistsAsync(int roleId, int permissionId, CancellationToken cancellationToken = default)
         {
             return await _context.RolePermissions
                 .AnyAsync(rp => rp.RoleId == roleId && rp.PermissionId == permissionId);
         }
 
-        public async Task<IEnumerable<PermissionEntity>> GetPermissionsForRoleAsync(int roleId)
+        public async Task<IEnumerable<PermissionEntity>> GetPermissionsForRoleAsync(int roleId, CancellationToken cancellationToken = default)
         {
             return await _context.RolePermissions
                 .Where(rp => rp.RoleId == roleId)
@@ -80,16 +80,22 @@ namespace UserManagementService.DataAccessLayer.Repositories
             }
         }
 
-        public async Task RemovePermissionFromRoleAsync(int roleId, int permissionId)
+        public async Task RemovePermissionFromRoleAsync(
+            int roleId, 
+            int permissionId, 
+            CancellationToken cancellationToken = default)
         {
-            await DeleteAsync(roleId, permissionId);
+            await DeleteAsync(roleId, permissionId, cancellationToken);
         }
 
-        public async Task UpdateRolePermissionsAsync(int roleId, IEnumerable<int> permissionIds)
+        public async Task UpdateRolePermissionsAsync(
+            int roleId, 
+            IEnumerable<int> permissionIds, 
+            CancellationToken cancellationToken = default)
         {
             var currentPermissions = await _context.RolePermissions
                 .Where(rp => rp.RoleId == roleId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             var permissionsToRemove = currentPermissions
                 .Where(cp => !permissionIds.Contains(cp.PermissionId))
@@ -106,7 +112,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
                     PermissionId = pid
                 });
 
-            await _context.RolePermissions.AddRangeAsync(permissionsToAdd);
+            await _context.RolePermissions.AddRangeAsync(permissionsToAdd, cancellationToken);
         }
     }
 }

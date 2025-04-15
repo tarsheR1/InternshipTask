@@ -14,7 +14,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task<List<RoleEntity>> GetAll()
+        public async Task<List<RoleEntity>> GetAllAsync()
         {
             return await _context.Roles.ToListAsync();
         }
@@ -26,7 +26,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .FirstOrDefaultAsync(r => r.Id == roleId, cancellationToken);
         }
 
-        public async Task<RoleEntity> GetByName(string roleName, CancellationToken cancellationToken)
+        public async Task<RoleEntity> GetByNameAsync(string roleName, CancellationToken cancellationToken)
         {
             return await _context.Roles
                 .Include(r => r.RolePermissions)

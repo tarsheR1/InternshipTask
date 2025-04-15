@@ -4,6 +4,7 @@ using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
+using UserManagementService.BusinessLogicLayer.Models.Pagination;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {
@@ -16,6 +17,19 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         {
             _userRepository = userRepository;
             _mapper = mapper;
+        }
+
+        public async Task<PagedResponse<User>> GetUsersPaginatedAsync(
+            PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
+        {
+
+
+            return new PagedResponse<User>(
+                users,
+                paginationParameters.PageNumber,
+                paginationParameters.PageSize,
+                totalCount);
         }
 
         public async Task<User> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
