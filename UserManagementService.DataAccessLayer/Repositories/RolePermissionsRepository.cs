@@ -40,7 +40,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
             var entity = await GetAsync(roleId, permissionId, cancellationToken);
             if (entity != null)
             {
-                _context.RolePermissions.Remove(entity, cancellationToken);
+                _context.RolePermissions.Remove(entity);
             }
         }
 
@@ -59,7 +59,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<RoleEntity>> GetRolesForPermissionAsync(int permissionId)
+        public async Task<IEnumerable<RoleEntity>> GetRolesForPermissionAsync(int permissionId, CancellationToken cancellationToken)
         {
             return await _context.RolePermissions
                 .Where(rp => rp.PermissionId == permissionId)
@@ -68,7 +68,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .ToListAsync();
         }
 
-        public async Task AddPermissionToRoleAsync(int roleId, int permissionId)
+        public async Task AddPermissionToRoleAsync(int roleId, int permissionId, CancellationToken cancellationToken)
         {
             if (!await ExistsAsync(roleId, permissionId))
             {

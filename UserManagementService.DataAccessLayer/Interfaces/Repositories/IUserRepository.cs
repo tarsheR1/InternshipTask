@@ -4,6 +4,11 @@ namespace UserManagementService.DataAccessLayer.Interfaces.Repositories
 {
     public interface IUserRepository
     {
+        Task<(List<UserEntity> Users, int TotalCount)> GetPagedUsersAsync(
+            int pageNumber,
+            int pageSize,
+            CancellationToken cancellation);
+
         Task<UserEntity> GetByIdAsync(Guid userId, CancellationToken cancellationToken);
 
         Task<UserEntity> GetByEmailAsync(string email, CancellationToken cancellationToken);
@@ -17,3 +22,4 @@ namespace UserManagementService.DataAccessLayer.Interfaces.Repositories
         Task DeleteAsync(UserEntity user, CancellationToken cancellationToken);
     }
 }
+    

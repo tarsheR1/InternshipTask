@@ -6,7 +6,7 @@ namespace UserManagementService.DataAccessLayer.Interfaces.Repositories
     {
         Task<RefreshTokenEntity> GetByIdAsync(Guid id, CancellationToken cancellation);
         Task<RefreshTokenEntity> GetByTokenAsync(string token, CancellationToken cancellation);
-        Task<IEnumerable<RefreshTokenEntity>> GetByUserIdAsync(Guid userId, CancellationToken cancellation);
+        Task<List<RefreshTokenEntity>> GetByUserIdAsync(Guid userId, CancellationToken cancellation);
 
         Task CreateAsync(RefreshTokenEntity token, CancellationToken cancellation);
         Task UpdateAsync(RefreshTokenEntity token, CancellationToken cancellation);

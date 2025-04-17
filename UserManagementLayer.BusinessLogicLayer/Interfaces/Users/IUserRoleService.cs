@@ -1,4 +1,6 @@
-﻿namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
+﻿using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
+
+namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
 {
     public interface IUserRoleService
     {
@@ -6,7 +8,7 @@
 
         Task RemoveRoleFromUserAsync(Guid userId, int roleId, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<Role>> GetUserRolesAsync(Guid userId, CancellationToken cancellationToken = default);
+        Task<List<Role>> GetUserRolesAsync(Guid userId, CancellationToken cancellationToken = default);
     }
 
 }

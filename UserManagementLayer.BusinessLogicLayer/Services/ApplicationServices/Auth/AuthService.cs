@@ -4,9 +4,9 @@ using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Exceptions.Auth;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
+using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.DataAccessLayer.Interfaces;
 using UserManagementService.DataAccessLayer.Entities;
-using UserManagementService.BusinessLogicLayer.Models.Queries;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {

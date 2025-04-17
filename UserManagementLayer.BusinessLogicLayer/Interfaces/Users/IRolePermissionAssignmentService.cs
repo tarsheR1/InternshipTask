@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 
 namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
 {
@@ -12,6 +8,6 @@ namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
 
         Task RemovePermissionFromRoleAsync(int roleId, int permissionId, CancellationToken cancellationToken);
 
-        Task<IEnumerable<Permission>> GetRolePermissionsAsync(int roleId, CancellationToken cancellationToken);
+        Task<List<Permission>> GetRolePermissionsAsync(int roleId, CancellationToken cancellationToken);
     }
 }

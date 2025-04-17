@@ -8,7 +8,6 @@ using UserManagementService.BusinessLogicLayer.Services.ApplicationServices.User
 using UserManagementService.BusinessLogicLayer.Services.ExternalServices;
 using Mapster;
 using System.Reflection;
-using UserManagementService.BusinessLogicLayer.Models.Settings;
 
 namespace UserManagementService.BusinessLogicLayer.Extensions
 {
@@ -21,6 +20,10 @@ namespace UserManagementService.BusinessLogicLayer.Extensions
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPermissionService, PermissionService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IUserRoleService, UserRoleService>();
+            services.AddScoped<IRolePermissionAssignmentService, RolePermissionAssignmentService>();
 
             services.AddScoped<IPasswordHasher, PasswordHasher>();
 

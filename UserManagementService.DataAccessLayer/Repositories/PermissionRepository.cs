@@ -14,7 +14,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task<List<PermissionEntity>> GetAll()
+        public async Task<List<PermissionEntity>> GetAll(CancellationToken cancellationToken)
         {
             return await _context.Permissions
                 .AsNoTracking() 

@@ -1,5 +1,4 @@
 ﻿using UserManagementService.DataAccessLayer.Interfaces.Repositories;
-using UserManagementService.DataAccessLayer.Repositories.Interfaces;
 
 namespace UserManagementService.DataAccessLayer.Interfaces
 {

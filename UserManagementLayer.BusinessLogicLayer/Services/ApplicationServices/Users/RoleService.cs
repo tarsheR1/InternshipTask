@@ -1,18 +1,20 @@
-﻿using UserManagementService.BusinessLogicLayer.Exceptions.Users;
+﻿using AutoMapper;
+using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 using UserManagementService.DataAccessLayer.Entities;
 using UserManagementService.DataAccessLayer.Interfaces;
 
+
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {
     public class RoleService : IRoleService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly AutoMapper.IMapper _mapper;
+        private readonly IMapper _mapper;
 
-        public RoleService(IUnitOfWork unitOfWork, AutoMapper.IMapper mapper)
+        public RoleService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -55,7 +57,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 var role = await _unitOfWork.Roles.GetByIdAsync(roleId, cancellationToken);
                 if (role == null)
                 {
-                    throw new NotFoundException($"Role with ID {roleId} not found");
+                    throw new NotFoundException($"Роль с Id {roleId} не найдена");
                 }
 
                 if (!string.Equals(role.Name, command.Name, StringComparison.OrdinalIgnoreCase))
@@ -97,7 +99,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 var userRoles = await _unitOfWork.UserRoles.GetUsersForRoleAsync(roleId, cancellationToken);
                 if (userRoles.Any())
                 {
-                    throw new ConflictException($"Cannot delete role '{role.Name}' as it is assigned to {userRoles.Count()} users");
+                    throw new ConflictException($"Нельзя удалить роль '{role.Name}' так как она назначена {userRoles.Count()} пользователю");
                 }
 
                 await _unitOfWork.Roles.DeleteAsync(role, cancellationToken);
@@ -116,7 +118,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             var role = await _unitOfWork.Roles.GetByIdAsync(roleId, cancellationToken);
             if (role == null)
             {
-                throw new NotFoundException($"Role with ID {roleId} not found");
+                throw new NotFoundException($"Роль с Id {roleId} не найдена");
             }
 
             return _mapper.Map<Role>(role);

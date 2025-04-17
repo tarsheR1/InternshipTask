@@ -14,7 +14,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task<List<RoleEntity>> GetAllAsync()
+        public async Task<List<RoleEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.Roles.ToListAsync();
         }
@@ -36,19 +36,16 @@ namespace UserManagementService.DataAccessLayer.Repositories
         public async Task AddAsync(RoleEntity role, CancellationToken cancellationToken)
         {
             await _context.Roles.AddAsync(role, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task UpdateAsync(RoleEntity role, CancellationToken cancellationToken)
         {
             _context.Roles.Update(role);
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task DeleteAsync(RoleEntity role, CancellationToken cancellationToken)
         {
             _context.Roles.Remove(role);
-            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

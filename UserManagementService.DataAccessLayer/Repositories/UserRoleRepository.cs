@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Threading;
 using UserManagementService.DataAccessLayer.Entities;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 using UserManagementService.DataAccessLayer.Persistence;
-using UserManagementService.DataAccessLayer.Repositories.Interfaces;
 
 namespace UserManagementService.DataAccessLayer.Repositories
 {
@@ -14,7 +15,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task<UserRoleEntity> GetAsync(Guid userId, int roleId)
+        public async Task<UserRoleEntity> GetAsync(Guid userId, int roleId, CancellationToken cancellationToken)
         {
             return await _context.UserRoles
                 .Include(ur => ur.User)
@@ -22,7 +23,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoleId == roleId);
         }
 
-        public async Task<IEnumerable<UserRoleEntity>> GetAllAsync()
+        public async Task<List<UserRoleEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.UserRoles
                 .Include(ur => ur.User)
@@ -30,27 +31,23 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .ToListAsync();
         }
 
-        public async Task AddAsync(UserRoleEntity userRole)
+        public async Task AddRoleToUserAsync(UserRoleEntity userRoleAssign, CancellationToken cancellationToken)
         {
-            await _context.UserRoles.AddAsync(userRole);
+            await _context.UserRoles.AddAsync(userRoleAssign, cancellationToken);
         }
 
-        public async Task DeleteAsync(Guid userId, int roleId)
+        public async Task RemoveRoleAssign(UserRoleEntity userRole, CancellationToken cancellationToken)
         {
-            var entity = await GetAsync(userId, roleId);
-            if (entity != null)
-            {
-                _context.UserRoles.Remove(entity);
-            }
+             _context.UserRoles.Remove(userRole);
         }
 
-        public async Task<bool> ExistsAsync(Guid userId, int roleId)
+        public async Task<bool> ExistsAsync(Guid userId, int roleId, CancellationToken cancellationToken)
         {
             return await _context.UserRoles
                 .AnyAsync(ur => ur.UserId == userId && ur.RoleId == roleId);
         }
 
-        public async Task<IEnumerable<RoleEntity>> GetRolesForUserAsync(Guid userId)
+        public async Task<List<RoleEntity>> GetRolesForUserAsync(Guid userId, CancellationToken cancellationToken)
         {
             return await _context.UserRoles
                 .Where(ur => ur.UserId == userId)
@@ -59,7 +56,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<UserEntity>> GetUsersForRoleAsync(int roleId)
+        public async Task<List<UserEntity>> GetUsersForRoleAsync(int roleId, CancellationToken cancellationToken)
         {
             return await _context.UserRoles
                 .Where(ur => ur.RoleId == roleId)
@@ -68,24 +65,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .ToListAsync();
         }
 
-        public async Task AddRoleToUserAsync(Guid userId, int roleId)
-        {
-            if (!await ExistsAsync(userId, roleId))
-            {
-                await AddAsync(new UserRoleEntity
-                {
-                    UserId = userId,
-                    RoleId = roleId
-                });
-            }
-        }
-
-        public async Task RemoveRoleFromUserAsync(Guid userId, int roleId)
-        {
-            await DeleteAsync(userId, roleId);
-        }
-
-        public async Task UpdateUserRolesAsync(Guid userId, IEnumerable<int> roleIds)
+        public async Task UpdateUserRolesAsync(Guid userId, List<int> roleIds, CancellationToken cancellationToken)
         {
             var currentRoles = await _context.UserRoles
                 .Where(ur => ur.UserId == userId)
@@ -106,15 +86,15 @@ namespace UserManagementService.DataAccessLayer.Repositories
                     RoleId = rid
                 });
 
-            await _context.UserRoles.AddRangeAsync(rolesToAdd);
+            await _context.UserRoles.AddRangeAsync(rolesToAdd, cancellationToken);
         }
 
-        public async Task<bool> UserHasRoleAsync(Guid userId, int roleId)
+        public async Task<bool> UserHasRoleAsync(Guid userId, int roleId, CancellationToken cancellationToken)
         {
-            return await ExistsAsync(userId, roleId);
+            return await ExistsAsync(userId, roleId, cancellationToken);
         }
 
-        public async Task<bool> UserHasAnyRoleAsync(Guid userId, IEnumerable<int> roleIds)
+        public async Task<bool> UserHasAnyRoleAsync(Guid userId, IEnumerable<int> roleIds, CancellationToken cancellationToken)
         {
             return await _context.UserRoles
                 .AnyAsync(ur => ur.UserId == userId && roleIds.Contains(ur.RoleId));

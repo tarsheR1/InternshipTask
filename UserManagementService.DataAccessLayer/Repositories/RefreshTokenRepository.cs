@@ -31,7 +31,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .FirstOrDefaultAsync(x => x.Token == token);
         }
 
-        public async Task<IEnumerable<RefreshTokenEntity>> GetByUserIdAsync(Guid userId, CancellationToken cancellation)
+        public async Task<List<RefreshTokenEntity>> GetByUserIdAsync(Guid userId, CancellationToken cancellation)
         {
             return await _context.RefreshTokens
                 .Where(x => x.UserId == userId)
