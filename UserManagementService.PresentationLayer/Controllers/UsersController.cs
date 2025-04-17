@@ -10,12 +10,12 @@ namespace UserManagementService.PresentationLayer.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Policy = "ModerateUsers")]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper; 
 
-        public UserController(IUserService userService, IMapper autoMapper)
+        public UsersController(IUserService userService, IMapper autoMapper)
         {
             _userService = userService;
             _mapper = autoMapper;

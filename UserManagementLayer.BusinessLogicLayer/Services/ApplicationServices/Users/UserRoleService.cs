@@ -49,7 +49,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     RoleId = roleId,
                 };
 
-                await _unitOfWork.UserRoles.AddAsync(userRole, cancellationToken);
+                await _unitOfWork.UserRoles.AddRoleToUserAsync(userRole, cancellationToken);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
             }
@@ -72,7 +72,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     throw new NotFoundException($"User does not have the specified role");
                 }
 
-                await _unitOfWork.UserRoles.DeleteAsync(userId, roleId, cancellationToken);
+                await _unitOfWork.UserRoles.RemoveRoleAssign(userRole, cancellationToken);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
             }

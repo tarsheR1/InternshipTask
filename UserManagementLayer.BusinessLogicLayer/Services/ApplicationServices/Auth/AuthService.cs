@@ -1,4 +1,5 @@
-﻿using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
+﻿using AutoMapper;
+using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
@@ -65,7 +66,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     UserId = user.Id,
                     RoleId = defaultRole.Id,
                 };
-                await _unitOfWork.UserRoles.AddAsync(assignedRole, cancellationToken);
+                await _unitOfWork.UserRoles.AddRoleToUserAsync(assignedRole, cancellationToken);
 
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);

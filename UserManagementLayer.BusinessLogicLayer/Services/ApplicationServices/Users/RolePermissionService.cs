@@ -37,7 +37,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 var permissions = await _permissionService.GetAllPermissionsAsync(cancellationToken);
                 if (!permissions.Any(p => p.Id == permissionId))
                 {
-                    throw new NotFoundException($"Permission with ID {permissionId} not found");
+                    throw new NotFoundException($"Разрешение с ID {permissionId} не найдено");
                 }
 
                 var existingAssignment = await _unitOfWork.RolePermission.GetAsync(roleId, permissionId, cancellationToken);

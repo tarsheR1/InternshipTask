@@ -62,6 +62,12 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("ModerateUsers", policy =>
         policy.RequireClaim("permission", "ModerateUsers"));
+
+    options.AddPolicy("ModerateRoles", policy =>
+        policy.RequireClaim("permission", "ModerateRoles"));
+
+    options.AddPolicy("AssignRoles", policy =>
+        policy.RequireClaim("permission", "AssignRoles"));
 });
 
 builder.Services.AddSwaggerGen(c =>
@@ -76,7 +82,6 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {

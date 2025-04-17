@@ -1,21 +1,22 @@
-using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Models.Pagination;
+using UserManagementService.DataAccessLayer.Interfaces;
+using UserManagementService.DataAccessLayer.Entities;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly AutoMapper.IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public UserService(IUnitOfWork unitOfWork, AutoMapper.IMapper mapper)
         {
-            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -23,7 +24,15 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             PaginationParameters paginationParameters,
             CancellationToken cancellationToken)
         {
+            int pageNumber = paginationParameters.PageNumber;
+            int pageSize = paginationParameters.PageSize;
 
+            (List<UserEntity> usersEntity, int totalCount) = await _unitOfWork.Users.GetPagedUsersAsync(
+                pageNumber,
+                pageSize,
+                cancellationToken);
+
+            List<User> users= _mapper.Map<List<User>>(usersEntity);
 
             return new PagedResponse<User>(
                 users,
@@ -34,7 +43,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         public async Task<User> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
-            var userEntity = await _userRepository.GetByIdAsync(userId, cancellationToken);
+            var userEntity = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
 
             if (userEntity == null)
             {
@@ -50,7 +59,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             UserUpdateCommand updateRequest,
             CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+            var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
             if (user == null)
             {
                 throw new UserNotFoundException(userId.ToString());
@@ -62,18 +71,18 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             user.MiddleName = updateRequest.MiddleName;
             user.Phone = updateRequest.Phone;
 
-            await _userRepository.UpdateAsync(user, cancellationToken);
+            await _unitOfWork.Users.UpdateAsync(user, cancellationToken);
         }
 
         public async Task DeleteUserAsync(Guid userId, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+            var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
             if (user == null)
             {
                 throw new UserNotFoundException(userId.ToString());
             }
 
-            await _userRepository.DeleteAsync(user, cancellationToken);
+            await _unitOfWork.Users.DeleteAsync(user, cancellationToken);
         }
     }
 }
