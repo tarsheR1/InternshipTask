@@ -32,7 +32,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
                 if (user == null)
                 {
-                    throw new NotFoundException($"User with ID {userId} not found");
+                    throw new NotFoundException(userId.ToString());
                 }
 
                 await _roleService.GetRoleByIdAsync(roleId, cancellationToken);
@@ -40,7 +40,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 var existingAssignment = await _unitOfWork.UserRoles.GetAsync(userId, roleId, cancellationToken);
                 if (existingAssignment != null)
                 {
-                    throw new AlreadyExistsException($"User already has this role");
+                    throw new AlreadyExistsException(roleId.ToString());
                 }
 
                 var userRole = new UserRoleEntity
@@ -69,7 +69,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 var userRole = await _unitOfWork.UserRoles.GetAsync(userId, roleId, cancellationToken);
                 if (userRole == null)
                 {
-                    throw new NotFoundException($"User does not have the specified role");
+                    throw new NotFoundException(roleId.ToString());
                 }
 
                 await _unitOfWork.UserRoles.RemoveRoleAssign(userRole, cancellationToken);
@@ -88,7 +88,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
             if (user == null)
             {
-                throw new NotFoundException($"User with ID {userId} not found");
+                throw new NotFoundException(userId.ToString());
             }
 
             var roles = await _unitOfWork.UserRoles.GetRolesForUserAsync(userId, cancellationToken);

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Threading;
 using UserManagementService.DataAccessLayer.Entities;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 using UserManagementService.DataAccessLayer.Persistence;
@@ -63,30 +62,6 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .Include(ur => ur.User)
                 .Select(ur => ur.User)
                 .ToListAsync();
-        }
-
-        public async Task UpdateUserRolesAsync(Guid userId, List<int> roleIds, CancellationToken cancellationToken)
-        {
-            var currentRoles = await _context.UserRoles
-                .Where(ur => ur.UserId == userId)
-                .ToListAsync();
-
-            var rolesToRemove = currentRoles
-                .Where(cr => !roleIds.Contains(cr.RoleId))
-                .ToList();
-
-            _context.UserRoles.RemoveRange(rolesToRemove);
-
-            var existingRoleIds = currentRoles.Select(cr => cr.RoleId);
-            var rolesToAdd = roleIds
-                .Where(rid => !existingRoleIds.Contains(rid))
-                .Select(rid => new UserRoleEntity
-                {
-                    UserId = userId,
-                    RoleId = rid
-                });
-
-            await _context.UserRoles.AddRangeAsync(rolesToAdd, cancellationToken);
         }
 
         public async Task<bool> UserHasRoleAsync(Guid userId, int roleId, CancellationToken cancellationToken)

@@ -12,6 +12,5 @@ namespace UserManagementService.DataAccessLayer.Interfaces.Repositories
         Task<List<RoleEntity>> GetRolesForUserAsync(Guid userId, CancellationToken cancellationToken );
         Task<List<UserEntity>> GetUsersForRoleAsync(int roleId, CancellationToken cancellationToken);
         Task AddRoleToUserAsync(UserRoleEntity userRoleAssign, CancellationToken cancellationToken);
-        Task UpdateUserRolesAsync(Guid userId, List<int> roleIds, CancellationToken cancellationToken);
     }
 }
