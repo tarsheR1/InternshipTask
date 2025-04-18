@@ -21,7 +21,7 @@ public class PermissionsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Permission>> GetPermissionById(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<Permission>> GetPermissionById([FromHeader]int id, CancellationToken cancellationToken)
     {
         var permission = await _permissionService.GetById(id, cancellationToken);
         return Ok(permission);

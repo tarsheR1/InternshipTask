@@ -48,6 +48,8 @@ namespace UserManagementService.DataAccessLayer.Repositories
             return await _context.Users
                 .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
+                .ThenInclude(rp => rp.RolePermissions)
+                .ThenInclude(p => p.Permission)
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 

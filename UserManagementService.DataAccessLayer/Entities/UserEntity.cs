@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace UserManagementService.DataAccessLayer.Entities
+﻿namespace UserManagementService.DataAccessLayer.Entities
 {
     public class UserEntity
     {

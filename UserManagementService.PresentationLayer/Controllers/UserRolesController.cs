@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 
-namespace UserManagementService.Presentation.Controllers
+namespace UserManagementService.PresentationLayer.Controllers
 {
     [ApiController]
     [Route("api/users/{userId}/roles")]
@@ -16,20 +17,28 @@ namespace UserManagementService.Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Role>>> Get(Guid userId, CancellationToken cancellationToken)
+        public async Task<ActionResult<List<Role>>> GetUserRoles(
+            [FromRoute] Guid userId,
+            CancellationToken cancellationToken)
         {
             return await _userRoleService.GetUserRolesAsync(userId, cancellationToken);
         }
 
         [HttpPost("{roleId}")]
-        public async Task<IActionResult> Post(Guid userId, int roleId, CancellationToken cancellationToken)
+        public async Task<IActionResult> AssignRole(
+            [FromRoute] Guid userId,
+            [FromRoute] int roleId,
+            CancellationToken cancellationToken)
         {
             await _userRoleService.AssignRoleToUserAsync(userId, roleId, cancellationToken);
             return NoContent();
         }
 
         [HttpDelete("{roleId}")]
-        public async Task<IActionResult> Delete(Guid userId, int roleId, CancellationToken cancellationToken)
+        public async Task<IActionResult> RemoveRole(
+            [FromRoute] Guid userId,
+            [FromRoute] int roleId,
+            CancellationToken cancellationToken)
         {
             await _userRoleService.RemoveRoleFromUserAsync(userId, roleId, cancellationToken);
             return NoContent();

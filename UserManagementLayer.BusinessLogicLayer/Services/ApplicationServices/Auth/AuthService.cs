@@ -51,12 +51,11 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     MiddleName = request.MiddleName,
-                    Phone = request.Phone
+                    Phone = request.Phone,
+                    IsActive = false
                 };
 
                 var defaultRole = await _unitOfWork.Roles.GetByNameAsync("User", cancellationToken);
-                await _unitOfWork.Roles.AddAsync(defaultRole, cancellationToken);
-                
 
                 var userEntity = _mapper.Map<UserEntity>(user);
                 await _unitOfWork.Users.AddAsync(userEntity, cancellationToken);
@@ -66,6 +65,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     UserId = user.Id,
                     RoleId = defaultRole.Id,
                 };
+
                 await _unitOfWork.UserRoles.AddRoleToUserAsync(assignedRole, cancellationToken);
 
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -96,6 +96,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             var user = _mapper.Map<User>(userEntity);
 
             var accessToken = _tokenGenerator.GenerateToken(user);
+             
             var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellationToken);
 
             return new AuthResult(accessToken, refreshToken);

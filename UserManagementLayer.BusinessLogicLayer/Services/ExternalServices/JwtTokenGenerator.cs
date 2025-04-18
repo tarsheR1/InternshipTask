@@ -50,10 +50,18 @@ namespace UserManagementService.BusinessLogicLayer.Services.ExternalServices
             {
                 claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
 
-                foreach (var rolePermission in userRole.Role.RolePermissions)
-                {
-                    claims.Add(new Claim("permission", rolePermission.Permission.Name));
-                }
+            }
+
+            var permissions = user.UserRoles
+                .Select(ur => ur.Role)         
+                .SelectMany(r => r.RolePermissions) 
+                .Select(rp => rp.Permission)       
+                .Distinct()                        
+                .ToList();
+
+            foreach (var permission in permissions)
+            {
+                claims.Add(new Claim("permission", permission.Name));
             }
 
             return claims;
