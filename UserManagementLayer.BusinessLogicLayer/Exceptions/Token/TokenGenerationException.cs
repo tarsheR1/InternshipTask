@@ -6,8 +6,7 @@ namespace UserManagementService.BusinessLogicLayer.Exceptions.Token
     {
         public TokenGenerationException(string message)
            : base("token_generation_failed", 
-                 message, 
-                 500) 
+                 message) 
         { }
     }
 }

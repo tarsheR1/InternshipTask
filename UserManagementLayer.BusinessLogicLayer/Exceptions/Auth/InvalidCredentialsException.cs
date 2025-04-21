@@ -6,8 +6,7 @@ namespace UserManagementService.BusinessLogicLayer.Exceptions.Auth
     {
         public InvalidCredentialsException()
             : base("invalid_credentials",
-                  "Неправильно ввёденый email или пароль",
-                  401) 
+                  "Неправильно ввёденый email или пароль") 
         { }
     }
 

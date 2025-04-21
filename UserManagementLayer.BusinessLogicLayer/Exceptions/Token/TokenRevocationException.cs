@@ -2,12 +2,11 @@
 
 namespace UserManagementService.BusinessLogicLayer.Exceptions.Token
 {
-    class TokenRevocationException : BusinessLogicException
+    public class TokenRevocationException : BusinessLogicException
     {
         public TokenRevocationException(string message)
            : base("token_revocation_failed", 
-                 message, 
-                 500) 
+                 message) 
         { }
     }
 }

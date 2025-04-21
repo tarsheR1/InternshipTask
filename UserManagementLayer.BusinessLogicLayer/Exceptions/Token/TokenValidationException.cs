@@ -2,12 +2,11 @@
 
 namespace UserManagementService.BusinessLogicLayer.Exceptions.Token
 {
-    class TokenValidationException : BusinessLogicException
+    public class TokenValidationException : BusinessLogicException
     {
         public TokenValidationException(string message)
             : base("token_validation_failed", 
-                  message, 
-                  401) 
+                  message) 
         { }
     }
 }

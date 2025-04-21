@@ -1,18 +1,19 @@
-﻿using UserManagementService.BusinessLogicLayer.Exceptions.Core;
+﻿using Microsoft.AspNetCore.Mvc;
+using UserManagementService.BusinessLogicLayer.Exceptions.Auth;
+using UserManagementService.BusinessLogicLayer.Exceptions.Core;
+using UserManagementService.BusinessLogicLayer.Exceptions.Token;
+using UserManagementService.BusinessLogicLayer.Exceptions.Users;
+using UserManagementService.BusinessLogicLayer.Exceptions.Jwt;
 
 namespace UserManagementService.PresentationLayer.Middlewares
 {
-    public class ErrorHandlingMiddleware
+    public class BusinessExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<ErrorHandlingMiddleware> _logger;
 
-        public ErrorHandlingMiddleware(
-            RequestDelegate next,
-            ILogger<ErrorHandlingMiddleware> logger)
+        public BusinessExceptionMiddleware(RequestDelegate next, ILogger<BusinessExceptionMiddleware> logger)
         {
             _next = next;
-            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -21,34 +22,48 @@ namespace UserManagementService.PresentationLayer.Middlewares
             {
                 await _next(context);
             }
+            catch (BusinessLogicException ex)
+            {
+                await HandleBusinessException(context, ex);
+            }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, ex);
+                await HandleGenericException(context, ex);
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private async Task HandleBusinessException(HttpContext context, BusinessLogicException ex)
         {
-            var (statusCode, errorCode, message) = exception switch
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = ex switch
             {
-                BusinessLogicException authEx =>
-                    (authEx.HttpStatusCode, authEx.ErrorCode, authEx.Message),
-
-                _ =>
-                    (500, "internal_error", "Internal server error")
+                NotFoundException => 404,
+                InvalidCredentialsException or InvalidTokenException => 401,
+                ConflictException or AlreadyExistsException => 409,
+                _ => 400
             };
 
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = statusCode;
-
-            await context.Response.WriteAsJsonAsync(new
+            var response = new
             {
-                Error = new
-                {
-                    Code = errorCode,
-                    Message = message
-                }
-            });
+                error = ex.ErrorCode,
+                message = ex.Message
+            };
+
+            await context.Response.WriteAsJsonAsync(response);
+        }
+
+        private async Task HandleGenericException(HttpContext context, Exception ex)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = 500;
+
+            var response = new
+            {
+                error = "internal_error",
+                message = "Произошла необработанная ошибка"
+            };
+
+            await context.Response.WriteAsJsonAsync(response);
         }
     }
 }

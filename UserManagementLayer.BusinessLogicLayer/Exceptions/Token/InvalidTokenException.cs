@@ -6,8 +6,7 @@ namespace UserManagementService.BusinessLogicLayer.Exceptions.Token
     {
         public InvalidTokenException(string message)
           : base("invalid_token_format", 
-                message, 
-                400) 
+                message) 
         { }
     }
 }

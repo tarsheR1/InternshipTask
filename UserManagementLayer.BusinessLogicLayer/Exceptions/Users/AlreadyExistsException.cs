@@ -2,13 +2,11 @@
 
 namespace UserManagementService.BusinessLogicLayer.Exceptions.Users
 {
-    class AlreadyExistsException : BusinessLogicException
+    public class AlreadyExistsException : BusinessLogicException
     {
-
         public AlreadyExistsException(string identifier)
             : base("already_exist",
-                  $"Запись уже существует: {identifier}",
-                  409)
+                  $"Запись уже существует: {identifier}")
         { }
     }
 }

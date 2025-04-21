@@ -6,8 +6,7 @@ namespace UserManagementService.BusinessLogicLayer.Exceptions.Token
     {
         public TokenNotFoundException(string message)
             : base("token_not_found", 
-                  message, 
-                  404) 
+                  message) 
         { }
     }
 }

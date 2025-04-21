@@ -6,8 +6,7 @@ namespace UserManagementService.BusinessLogicLayer.Exceptions.Auth
     {
         public EmailAlreadyExistsException(string email)
             : base("email_already_exists",
-                  $"Пользователь с электрнной почтой '{email}' уже существует",
-                  409) 
+                  $"Пользователь с электрнной почтой '{email}' уже существует") 
         { }
     }
 }

@@ -2,12 +2,11 @@
 
 namespace UserManagementService.BusinessLogicLayer.Exceptions.Token
 {
-    class TokenAlreadyRevokedException : BusinessLogicException
+    public class TokenAlreadyRevokedException : BusinessLogicException
     {
         public TokenAlreadyRevokedException(string message)
             : base("token_already_revoked", 
-                  message, 
-                  409)
+                  message)
         { }
     }
 }
