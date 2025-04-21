@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using UserManagementService.BusinessLogicLayer.Exceptions.Auth;
+﻿using UserManagementService.BusinessLogicLayer.Exceptions.Auth;
 using UserManagementService.BusinessLogicLayer.Exceptions.Core;
 using UserManagementService.BusinessLogicLayer.Exceptions.Token;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
@@ -7,6 +6,8 @@ using UserManagementService.BusinessLogicLayer.Exceptions.Jwt;
 
 namespace UserManagementService.PresentationLayer.Middlewares
 {
+
+    // TODO:  I will add the logger when there is an ELC stack.
     public class BusinessExceptionMiddleware
     {
         private readonly RequestDelegate _next;
@@ -22,48 +23,55 @@ namespace UserManagementService.PresentationLayer.Middlewares
             {
                 await _next(context);
             }
-            catch (BusinessLogicException ex)
-            {
-                await HandleBusinessException(context, ex);
-            }
             catch (Exception ex)
             {
-                await HandleGenericException(context, ex);
+                await HandleException(context, ex);
             }
         }
 
-        private async Task HandleBusinessException(HttpContext context, BusinessLogicException ex)
+        private async Task HandleException(HttpContext context, Exception ex)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = ex switch
+            context.Response.StatusCode = GetStatusCode(ex);
+
+            var errorResponse = new
             {
-                NotFoundException => 404,
-                InvalidCredentialsException or InvalidTokenException => 401,
-                ConflictException or AlreadyExistsException => 409,
-                _ => 400
+                ErrorCode = (ex as BusinessLogicException)?.ErrorCode ?? "internal_error",
+                Message = ex.Message
             };
 
-            var response = new
-            {
-                error = ex.ErrorCode,
-                message = ex.Message
-            };
-
-            await context.Response.WriteAsJsonAsync(response);
+            await context.Response.WriteAsJsonAsync(errorResponse);            
         }
 
-        private async Task HandleGenericException(HttpContext context, Exception ex)
+        private static int GetStatusCode(Exception ex)
         {
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = 500;
-
-            var response = new
+            return ex switch
             {
-                error = "internal_error",
-                message = "Произошла необработанная ошибка"
-            };
+                // Auth
+                InvalidCredentialsException => StatusCodes.Status401Unauthorized,
+                InvalidRefreshTokenException => StatusCodes.Status401Unauthorized,
+                EmailAlreadyExistsException => StatusCodes.Status409Conflict,
 
-            await context.Response.WriteAsJsonAsync(response);
+                // JWT
+                JwtConfigurationException => StatusCodes.Status500InternalServerError,
+
+                // Token
+                InvalidTokenException => StatusCodes.Status401Unauthorized,
+                TokenAlreadyRevokedException => StatusCodes.Status400BadRequest,
+                TokenGenerationException => StatusCodes.Status500InternalServerError,
+                TokenNotFoundException => StatusCodes.Status404NotFound,
+                TokenRevocationException => StatusCodes.Status500InternalServerError,
+                TokenValidationException => StatusCodes.Status401Unauthorized,
+
+                // Users
+                AlreadyExistsException => StatusCodes.Status409Conflict,
+                ConflictException => StatusCodes.Status409Conflict,
+                NotFoundException => StatusCodes.Status404NotFound,
+                UserNotFoundException => StatusCodes.Status404NotFound,
+
+                BusinessLogicException => StatusCodes.Status400BadRequest,
+                _ => StatusCodes.Status500InternalServerError
+            };
         }
     }
 }
