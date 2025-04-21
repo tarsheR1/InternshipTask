@@ -8,11 +8,11 @@ namespace UserManagementService.PresentationLayer.Middlewares
 {
 
     // TODO:  I will add the logger when there is an ELC stack.
-    public class BusinessExceptionMiddleware
+    public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public BusinessExceptionMiddleware(RequestDelegate next, ILogger<BusinessExceptionMiddleware> logger)
+        public ExceptionHandlingMiddleware(RequestDelegate next)
         {
             _next = next;
         }
