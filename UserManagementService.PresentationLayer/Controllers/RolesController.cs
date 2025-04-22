@@ -35,9 +35,10 @@ public class RolesController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> CreateRole(
-        [FromBody] RoleCreateCommand command,
+        [FromBody] RoleCreateRequest request,
         CancellationToken cancellationToken)
     {
+        var command = _mapper.Map<RoleCreateCommand>(request);
         await _roleService.CreateRoleAsync(command, cancellationToken);
         return Ok();
     }
