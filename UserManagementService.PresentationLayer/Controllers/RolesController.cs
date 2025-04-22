@@ -1,18 +1,20 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
-using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
+using UserManagementService.PresentationLayer.DTO.Request;
 
 [ApiController]
 [Route("api/roles")]
 public class RolesController : ControllerBase
 {
     private readonly IRoleService _roleService;
+    private readonly IMapper _mapper;
 
-    public RolesController(IRoleService roleService)
+    public RolesController(IRoleService roleService, IMapper mapper)
     {
         _roleService = roleService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -43,9 +45,10 @@ public class RolesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateRole(
         [FromRoute] int id,
-        [FromBody] RoleUpdateCommand command,
+        [FromBody] RoleUpdateRequest request,
         CancellationToken cancellationToken)
     {
+        var command = _mapper.Map<RoleUpdateCommand>(request);
         var updatedRole = await _roleService.UpdateRoleAsync(id, command, cancellationToken);
         return Ok(updatedRole);
     }

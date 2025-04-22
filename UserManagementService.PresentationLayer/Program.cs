@@ -7,6 +7,9 @@ using UserManagementService.DataAccessLayer.Extensions;
 using UserManagementService.PresentationLayer.Extensions;
 using UserManagementService.BusinessLogicLayer.Services.ExternalServices.Mapping;
 using Microsoft.OpenApi.Models;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using UserManagementService.PresentationLayer.DTO.Validators;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -103,7 +106,14 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddAutoMapper(typeof(UserProfile));
-builder.Services.AddScoped<MapsterMapper.IMapper, MapsterMapper.Mapper>(); 
+builder.Services.AddScoped<MapsterMapper.IMapper, MapsterMapper.Mapper>();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
+builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestDtoValidator>(ServiceLifetime.Scoped);
 
 var app = builder.Build();
 

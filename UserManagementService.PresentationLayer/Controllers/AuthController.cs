@@ -57,7 +57,7 @@ namespace UserManagementService.PresentationLayer.Controllers
             [FromBody] RefreshTokenRequestDto request,
             CancellationToken cancellationToken)
         {
-            var authResult = await _authService.RefreshTokenAsync(request.RefreshToken, request.userId, cancellationToken);
+            var authResult = await _authService.RefreshTokenAsync(request.RefreshToken, request.UserId, cancellationToken);
 
             var response = new AuthResponseDto(
                 AccessToken: authResult.AccessToken,
