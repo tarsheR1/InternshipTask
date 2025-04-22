@@ -65,25 +65,15 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         public async Task RemovePermissionFromRoleAsync(int roleId, int permissionId, CancellationToken cancellationToken)
         {
-            await _unitOfWork.BeginTransactionAsync(cancellationToken);
-
-            try
+            
+            var rolePermission = await _unitOfWork.RolePermission.GetAsync(roleId, permissionId, cancellationToken);
+            if (rolePermission == null)
             {
-                var rolePermission = await _unitOfWork.RolePermission.GetAsync(roleId, permissionId, cancellationToken);
-                if (rolePermission == null)
-                {
-                    throw new NotFoundException($"Разрешение не назначено к роли");
-                } 
+                throw new NotFoundException($"Разрешение не назначено к роли");
+            } 
 
-                await _unitOfWork.RolePermission.DeleteAsync(roleId, permissionId, cancellationToken);
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
-                await _unitOfWork.CommitTransactionAsync(cancellationToken);
-            }
-            catch
-            {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                throw;
-            }
+            await _unitOfWork.RolePermission.DeleteAsync(roleId, permissionId, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<List<Permission>> GetRolePermissionsAsync(int roleId, CancellationToken cancellationToken)

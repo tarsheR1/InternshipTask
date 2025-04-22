@@ -66,13 +66,14 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     RoleId = defaultRole.Id,
                 };
 
-                await _unitOfWork.UserRoles.AddRoleToUserAsync(assignedRole, cancellationToken);
 
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
-                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+                await _unitOfWork.UserRoles.AddRoleToUserAsync(assignedRole, cancellationToken);
 
                 var accessToken = _tokenGenerator.GenerateToken(user);
                 var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellationToken);
+
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 return new AuthResult(accessToken, refreshToken);
             }
@@ -87,11 +88,12 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         {
             var userEntity = await _unitOfWork.Users.GetByEmailAsync(request.Email, cancellationToken);
 
-            if (userEntity == null)
-                throw new InvalidCredentialsException();
+            bool isLoginValid = (userEntity == null || !_passwordHasher.Verify(request.Password, userEntity.PasswordHash));
 
-            if (!_passwordHasher.Verify(request.Password, userEntity.PasswordHash))
+            if (isLoginValid)
+            {
                 throw new InvalidCredentialsException();
+            }
 
             var user = _mapper.Map<User>(userEntity);
 
@@ -111,11 +113,11 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             if (!isTokenValid)
                 throw new InvalidRefreshTokenException();
 
-            await _refreshTokenService.RevokeRefreshTokenAsync(refreshToken, cancellationToken);
-
             var userEntity = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
             if (userEntity == null)
                 throw new UserNotFoundException(userId.ToString());
+
+            await _refreshTokenService.RevokeRefreshTokenAsync(refreshToken, cancellationToken);
 
             var user = _mapper.Map<User>(userEntity);
             var newAccessToken = _tokenGenerator.GenerateToken(user);

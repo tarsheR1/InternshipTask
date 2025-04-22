@@ -70,14 +70,12 @@ namespace UserManagementService.DataAccessLayer.Repositories
 
         public async Task<List<string>> GetUserRolesAsync(Guid userId, CancellationToken cancellation)
         {
-            var user = await _context.Users
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                .FirstOrDefaultAsync(u => u.Id == userId);
+            var roleNames = await _context.Users
+                .Where(u => u.Id == userId)
+                .SelectMany(u => u.UserRoles.Select(ur => ur.Role.Name))
+                .ToListAsync();
 
-            return user.UserRoles
-                .Select(ur => ur.Role.Name)
-                .ToList();
+            return roleNames;
         }
     }
 }

@@ -5,11 +5,11 @@ using UserManagementService.BusinessLogicLayer.Models.Settings;
 using UserManagementService.BusinessLogicLayer.Extensions;
 using UserManagementService.DataAccessLayer.Extensions;
 using UserManagementService.PresentationLayer.Extensions;
-using UserManagementService.BusinessLogicLayer.Services.ExternalServices.Mapping;
 using Microsoft.OpenApi.Models;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementService.PresentationLayer.DTO.Validators;
+using UserManagementService.BusinessLogicLayer.Models.Settings.Mapping;
 
 
 var builder = WebApplication.CreateBuilder(args);

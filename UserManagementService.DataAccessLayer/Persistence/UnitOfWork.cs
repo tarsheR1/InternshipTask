@@ -52,6 +52,12 @@ namespace UserManagementService.DataAccessLayer.Persistence
         {
             await _context.Database.RollbackTransactionAsync(cancellationToken);
         }
+        
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
         protected virtual void Dispose(bool disposing)
         {
@@ -61,12 +67,5 @@ namespace UserManagementService.DataAccessLayer.Persistence
             }
             _disposed = true;
         }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
     }
-
 }

@@ -1,20 +1,21 @@
+using AutoMapper;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
-using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Models.Pagination;
 using UserManagementService.DataAccessLayer.Interfaces;
 using UserManagementService.DataAccessLayer.Entities;
+
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly AutoMapper.IMapper _mapper;
+        private readonly IMapper _mapper;
 
-        public UserService(IUnitOfWork unitOfWork, AutoMapper.IMapper mapper)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -32,7 +33,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 pageSize,
                 cancellationToken);
 
-            List<User> users= _mapper.Map<List<User>>(usersEntity);
+            List<User> users = _mapper.Map<List<User>>(usersEntity);
 
             return new PagedResponse<User>(
                 users,

@@ -15,7 +15,6 @@ namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
 
         Task DeleteUserAsync(Guid userId, CancellationToken cancellationToken);
 
-
         Task<PagedResponse<User>> GetUsersPaginatedAsync(
             PaginationParameters paginationParameters,
             CancellationToken cancellationToken);

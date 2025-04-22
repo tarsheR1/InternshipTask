@@ -7,7 +7,6 @@ namespace UserManagementService.DataAccessLayer.Interfaces.Repositories
         Task<UserRoleEntity> GetAsync(Guid userId, int roleId, CancellationToken cancellationToken);
         Task<List<UserRoleEntity>> GetAllAsync(CancellationToken cancellationToken);
         Task RemoveRoleAssign(UserRoleEntity userRole, CancellationToken cancellationToken);
-        Task<bool> ExistsAsync(Guid userId, int roleId, CancellationToken cancellationToken);
                                                                                 
         Task<List<RoleEntity>> GetRolesForUserAsync(Guid userId, CancellationToken cancellationToken );
         Task<List<UserEntity>> GetUsersForRoleAsync(int roleId, CancellationToken cancellationToken);

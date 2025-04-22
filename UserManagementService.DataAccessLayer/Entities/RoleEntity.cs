@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace UserManagementService.DataAccessLayer.Entities
+﻿namespace UserManagementService.DataAccessLayer.Entities
 {
     public class RoleEntity
     {

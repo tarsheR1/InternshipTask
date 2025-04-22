@@ -40,12 +40,6 @@ namespace UserManagementService.DataAccessLayer.Repositories
              _context.UserRoles.Remove(userRole);
         }
 
-        public async Task<bool> ExistsAsync(Guid userId, int roleId, CancellationToken cancellationToken)
-        {
-            return await _context.UserRoles
-                .AnyAsync(ur => ur.UserId == userId && ur.RoleId == roleId);
-        }
-
         public async Task<List<RoleEntity>> GetRolesForUserAsync(Guid userId, CancellationToken cancellationToken)
         {
             return await _context.UserRoles
@@ -66,7 +60,8 @@ namespace UserManagementService.DataAccessLayer.Repositories
 
         public async Task<bool> UserHasRoleAsync(Guid userId, int roleId, CancellationToken cancellationToken)
         {
-            return await ExistsAsync(userId, roleId, cancellationToken);
+            return await _context.UserRoles
+                .AnyAsync(ur => ur.UserId == userId && ur.RoleId == roleId);
         }
 
         public async Task<bool> UserHasAnyRoleAsync(Guid userId, IEnumerable<int> roleIds, CancellationToken cancellationToken)
