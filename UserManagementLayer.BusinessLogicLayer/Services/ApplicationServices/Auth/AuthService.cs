@@ -18,6 +18,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         private readonly IPasswordHasher _passwordHasher;
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly AutoMapper.IMapper _mapper;
+        private readonly string defaultRole = "User";
 
         public AuthService(
             IUnitOfWork unitOfWork,
