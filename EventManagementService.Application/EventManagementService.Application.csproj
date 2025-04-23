@@ -10,4 +10,8 @@
     <ProjectReference Include="..\EventManagementService.Domain\EventManagementService.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
+
 </Project>
