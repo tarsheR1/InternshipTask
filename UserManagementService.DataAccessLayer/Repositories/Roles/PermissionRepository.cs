@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UserManagementService.DataAccessLayer.Entities;
-using UserManagementService.DataAccessLayer.Interfaces.Repositories;
+using UserManagementService.DataAccessLayer.Entities.Role;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories.Roles;
 using UserManagementService.DataAccessLayer.Persistence;
 
-namespace UserManagementService.DataAccessLayer.Repositories
+namespace UserManagementService.DataAccessLayer.Repositories.Roles
 {
     public class PermissionRepository : IPermissionRepository
     {
@@ -18,7 +18,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
         {
             return await _context.Permissions
                 .AsNoTracking() 
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<PermissionEntity> GetByIdAsync(int permissionId, CancellationToken cancellationToken)

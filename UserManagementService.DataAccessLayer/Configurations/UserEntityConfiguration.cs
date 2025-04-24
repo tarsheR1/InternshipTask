@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UserManagementService.DataAccessLayer.Entities;
+using UserManagementService.DataAccessLayer.Entities.Users;
 
 namespace UserManagementService.DataAccessLayer.Configurations
 {

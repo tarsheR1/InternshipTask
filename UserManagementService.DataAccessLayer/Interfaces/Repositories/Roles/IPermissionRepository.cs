@@ -1,6 +1,6 @@
-﻿using UserManagementService.DataAccessLayer.Entities;
+﻿using UserManagementService.DataAccessLayer.Entities.Role;
 
-namespace UserManagementService.DataAccessLayer.Interfaces.Repositories
+namespace UserManagementService.DataAccessLayer.Interfaces.Repositories.Roles
 {
     public interface IPermissionRepository
     {

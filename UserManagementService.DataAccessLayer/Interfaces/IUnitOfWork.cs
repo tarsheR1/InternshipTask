@@ -1,4 +1,6 @@
-﻿using UserManagementService.DataAccessLayer.Interfaces.Repositories;
+﻿using UserManagementService.DataAccessLayer.Interfaces.Repositories.Relations;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories.Roles;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories.Users;
 
 namespace UserManagementService.DataAccessLayer.Interfaces
 {

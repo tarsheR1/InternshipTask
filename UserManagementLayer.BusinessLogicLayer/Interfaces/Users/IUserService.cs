@@ -1,6 +1,6 @@
 ﻿using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
-using UserManagementService.BusinessLogicLayer.Models.Pagination;
+using UserManagementService.DataAccessLayer.Entities.Pagination;
 
 namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
 {

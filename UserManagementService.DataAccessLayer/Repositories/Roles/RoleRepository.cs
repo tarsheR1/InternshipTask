@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UserManagementService.DataAccessLayer.Entities;
-using UserManagementService.DataAccessLayer.Interfaces.Repositories;
+using UserManagementService.DataAccessLayer.Entities.Role;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories.Roles;
 using UserManagementService.DataAccessLayer.Persistence;
 
-namespace UserManagementService.DataAccessLayer.Repositories
+namespace UserManagementService.DataAccessLayer.Repositories.Roles
 {
     public class RoleRepository : IRoleRepository
     {
@@ -16,7 +16,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
 
         public async Task<List<RoleEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.Roles.ToListAsync();
+            return await _context.Roles.ToListAsync(cancellationToken);
         }
 
         public async Task<RoleEntity> GetByIdAsync(int roleId, CancellationToken cancellationToken)

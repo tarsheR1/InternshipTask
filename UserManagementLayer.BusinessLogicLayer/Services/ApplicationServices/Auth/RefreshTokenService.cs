@@ -1,8 +1,8 @@
 ﻿using System.Security.Cryptography;
 using UserManagementService.DataAccessLayer.Entities;
-using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
-using UserManagementService.BusinessLogicLayer.Exceptions.Token;    
+using UserManagementService.BusinessLogicLayer.Exceptions.Token;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories.Users;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {

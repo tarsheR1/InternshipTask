@@ -1,4 +1,7 @@
-﻿namespace UserManagementService.DataAccessLayer.Entities
+﻿using UserManagementService.DataAccessLayer.Entities.Role;
+using UserManagementService.DataAccessLayer.Entities.Users;
+
+namespace UserManagementService.DataAccessLayer.Entities.Relations
 {
     public class UserRoleEntity
     {

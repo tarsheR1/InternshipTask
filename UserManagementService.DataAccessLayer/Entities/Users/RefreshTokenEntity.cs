@@ -1,4 +1,4 @@
-﻿namespace UserManagementService.DataAccessLayer.Entities
+﻿namespace UserManagementService.DataAccessLayer.Entities.Users
 {
     public class RefreshTokenEntity
     {

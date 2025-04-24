@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UserManagementService.DataAccessLayer.Configurations;
-using UserManagementService.DataAccessLayer.Entities;
+using UserManagementService.DataAccessLayer.Entities.Relations;
+using UserManagementService.DataAccessLayer.Entities.Role;
+using UserManagementService.DataAccessLayer.Entities.Users;
 
 namespace UserManagementService.DataAccessLayer.Persistence
 {

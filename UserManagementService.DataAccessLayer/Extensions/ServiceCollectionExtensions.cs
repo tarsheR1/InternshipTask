@@ -1,10 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 using UserManagementService.DataAccessLayer.Persistence;
-using UserManagementService.DataAccessLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
 using UserManagementService.DataAccessLayer.Interfaces;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories.Users;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories.Roles;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories.Relations;
+using UserManagementService.DataAccessLayer.Repositories.Relations;
+using UserManagementService.DataAccessLayer.Repositories.Roles;
+using UserManagementService.DataAccessLayer.Repositories.Users;
 
 namespace UserManagementService.DataAccessLayer.Extensions
 {

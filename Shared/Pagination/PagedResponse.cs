@@ -1,4 +1,4 @@
-﻿namespace UserManagementService.BusinessLogicLayer.Models.Pagination
+﻿namespace Shared.Pagination
 {
     public class PagedResponse<T>
     {

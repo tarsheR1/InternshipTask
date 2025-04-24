@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using UserManagementService.DataAccessLayer.Entities;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
+using UserManagementService.DataAccessLayer.Entities.Role;
 
 namespace UserManagementService.BusinessLogicLayer.Models.Settings.Mapping
 {

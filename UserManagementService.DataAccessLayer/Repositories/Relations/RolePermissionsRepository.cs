@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UserManagementService.DataAccessLayer.Entities;
-using UserManagementService.DataAccessLayer.Interfaces.Repositories;
+using UserManagementService.DataAccessLayer.Entities.Relations;
+using UserManagementService.DataAccessLayer.Entities.Role;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories.Relations;
 using UserManagementService.DataAccessLayer.Persistence;
 
-namespace UserManagementService.DataAccessLayer.Repositories
+namespace UserManagementService.DataAccessLayer.Repositories.Relations
 {
     public class RolePermissionsRepository : IRolePermissionRepository
     {
@@ -19,7 +20,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
             return await _context.RolePermissions
                 .Include(rp => rp.Role)
                 .Include(rp => rp.Permission)
-                .FirstOrDefaultAsync(rp => rp.RoleId == roleId && rp.PermissionId == permissionId);
+                .FirstOrDefaultAsync(rp => rp.RoleId == roleId && rp.PermissionId == permissionId, cancellationToken);
         }
 
         public async Task<IEnumerable<RolePermissionEntity>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -32,7 +33,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
          
         public async Task AddAsync(RolePermissionEntity rolePermission, CancellationToken cancellationToken = default)
         {
-            await _context.RolePermissions.AddAsync(rolePermission);
+            await _context.RolePermissions.AddAsync(rolePermission, cancellationToken);
         }
 
         public async Task DeleteAsync(int roleId, int permissionId, CancellationToken cancellationToken = default)
@@ -47,7 +48,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
         public async Task<bool> ExistsAsync(int roleId, int permissionId, CancellationToken cancellationToken = default)
         {
             return await _context.RolePermissions
-                .AnyAsync(rp => rp.RoleId == roleId && rp.PermissionId == permissionId);
+                .AnyAsync(rp => rp.RoleId == roleId && rp.PermissionId == permissionId, cancellationToken);
         }
 
         public async Task<IEnumerable<PermissionEntity>> GetPermissionsForRoleAsync(int roleId, CancellationToken cancellationToken = default)
@@ -56,7 +57,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .Where(rp => rp.RoleId == roleId)
                 .Include(rp => rp.Permission)
                 .Select(rp => rp.Permission)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<RoleEntity>> GetRolesForPermissionAsync(int permissionId, CancellationToken cancellationToken)
@@ -65,7 +66,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .Where(rp => rp.PermissionId == permissionId)
                 .Include(rp => rp.Role)
                 .Select(rp => rp.Role)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
         public async Task AddPermissionToRoleAsync(int roleId, int permissionId, CancellationToken cancellationToken)
@@ -76,7 +77,7 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 {
                     RoleId = roleId,
                     PermissionId = permissionId
-                });
+                }, cancellationToken);
             }
         }
 
@@ -86,33 +87,6 @@ namespace UserManagementService.DataAccessLayer.Repositories
             CancellationToken cancellationToken = default)
         {
             await DeleteAsync(roleId, permissionId, cancellationToken);
-        }
-
-        public async Task UpdateRolePermissionsAsync(
-            int roleId, 
-            IEnumerable<int> permissionIds, 
-            CancellationToken cancellationToken = default)
-        {
-            var currentPermissions = await _context.RolePermissions
-                .Where(rp => rp.RoleId == roleId)
-                .ToListAsync(cancellationToken);
-
-            var permissionsToRemove = currentPermissions
-                .Where(cp => !permissionIds.Contains(cp.PermissionId))
-                .ToList();
-
-            _context.RolePermissions.RemoveRange(permissionsToRemove);
-
-            var existingPermissionIds = currentPermissions.Select(cp => cp.PermissionId);
-            var permissionsToAdd = permissionIds
-                .Where(pid => !existingPermissionIds.Contains(pid))
-                .Select(pid => new RolePermissionEntity
-                {
-                    RoleId = roleId,
-                    PermissionId = pid
-                });
-
-            await _context.RolePermissions.AddRangeAsync(permissionsToAdd, cancellationToken);
         }
     }
 }
