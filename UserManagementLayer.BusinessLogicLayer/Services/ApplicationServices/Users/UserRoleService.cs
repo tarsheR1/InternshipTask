@@ -2,7 +2,8 @@
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
-using UserManagementService.DataAccessLayer.Entities;
+using UserManagementService.BusinessLogicLayer.Models.Entities.Users; 
+using UserManagementService.DataAccessLayer.Entities.Relations;
 using UserManagementService.DataAccessLayer.Interfaces;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
@@ -43,13 +44,15 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     throw new AlreadyExistsException(roleId.ToString());
                 }
 
-                var userRole = new UserRoleEntity
+                var userRole = new UserRole
                 {
                     UserId = userId,
                     RoleId = roleId,
                 };
 
-                await _unitOfWork.UserRoles.AddRoleToUserAsync(userRole, cancellationToken);
+                var userRoleEntity = _mapper.Map<UserRoleEntity>(userRole);
+
+                await _unitOfWork.UserRoles.AddAsync(userRoleEntity, cancellationToken);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
             }
@@ -72,7 +75,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     throw new NotFoundException(roleId.ToString());
                 }
 
-                await _unitOfWork.UserRoles.RemoveRoleAssign(userRole, cancellationToken);
+                await _unitOfWork.UserRoles.DeleteAsync(userRole, cancellationToken);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
             }

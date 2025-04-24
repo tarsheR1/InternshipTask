@@ -6,7 +6,7 @@ namespace UserManagementService.PresentationLayer.Extensions
     {
         public static IApplicationBuilder UseGlobalErrorHandling(this IApplicationBuilder app)
         {
-            return app.UseMiddleware<ErrorHandlingMiddleware>();
+            return app.UseMiddleware<ExceptionHandlingMiddleware>();
         }
     }
 }

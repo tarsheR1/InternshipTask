@@ -27,11 +27,6 @@ namespace UserManagementService.BusinessLogicLayer.Extensions
 
             services.AddScoped<IPasswordHasher, PasswordHasher>();
 
-            var config = TypeAdapterConfig.GlobalSettings;
-            config.Scan(Assembly.GetExecutingAssembly());
-            services.AddSingleton(config);
-            services.AddScoped<IMapper, MapperService>();
-
             return services;
         }
     }

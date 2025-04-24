@@ -3,7 +3,7 @@ using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
-using UserManagementService.DataAccessLayer.Entities;
+using UserManagementService.DataAccessLayer.Entities.Role;
 using UserManagementService.DataAccessLayer.Interfaces;
 
 

@@ -29,8 +29,6 @@ builder.Services.AddDataAccessLayer(builder.Configuration);
 
 builder.Services.AddBusinessLogicLayer(builder.Configuration);
 
-MapsterConfig.Configure();
-
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 builder.Services.Configure<JwtSettings>(jwtSettings);
     

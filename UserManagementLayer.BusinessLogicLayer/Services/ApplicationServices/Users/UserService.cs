@@ -25,8 +25,12 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             PaginationParameters paginationParameters,
             CancellationToken cancellationToken)
         {
+            int skip = paginationParameters.PageNumber;
+            int take = paginationParameters.PageSize;
+
             (List<UserEntity> usersEntity, int totalCount) = await _unitOfWork.Users.GetPagedAsync(
-                paginationParameters,
+                skip,
+                take,
                 cancellationToken);
 
             List<User> users = _mapper.Map<List<User>>(usersEntity);

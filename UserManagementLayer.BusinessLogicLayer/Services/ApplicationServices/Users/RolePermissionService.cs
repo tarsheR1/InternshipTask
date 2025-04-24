@@ -3,7 +3,7 @@ using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 using UserManagementService.DataAccessLayer.Interfaces;
-using UserManagementService.DataAccessLayer.Entities;
+using UserManagementService.DataAccessLayer.Entities.Relations;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {
@@ -46,13 +46,15 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     throw new AlreadyExistsException($"Разрешение уже назначено для роли");
                 }
 
-                var rolePermission = new RolePermissionEntity
+                var rolePermission = new RolePermission
                 {
                     RoleId = roleId,
                     PermissionId = permissionId,
                 };
 
-                await _unitOfWork.RolePermission.AddAsync(rolePermission, cancellationToken);
+                var rolePermissionEntity = _mapper.Map<RolePermissionEntity>(rolePermission);
+
+                await _unitOfWork.RolePermission.AddAsync(rolePermissionEntity, cancellationToken);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
             }
@@ -72,7 +74,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 throw new NotFoundException($"Разрешение не назначено к роли");
             } 
 
-            await _unitOfWork.RolePermission.DeleteAsync(roleId, permissionId, cancellationToken);
+            await _unitOfWork.RolePermission.DeleteAsync(rolePermission, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
