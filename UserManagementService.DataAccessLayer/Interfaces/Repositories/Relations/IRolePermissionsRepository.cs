@@ -8,7 +8,5 @@ namespace UserManagementService.DataAccessLayer.Interfaces.Repositories.Relation
     {
         Task<List<PermissionEntity>> GetPermissionsForRoleAsync(int roleId, CancellationToken cancellationToken = default);
         Task<List<RoleEntity>> GetRolesForPermissionAsync(int permissionId, CancellationToken cancellationToken = default);
-        Task AddPermissionToRoleAsync(int roleId, int permissionId, CancellationToken cancellationToken = default);
-        Task RemovePermissionFromRoleAsync(int roleId, int permissionId, CancellationToken cancellationToken = default);
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Security.Cryptography;
-using UserManagementService.DataAccessLayer.Entities;
+using UserManagementService.DataAccessLayer.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
 using UserManagementService.BusinessLogicLayer.Exceptions.Token;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories.Users;
@@ -28,7 +28,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 Expires = DateTime.UtcNow.Add(_tokenLifetime)
             };
 
-            await _tokenRepository.CreateAsync(token, cancellationToken);
+            await _tokenRepository.AddAsync(token, cancellationToken);
             return tokenValue;
         }
 

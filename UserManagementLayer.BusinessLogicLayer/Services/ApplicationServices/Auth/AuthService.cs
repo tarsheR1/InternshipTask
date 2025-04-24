@@ -7,8 +7,8 @@ using UserManagementService.BusinessLogicLayer.Exceptions.Auth;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.DataAccessLayer.Interfaces;
-using UserManagementService.DataAccessLayer.Entities;
 using UserManagementService.DataAccessLayer.Entities.Users;
+using UserManagementService.DataAccessLayer.Entities.Relations;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {
@@ -69,7 +69,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 };
 
 
-                await _unitOfWork.UserRoles.AddRoleToUserAsync(assignedRole, cancellationToken);
+                await _unitOfWork.UserRoles.AddAsync(assignedRole, cancellationToken);
 
                 var accessToken = _tokenGenerator.GenerateToken(user);
                 var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellationToken);

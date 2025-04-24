@@ -1,10 +1,10 @@
 using AutoMapper;
+using Shared.Pagination;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.DataAccessLayer.Interfaces;
-using UserManagementService.DataAccessLayer.Entities.Pagination;
 using UserManagementService.DataAccessLayer.Entities.Users;
 
 
@@ -25,12 +25,8 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             PaginationParameters paginationParameters,
             CancellationToken cancellationToken)
         {
-            int pageNumber = paginationParameters.PageNumber;
-            int pageSize = paginationParameters.PageSize;
-
-            (List<UserEntity> usersEntity, int totalCount) = await _unitOfWork.Users.GetPagedUsersAsync(
-                pageNumber,
-                pageSize,
+            (List<UserEntity> usersEntity, int totalCount) = await _unitOfWork.Users.GetPagedAsync(
+                paginationParameters,
                 cancellationToken);
 
             List<User> users = _mapper.Map<List<User>>(usersEntity);

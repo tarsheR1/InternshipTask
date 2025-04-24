@@ -1,6 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Shared.Pagination;
-using System.Threading;
 using UserManagementService.DataAccessLayer.Entities.Users;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories.Users;
 using UserManagementService.DataAccessLayer.Persistence;
@@ -16,8 +14,9 @@ namespace UserManagementService.DataAccessLayer.Repositories.Users
             _context = context;
         }
 
-        public async Task<(List<UserEntity> Users, int TotalCount)> GetPagedAsync(
-            PaginationParameters parameters,
+        public async Task<(List<UserEntity> Items, int TotalCount)> GetPagedAsync(
+            int skip,
+            int take,
             CancellationToken cancellationToken)
         {
             var query = _context.Users
@@ -28,9 +27,8 @@ namespace UserManagementService.DataAccessLayer.Repositories.Users
             int totalCount = await query.CountAsync(cancellationToken);
 
             var users = await query
-                .OrderBy(u => u.Email) 
-                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
-                .Take(parameters.PageSize)
+                .Skip(skip)
+                .Take(take)
                 .ToListAsync(cancellationToken);
 
             return (users, totalCount);
