@@ -9,57 +9,55 @@ namespace EventManagementService.DataAccess.Repositories
     {
         private readonly EventDbContext _dbContext = eventDbContext;
 
-        public async Task<EventEntity> GetEventAsync(Guid id, CancellationToken cancellation)
+        public async Task<EventEntity> GetEventAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _dbContext.Events
                 .Include(e => e.Category)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.Id == id);
+                .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
         }
 
-        public async Task<List<EventEntity>> GetAllAsync(CancellationToken cancellation)
+        public async Task<List<EventEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _dbContext.Events
                 .Include(e => e.Category)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<(List<EventEntity> Events, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellation)
+        public async Task<(List<EventEntity> Events, int TotalCount)> GetPagedAsync(
+            int skip, 
+            int take, 
+            CancellationToken cancellationToken)
         {
             var query = _dbContext.Events
                 .Include(e => e.Category); 
 
-            var totalCount = await query.CountAsync();
+            var totalCount = await query.CountAsync(cancellationToken);
             var events = await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+                .Skip((skip - 1) * take)
+                .Take(take)
+                .ToListAsync(cancellationToken);
 
             return (events, totalCount);
         }
 
-        public async Task UpdateAsync(EventEntity eventEntity, CancellationToken cancellation)
+        public async Task UpdateAsync(EventEntity eventEntity, CancellationToken cancellationToken)
         {
             _dbContext.Events.Update(eventEntity);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task AddAsync(EventEntity eventEntity, CancellationToken cancellation)
+        public async Task AddAsync(EventEntity eventEntity, CancellationToken cancellationToken)
         {
-            await _dbContext.Events.AddAsync(eventEntity);
-            _dbContext.SaveChanges();
+            await _dbContext.Events.AddAsync(eventEntity, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task DeleteAsync(Guid id, CancellationToken cancellation)
+        public async Task DeleteAsync(EventEntity eventEntity, CancellationToken cancellationToken)
         {
-            var entity = await _dbContext.Events.FindAsync(id);
-
-            if (entity != null)
-            {
-                _dbContext.Events.Remove(entity);
-                await _dbContext.SaveChangesAsync();
-            }
+            _dbContext.Events.Remove(eventEntity);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

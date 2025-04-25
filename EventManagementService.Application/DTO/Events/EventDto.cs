@@ -8,6 +8,7 @@
         public DateTime Date;
         public string Location;
         public int CategoryId;
+        public bool IsActive;
 
         public CategoryDto Category;
     }
