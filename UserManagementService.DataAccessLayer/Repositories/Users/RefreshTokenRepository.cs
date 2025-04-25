@@ -45,15 +45,15 @@ namespace UserManagementService.DataAccessLayer.Repositories.Users
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task RevokeAsync(Guid id, DateTime revokedAt, CancellationToken cancellationToken)
-        {
-            var token = await GetByIdAsync(id, cancellationToken);
-            if (token != null)
-            {
-                token.Revoked = revokedAt;
-                await UpdateAsync(token, cancellationToken);
-            }
-        }
+        //public async Task RevokeAsync(Guid id, DateTime revokedAt, CancellationToken cancellationToken)
+        //{
+        //    var token = await GetByIdAsync(id, cancellationToken);
+        //    if (token != null)
+        //    {
+        //        token.Revoked = revokedAt;
+        //        await UpdateAsync(token, cancellationToken);
+        //    }
+        //}
 
         public async Task<bool> ExistsActiveTokenAsync(Guid userId, CancellationToken cancellationToken)
         {

@@ -18,7 +18,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         private readonly IJwtTokenGenerator _tokenGenerator;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IRefreshTokenService _refreshTokenService;
-        private readonly AutoMapper.IMapper _mapper;
+        private readonly IMapper _mapper;
         private readonly string defaultRole = "User";
 
         public AuthService(
@@ -26,7 +26,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             IJwtTokenGenerator tokenGenerator,
             IPasswordHasher passwordHasher,
             IRefreshTokenService refreshTokenService,
-            AutoMapper.IMapper mapper)
+            IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _tokenGenerator = tokenGenerator;
