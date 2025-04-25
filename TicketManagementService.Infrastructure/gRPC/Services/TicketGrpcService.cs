@@ -26,7 +26,7 @@ namespace TicketManagementService.Infrastructure.gRPC.Services
         {
             _logger.LogInformation("Creating ticket type via MediatR");
 
-            var command = new CreateTi
+            var command = new CreateTicket
             {
                 EventId = Guid.Parse(request.EventId),
                 TicketType = request.TicketType,
