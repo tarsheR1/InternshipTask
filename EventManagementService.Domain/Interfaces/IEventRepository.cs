@@ -1,19 +1,25 @@
 ﻿using EventManagementService.Domain.Models;
+using System.Linq.Expressions;
 
-namespace EventManagementService.Domain.Interfaces
+namespace EventManagementService.DataAccess.Repositories
 {
-    public interface IEventRepository 
+    public interface IEventRepository
     {
-        Task<EventEntity> GetEventAsync(Guid eventId, CancellationToken cancellation);
+        Task AddAsync(EventEntity entity, CancellationToken cancellationToken);
+        
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
 
-        Task<List<EventEntity>> GetAllAsync(CancellationToken cancellation);
+        Task<EventEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-        Task<(List<EventEntity> Events, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellation);
+        Task<List<EventEntity>> GetEventsAsync(
+            Expression<Func<EventEntity, bool>>? filter = null, 
+            List<Expression<Func<EventEntity, object>>>? includes = null, 
+            Func<IQueryable<EventEntity>, 
+            IOrderedQueryable<EventEntity>>? orderBy = null, 
+            int? skip = null, 
+            int? take = null, 
+            CancellationToken cancellationToken = default);
 
-        Task AddAsync(EventEntity eventEntity, CancellationToken cancellation);
-
-        Task UpdateAsync(EventEntity eventEntity, CancellationToken cancellation);
-
-        Task DeleteAsync(EventEntity eventEntity, CancellationToken cancellation);
+        Task UpdateAsync(EventEntity entity, CancellationToken cancellationToken);
     }
 }
