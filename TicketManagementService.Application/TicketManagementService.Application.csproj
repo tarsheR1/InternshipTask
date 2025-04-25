@@ -19,5 +19,12 @@
   <ItemGroup>
     <ProjectReference Include="..\TicketManagementService.Domain\TicketManagementService.Domain.csproj" />
   </ItemGroup>
+	<ItemGroup>
+  <Protobuf Include="Protos\ticket.proto" GrpcServices="Server" />
+</ItemGroup>  
+
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
 
 </Project>
