@@ -8,6 +8,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 {
     public class RefreshTokenService : IRefreshTokenService
     {
+        // Названия методов
         private readonly IRefreshTokenRepository _tokenRepository;
         private readonly TimeSpan _tokenLifetime = TimeSpan.FromDays(30);
 
