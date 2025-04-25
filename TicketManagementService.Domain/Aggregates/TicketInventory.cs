@@ -8,17 +8,17 @@ namespace TicketManagementService.Domain.Aggregates
     {
         private readonly List<DomainEvent> _domainEvents = new();
 
-        public Guid EventId { get; private set; }
-        public string TicketType { get; private set; }
-        public int TotalQuantity { get; private set; }
-        public int AvailableQuantity { get; private set; }
-        public int ReservedQuantity { get; private set; }
+        public Guid EventId { get; init; }
+        public string TicketType { get; init; }
+        public int TotalQuantity { get; init; }
+        public int AvailableQuantity { get; init; }
+        public int ReservedQuantity { get; init; }
 
         public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents.AsReadOnly();
         public void ClearDomainEvents() => _domainEvents.Clear();
 
 
-        private TicketInventory() { }
+        public TicketInventory() { }
 
         public TicketInventory(Guid eventId, string ticketType, int totalQuantity)
         {

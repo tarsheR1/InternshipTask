@@ -16,5 +16,8 @@
     <ProjectReference Include="..\TicketManagementService.Application\TicketManagementService.Application.csproj" />
     <ProjectReference Include="..\TicketManagementService.Infrastructure\TicketManagementService.Infrastructure.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<Protobuf Include="Protos\ticket.proto" GrpcServices="Server" />
+	</ItemGroup>
 
-</Project>
+</Project> 
