@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagementService.Prese
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagementService.DataAccessLayer", "UserManagementService.DataAccessLayer\UserManagementService.DataAccessLayer.csproj", "{F1A2CF44-3030-499C-B5D8-753141D736C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagementLayer.BusinessLogicLayer", "UserManagementLayer.BusinessLogicLayer\UserManagementLayer.BusinessLogicLayer.csproj", "{CA5BCE78-322A-46CD-98A0-1BACFBC2814D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagementService.BusinessLogicLayer", "UserManagementLayer.BusinessLogicLayer\UserManagementService.BusinessLogicLayer.csproj", "{CA5BCE78-322A-46CD-98A0-1BACFBC2814D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketManagementService.API", "TicketManagementService.API\TicketManagementService.API.csproj", "{91E90AA3-8D00-4BD8-9D0D-AF9E5B1EE932}"
 EndProject
@@ -41,6 +41,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketManagementService.DataAccess", "TicketManagementService.DataAccess\TicketManagementService.DataAccess.csproj", "{2B7A7FC2-DCDD-4AD8-93B8-95C611AB633A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketManagementService.Application", "TicketManagementService.Application\TicketManagementService.Application.csproj", "{394B874F-9CA1-44F7-BC15-11A54AA1D47A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Protos", "Protos", "{FF7DB75A-7CBB-44A3-AED3-822C2CC877B0}"
+	ProjectSection(SolutionItems) = preProject
+		ticket.proto = ticket.proto
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -122,6 +127,7 @@ Global
 		{54BAD619-6F44-4919-A57D-DE55F8BDF046} = {702BA432-1426-4580-A971-57CA6038C6F6}
 		{2B7A7FC2-DCDD-4AD8-93B8-95C611AB633A} = {702BA432-1426-4580-A971-57CA6038C6F6}
 		{394B874F-9CA1-44F7-BC15-11A54AA1D47A} = {702BA432-1426-4580-A971-57CA6038C6F6}
+		{FF7DB75A-7CBB-44A3-AED3-822C2CC877B0} = {55820BC0-08F0-4CF0-9030-C86F147C2943}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0CA0B00-B9B1-49D5-A96C-754C1B43D27E}

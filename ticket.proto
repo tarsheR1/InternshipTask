@@ -1,7 +1,7 @@
 syntax = "proto3";
-option csharp_namespace = "TicketService";
+option csharp_namespace = "TicketService.Grpc";
 
-service Ticket {
+service TicketService {
   rpc ReserveTickets (ReserveRequest) returns (ReserveResponse);
 }
 
