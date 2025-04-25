@@ -1,6 +1,9 @@
-﻿namespace EventManagementService.Application.Queries
+﻿using MediatR;
+using EventManagementService.Domain.Models;
+
+namespace EventManagementService.Application.Queries
 {
-    public class GetEventByIdQuery
+    public class GetEventByIdQuery : IRequest<EventEntity>
     {
         public Guid Id;
     }

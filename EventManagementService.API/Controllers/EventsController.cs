@@ -3,7 +3,7 @@ using EventManagementService.Application.Сommands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventManagementMicroservice.API.Controllers
+namespace EventManagementService.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

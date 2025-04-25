@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace TicketManagementService.Application.UseCases
+namespace EventManagementService.Application.Handlers.CommandHandlers
 {
     
     public class GetTicketInventoriesForEventQueryHandler

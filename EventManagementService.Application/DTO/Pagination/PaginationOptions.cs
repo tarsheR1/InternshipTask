@@ -1,4 +1,4 @@
-﻿namespace EventManagementService.Domain.Models.Pagination
+﻿namespace EventManagementService.Application.DTO.Pagination
 {
     public class PaginationOptions
     {
