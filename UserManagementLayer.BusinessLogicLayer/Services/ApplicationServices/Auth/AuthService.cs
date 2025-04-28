@@ -19,7 +19,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         private readonly IPasswordHasher _passwordHasher;
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly IMapper _mapper;
-        private readonly string defaultRole = "User";
+        private readonly string defaultRoleForUser = "User";
 
         public AuthService(
             IUnitOfWork unitOfWork,
@@ -57,7 +57,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     IsActive = false
                 };
 
-                var defaultRole = await _unitOfWork.Roles.GetByNameAsync("User", cancellationToken);
+                var defaultRole = await _unitOfWork.Roles.GetByNameAsync(defaultRoleForUser, cancellationToken);
 
                 var userEntity = _mapper.Map<UserEntity>(user);
                 await _unitOfWork.Users.AddAsync(userEntity, cancellationToken);

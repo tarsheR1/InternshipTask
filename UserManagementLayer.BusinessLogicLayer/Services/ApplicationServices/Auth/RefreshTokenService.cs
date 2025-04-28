@@ -8,7 +8,6 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 {
     public class RefreshTokenService : IRefreshTokenService
     {
-        // Названия методов
         private readonly IRefreshTokenRepository _tokenRepository;
         private readonly TimeSpan _tokenLifetime = TimeSpan.FromDays(30);
 
@@ -17,7 +16,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             _tokenRepository = tokenRepository;
         }
 
-        public async Task<string> GenerateRefreshTokenAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<string> GenerateAndSaveRefreshTokenAsync(Guid userId, CancellationToken cancellationToken)
         {
             var tokenValue = GenerateSecureToken();
 
