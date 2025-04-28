@@ -1,18 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using UserManagementService.DataAccessLayer.Entities.Users;
-using UserManagementService.DataAccessLayer.Interfaces.Repositories.Users;
 using UserManagementService.DataAccessLayer.Persistence;
+using UserManagementService.DataAccessLayer.Repositories.Base;
 
 namespace UserManagementService.DataAccessLayer.Repositories.Users
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : BaseRepository<UserEntity, Guid>
     {
         private readonly UserManagementDbContext _context;
 
-        public UserRepository(UserManagementDbContext context)
-        {
-            _context = context;
-        }
+        public UserRepository(UserManagementDbContext context) : base(context) { }
 
         public async Task<(List<UserEntity> Items, int TotalCount)> GetPagedAsync(
             int skip,
@@ -34,14 +31,6 @@ namespace UserManagementService.DataAccessLayer.Repositories.Users
             return (users, totalCount);
         }
 
-        public async Task<UserEntity> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
-        {
-            return await _context.Users
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                .FirstOrDefaultAsync(u => u.Id == userId);
-        }
-
         public async Task<UserEntity> GetByEmailAsync(string email, CancellationToken cancellationToken)
         {
             return await _context.Users
@@ -50,21 +39,6 @@ namespace UserManagementService.DataAccessLayer.Repositories.Users
                 .ThenInclude(rp => rp.RolePermissions)
                 .ThenInclude(p => p.Permission)
                 .FirstOrDefaultAsync(u => u.Email == email);
-        }
-
-        public async Task AddAsync(UserEntity user, CancellationToken cancellationToken)
-        {
-            await _context.Users.AddAsync(user, cancellationToken);
-        }
-
-        public async Task UpdateAsync(UserEntity user, CancellationToken cancellationToken)
-        {
-            _context.Users.Update(user);
-        }
-
-        public async Task DeleteAsync(UserEntity user, CancellationToken cancellationToken)
-        {
-            _context.Users.Remove(user);
         }
 
         public async Task<List<string>> GetUserRolesAsync(Guid userId, CancellationToken cancellationToken)
