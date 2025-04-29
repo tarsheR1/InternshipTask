@@ -1,6 +1,4 @@
-﻿using UserManagementService.DataAccessLayer.Entities;
-
-namespace UserManagementService.BusinessLogicLayer.Models.Entities.Users
+﻿namespace UserManagementService.BusinessLogicLayer.Models.Entities.Users
 {
     public class User
     {

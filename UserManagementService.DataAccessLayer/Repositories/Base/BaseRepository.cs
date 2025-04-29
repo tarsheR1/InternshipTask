@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UserManagementService.DataAccessLayer.Persistence;
+using Shared.Interfaces;
 
 namespace UserManagementService.DataAccessLayer.Repositories.Base
 {
@@ -39,6 +40,63 @@ namespace UserManagementService.DataAccessLayer.Repositories.Base
         {
             _dbSet.Remove(entity);
             await Task.CompletedTask;
+        }
+
+        public virtual async Task<TEntity?> GetBySpecAsync(
+            ISpecification<TEntity> spec,
+            CancellationToken cancellationToken = default)
+        {
+            return await ApplySpecification(spec)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public virtual async Task<List<TEntity>> GetAllBySpecAsync(
+            ISpecification<TEntity> spec,
+            CancellationToken cancellationToken = default)
+        {
+            return await ApplySpecification(spec)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
+        }
+
+        public virtual async Task<int> CountBySpecAsync(
+            ISpecification<TEntity> spec,
+            CancellationToken cancellationToken = default)
+        {
+            return await ApplySpecification(spec).CountAsync(cancellationToken);
+        }
+
+        public virtual async Task<bool> AnyBySpecAsync(
+            ISpecification<TEntity> spec,
+            CancellationToken cancellationToken = default)
+        {
+            return await ApplySpecification(spec)
+                .AsNoTracking()
+                .AnyAsync(cancellationToken);
+        }
+
+        protected virtual IQueryable<TEntity> ApplySpecification(ISpecification<TEntity> spec)
+        {
+            IQueryable<TEntity> query = _dbSet.AsQueryable();
+
+            if (spec.Criteria != null)
+            {
+                query = query.Where(spec.Criteria);
+            }
+
+            query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
+
+            if (spec.OrderBy != null)
+            {
+                query = query.OrderBy(spec.OrderBy);
+            }
+            else if (spec.OrderByDescending != null)
+            {
+                query = query.OrderByDescending(spec.OrderByDescending);
+            }
+
+            return query;
         }
     }
 }

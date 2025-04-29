@@ -54,7 +54,7 @@ namespace UserManagementService.DataAccessLayer.Repositories.Relations
         public async Task<List<UserEntity>> GetUsersForRoleAsync(int roleId, CancellationToken cancellationToken)
         {
             return await _context.UserRoles
-                .Where(ur => ur.RoleId == roleId)
+                .Where(ur => ur.RoleId == roleId)       
                 .Include(ur => ur.User)
                 .Select(ur => ur.User)
                 .ToListAsync(cancellationToken);
