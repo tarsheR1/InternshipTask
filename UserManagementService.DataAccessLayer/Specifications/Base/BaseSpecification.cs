@@ -27,7 +27,6 @@ namespace UserManagementService.DataAccessLayer.Specifications.Base
             var parameter = Expression.Parameter(typeof(T), "x");
             var property = Expression.Property(parameter, sortBy);
             var lambda = Expression.Lambda<Func<T, object>>(property, parameter);
-
             if (isDescending)
                 AddOrderByDescending(lambda);
             else

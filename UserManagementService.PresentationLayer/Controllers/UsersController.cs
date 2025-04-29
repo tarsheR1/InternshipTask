@@ -2,7 +2,10 @@
 using UserManagementService.PresentationLayer.DTO.Request;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
-using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
+using AutoMapper;
+using Shared.Pagination;
+using UserManagementService.BusinessLogicLayer.Models.Queries;
+using UserManagementService.DataAccessLayer.Specifications.Users;
 
 namespace UserManagementService.PresentationLayer.Controllers
 {
@@ -27,6 +30,49 @@ namespace UserManagementService.PresentationLayer.Controllers
             var user = await _userService.GetUserByIdAsync(userId, cancellationToken);
             return Ok(user);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsersPaginated(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string search = null,
+            [FromQuery] bool? isActive = null,
+            [FromQuery] List<string> roles = null,
+            [FromQuery] DateTime? createdFrom = null,
+            [FromQuery] DateTime? createdTo = null,
+            [FromQuery] string sortField = "CreatedAt",
+            [FromQuery] bool isDescending = true,
+            CancellationToken cancellationToken = default)
+        {
+            var pagination = new PaginationParameters
+            { 
+                PageNumber = pageNumber, 
+                PageSize = pageSize
+            };
+
+            var filter = new UserFilter
+            {
+                Search = search,
+                IsActive = isActive,
+                Roles = roles ?? new List<string>(),
+                CreatedFrom = createdFrom,
+                CreatedTo = createdTo
+            };
+            var sort = new SortOptions 
+            { 
+                Field = sortField, 
+                IsDescending = isDescending 
+            };
+
+            var result = await _userService.GetUsersPaginatedAsync(
+                pagination,
+                filter,
+                sort,
+                cancellationToken);
+
+            return Ok(result);
+        }
+
 
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateUser(

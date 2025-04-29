@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UserManagementService.DataAccessLayer.Persistence;
 using Shared.Interfaces;
+using Shared.Pagination;
 
 namespace UserManagementService.DataAccessLayer.Repositories.Base
 {
@@ -51,13 +52,21 @@ namespace UserManagementService.DataAccessLayer.Repositories.Base
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public virtual async Task<List<TEntity>> GetAllBySpecAsync(
+        public virtual async Task<(List<TEntity> Items, int TotalCount)> GetAllBySpecAsync(
             ISpecification<TEntity> spec,
+            PaginationParameters paginationParameters,
             CancellationToken cancellationToken = default)
         {
-            return await ApplySpecification(spec)
-                .AsNoTracking()
+            var query = ApplySpecification(spec);
+            var totalCount = await query.CountAsync(cancellationToken);
+
+
+            var items = await query
+                .Skip(paginationParameters.Skip)
+                .Take(paginationParameters.Take)
                 .ToListAsync(cancellationToken);
+
+            return (items, totalCount);
         }
 
         public virtual async Task<int> CountBySpecAsync(

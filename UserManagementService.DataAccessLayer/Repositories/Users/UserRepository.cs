@@ -11,26 +11,6 @@ namespace UserManagementService.DataAccessLayer.Repositories.Users
 
         public UserRepository(UserManagementDbContext context) : base(context) { }
 
-        public async Task<(List<UserEntity> Items, int TotalCount)> GetPagedAsync(
-            int skip,
-            int take,
-            CancellationToken cancellationToken)
-        {
-            var query = _context.Users
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                .AsNoTracking();
-
-            int totalCount = await query.CountAsync(cancellationToken);
-
-            var users = await query
-                .Skip(skip)
-                .Take(take)
-                .ToListAsync(cancellationToken);
-
-            return (users, totalCount);
-        }
-
         public async Task<UserEntity> GetByEmailAsync(string email, CancellationToken cancellationToken)
         {
             return await _context.Users
