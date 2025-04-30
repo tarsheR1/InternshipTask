@@ -33,35 +33,29 @@ namespace UserManagementService.PresentationLayer.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetUsersPaginated(
-            [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 10,
-            [FromQuery] string search = null,
-            [FromQuery] bool? isActive = null,
-            [FromQuery] List<string> roles = null,
-            [FromQuery] DateTime? createdFrom = null,
-            [FromQuery] DateTime? createdTo = null,
-            [FromQuery] string sortField = "CreatedAt",
-            [FromQuery] bool isDescending = true,
+            [FromQuery] GetUsersRequestDto request,
             CancellationToken cancellationToken = default)
         {
+            
             var pagination = new PaginationParameters
             { 
-                PageNumber = pageNumber, 
-                PageSize = pageSize
+                PageNumber = request.PageNumber, 
+                PageSize = request.PageSize
             };
 
             var filter = new UserFilter
             {
-                Search = search,
-                IsActive = isActive,
-                Roles = roles ?? new List<string>(),
-                CreatedFrom = createdFrom,
-                CreatedTo = createdTo
+                Search = request.Search,
+                IsActive = request.IsActive,
+                Roles = request.Roles,
+                CreatedFrom = request.CreatedFrom,
+                CreatedTo = request.CreatedTo
             };
+
             var sort = new SortOptions 
             { 
-                Field = sortField, 
-                IsDescending = isDescending 
+                Field = request.SortField, 
+                IsDescending = request.IsDescending 
             };
 
             var result = await _userService.GetUsersPaginatedAsync(
@@ -72,7 +66,6 @@ namespace UserManagementService.PresentationLayer.Controllers
 
             return Ok(result);
         }
-
 
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateUser(

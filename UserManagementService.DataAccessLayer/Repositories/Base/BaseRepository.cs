@@ -52,21 +52,10 @@ namespace UserManagementService.DataAccessLayer.Repositories.Base
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public virtual async Task<(List<TEntity> Items, int TotalCount)> GetAllBySpecAsync(
-            ISpecification<TEntity> spec,
-            PaginationParameters paginationParameters,
-            CancellationToken cancellationToken = default)
+        public virtual IQueryable<TEntity> GetAllBySpecAsync(ISpecification<TEntity> spec)
         {
             var query = ApplySpecification(spec);
-            var totalCount = await query.CountAsync(cancellationToken);
-
-
-            var items = await query
-                .Skip(paginationParameters.Skip)
-                .Take(paginationParameters.Take)
-                .ToListAsync(cancellationToken);
-
-            return (items, totalCount);
+            return query;
         }
 
         public virtual async Task<int> CountBySpecAsync(

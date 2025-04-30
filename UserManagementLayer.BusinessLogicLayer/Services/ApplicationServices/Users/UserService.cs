@@ -7,6 +7,7 @@ using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.DataAccessLayer.Interfaces;
 using UserManagementService.DataAccessLayer.Specifications.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {
@@ -34,10 +35,14 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 spec.ApplyOrdering(sort.Field, sort.IsDescending);
             }
 
-            var (usersEntity, totalCount) = await _unitOfWork.Users.GetAllBySpecAsync(
-                spec,
-                paginationParameters,
-                cancellationToken);
+            var query = _unitOfWork.Users.GetAllBySpecAsync(spec);
+
+            var totalCount = await _unitOfWork.Users.CountBySpecAsync(spec);
+
+            var usersEntity = await query
+                .Skip(5)
+                .Take(paginationParameters.PageSize)
+                .ToListAsync(cancellationToken);
 
             var users = _mapper.Map<List<User>>(usersEntity);
 

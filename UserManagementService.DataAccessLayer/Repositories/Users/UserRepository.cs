@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using UserManagementService.DataAccessLayer.Entities.Users;
+using UserManagementService.DataAccessLayer.Interfaces.Repositories.Users;
 using UserManagementService.DataAccessLayer.Persistence;
 using UserManagementService.DataAccessLayer.Repositories.Base;
 
 namespace UserManagementService.DataAccessLayer.Repositories.Users
 {
-    public class UserRepository : BaseRepository<UserEntity, Guid>
+    public class UserRepository : BaseRepository<UserEntity, Guid>, IUserRepository
     {
         private readonly UserManagementDbContext _context;
 
