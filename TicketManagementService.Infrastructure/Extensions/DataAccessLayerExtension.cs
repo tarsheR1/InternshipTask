@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Driver;
 using TicketManagementService.Domain.Interfaces.Repositories.Read;
 using TicketManagementService.Domain.Interfaces.Repositories.Write;
 using TicketManagementService.Infrastructure.Persistance.Repositories.Read;
@@ -7,7 +6,7 @@ using TicketManagementService.Infrastructure.Persistance.Repositories.Write;
 
 namespace TicketManagementService.Infrastructure.Extensions
 {
-    public static class DependencyInjection
+    public static class DataAccessLayerExtension
     {
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
@@ -27,7 +26,5 @@ namespace TicketManagementService.Infrastructure.Extensions
 
             return services;
         }
-
-
     }
 }

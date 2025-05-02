@@ -1,4 +1,6 @@
-﻿namespace TicketManagementService.API.Middlewares
+﻿using TicketManagementService.Domain.Exceptions;
+
+namespace TicketManagementService.API.Middlewares
 {
     public class ExceptionHandlingMiddleware
     {

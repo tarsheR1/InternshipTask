@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using MongoDB.Driver;
+using System.Text;
 using TicketManagementService.Infrastructure.Settings;
 using TicketManagementService.Infrastructure.Extensions;
 using TicketManagementService.Application.UseCases;
