@@ -26,7 +26,7 @@ namespace EventManagementService.Application.Handlers.CommandHandlers
                 CategoryId = request.CategoryId
             };
 
-            await _eventRepository.AddAsync(eventEntity);
+            await _eventRepository.AddAsync(eventEntity, cancellationToken);
             return eventEntity.Id;
         }
     }

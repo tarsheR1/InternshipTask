@@ -16,7 +16,7 @@ namespace EventManagementService.Application.Handlers.CommandHandlers
 
         public async Task<Guid> Handle(UpdateEventCommand request, CancellationToken cancellationToken)
         {
-            var eventEntity = await _eventRepository.GetEventAsync(request.Id);
+            var eventEntity = await _eventRepository.GetByIdAsync(request.Id, cancellationToken);
             if (eventEntity == null)
             {
                 throw new KeyNotFoundException($"Мероприятие с ID {request.Id} не найдено.");
@@ -28,7 +28,7 @@ namespace EventManagementService.Application.Handlers.CommandHandlers
             eventEntity.Location = request.Location;
             eventEntity.CategoryId = request.CategoryId;
 
-            await _eventRepository.UpdateAsync(eventEntity);
+            await _eventRepository.UpdateAsync(eventEntity, cancellationToken);
 
             return eventEntity.Id;
         }

@@ -18,12 +18,12 @@ namespace EventManagementService.DataAccess.Repositories
         }
 
         public async Task<List<EventEntity>> GetEventsAsync(
+            CancellationToken cancellationToken,
             Expression<Func<EventEntity, bool>>? filter = null,
             List<Expression<Func<EventEntity, object>>>? includes = null,
             Func<IQueryable<EventEntity>, IOrderedQueryable<EventEntity>>? orderBy = null,
             int? skip = null,
-            int? take = null,
-            CancellationToken cancellationToken)
+            int? take = null)
         {
             IQueryable<EventEntity> query = _events;
 
@@ -62,14 +62,12 @@ namespace EventManagementService.DataAccess.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+        public async Task DeleteAsync(EventEntity entity, CancellationToken cancellationToken)
         {
-            var entity = await GetByIdAsync(id, cancellationToken);
-            if (entity != null)
-            {
-                _events.Remove(entity);
-                await _context.SaveChangesAsync(cancellationToken);
-            }
+            
+            _events.Remove(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+            
         }
     }
 }

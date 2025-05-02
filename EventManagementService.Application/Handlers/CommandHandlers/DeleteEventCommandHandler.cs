@@ -1,31 +1,32 @@
-﻿using EventManagementService.Domain.Interfaces;
+﻿using EventManagementService.Application.Сommands;
+using EventManagementService.Domain.Interfaces;
+using EventManagementService.Domain.Models;
 using MediatR;
 
 namespace EventManagementService.Application.Handlers.CommandHandlers
 {
     
-    public class GetTicketInventoriesForEventQueryHandler
-        : IRequestHandler<GetTicketInventoriesForEventQuery, IReadOnlyList<TicketInventory>>
+    public class DeleteEventCommandHandler
+        : IRequestHandler<DeleteEventCommand, EventEntity>
     {
-        private readonly IEventRepository _readRepository;
+        private readonly IEventRepository _eventRepository;
 
-        public GetTicketInventoriesForEventQueryHandler(
-            ITicketInventoryReadRepository readRepository)
+        public DeleteEventCommandHandler(IEventRepository eventRepository)
         {
-            _readRepository = readRepository;
+            _eventRepository = eventRepository;
         }
 
-        public async Task<IReadOnlyList<TicketInventory>> Handle(
-            GetTicketInventoriesForEventQuery query,
-            CancellationToken cancellationToken)
+        public async Task<Guid> Handle(DeleteEventCommand request, CancellationToken cancellationToken)
         {
-            if (query.EventId == Guid.Empty)
-                throw new ArgumentException("Invalid event ID");
+            var eventEntity = await _eventRepository.GetByIdAsync(request.Id, cancellationToken);
+            if (eventEntity == null)
+            {
+                throw new KeyNotFoundException($"Мероприятие с ID {request.Id} не найдено.");
+            }
 
-            var ticketInventories = await _readRepository
-                .GetTicketInventoriesByEventId(query.EventId);
+            await _eventRepository.DeleteAsync(eventEntity, cancellationToken);
 
-            return ticketInventories ?? new List<TicketInventory>().AsReadOnly();
+            return eventEntity.Id;
         }
     }
 }
