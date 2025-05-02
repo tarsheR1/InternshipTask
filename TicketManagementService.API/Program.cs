@@ -56,7 +56,7 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim("permission", "BuyTicket"));
 
     options.AddPolicy("ManageTickets", policy =>
-        policy.RequireClaim("permission", "ModerateEvents"));
+        policy.RequireClaim("permission", "ManageTickets"));
 });
 
 
