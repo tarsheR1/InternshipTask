@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using EventManagementService.Domain.Interfaces;
+using MediatR;
 
 namespace EventManagementService.Application.Handlers.CommandHandlers
 {
@@ -6,7 +7,7 @@ namespace EventManagementService.Application.Handlers.CommandHandlers
     public class GetTicketInventoriesForEventQueryHandler
         : IRequestHandler<GetTicketInventoriesForEventQuery, IReadOnlyList<TicketInventory>>
     {
-        private readonly ITicketInventoryReadRepository _readRepository;
+        private readonly IEventRepository _readRepository;
 
         public GetTicketInventoriesForEventQueryHandler(
             ITicketInventoryReadRepository readRepository)

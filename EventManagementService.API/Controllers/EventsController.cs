@@ -1,7 +1,7 @@
-﻿using EventManagementService.Application.Queries;
-using EventManagementService.Application.Сommands;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using EventManagementService.Application.Queries;
+using EventManagementService.Application.Сommands;
 
 namespace EventManagementService.API.Controllers
 {
@@ -20,7 +20,7 @@ namespace EventManagementService.API.Controllers
         public async Task<ActionResult<EventEntity>> GetEventById(Guid id, CancellationToken cancellation)
         {
             var query = new GetEventByIdQuery { Id = id };
-            var eventEntity = await _mediator.Send(query);
+            var eventEntity = await _mediator.Send(query, cancellation);
             return Ok(eventEntity);
         }
 
@@ -53,7 +53,7 @@ namespace EventManagementService.API.Controllers
                 return BadRequest("ID в маршруте и теле запроса не совпадают.");
             }
 
-            await _mediator.Send(command);
+            await _mediator.Send(command, cancellation);
             return Ok(); 
         }
 
