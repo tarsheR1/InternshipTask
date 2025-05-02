@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using UserManagementService.BusinessLogicLayer.Exceptions.Core;
 
 namespace UserManagementService.PresentationLayer.Middlewares
 {
@@ -34,8 +35,8 @@ namespace UserManagementService.PresentationLayer.Middlewares
                     Errors = ex.Errors.Select(e => new
                     {
                         Property = e.PropertyName,
-                        Message = e.ErrorMessage,
-                        Code = e.ErrorCode
+                        Message = e.Message,
+                        Code = e.Code
                     })
                 };
 

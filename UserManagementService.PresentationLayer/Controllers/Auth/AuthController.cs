@@ -16,7 +16,7 @@ namespace UserManagementService.PresentationLayer.Controllers.Auth
             _authService = authService;
         }
 
-        [HttpPost("registrations")]
+        [HttpPost("users")]
         public async Task<IActionResult> Register(
             [FromBody] RegisterUserRequestDto request,
             CancellationToken cancellationToken)
@@ -26,7 +26,7 @@ namespace UserManagementService.PresentationLayer.Controllers.Auth
             return Ok(authResult);
         }
 
-        [HttpPost("sessions")]
+        [HttpPost("auth/token")]
         public async Task<IActionResult> Login(
             [FromBody] LoginRequestDto request,
             CancellationToken cancellationToken)
