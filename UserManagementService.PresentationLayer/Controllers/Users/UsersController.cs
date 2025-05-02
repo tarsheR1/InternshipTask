@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
-using UserManagementService.BusinessLogicLayer.Models.Commands;
 using AutoMapper;
 using Shared.Pagination;
 using UserManagementService.BusinessLogicLayer.Models.Queries;

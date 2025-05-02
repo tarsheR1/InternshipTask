@@ -1,4 +1,6 @@
-﻿using UserManagementService.BusinessLogicLayer.Exceptions.Auth;
+﻿using FluentValidation;
+using System.Text.Json;
+using UserManagementService.BusinessLogicLayer.Exceptions.Auth;
 using UserManagementService.BusinessLogicLayer.Exceptions.Core;
 using UserManagementService.BusinessLogicLayer.Exceptions.Token;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
@@ -6,8 +8,6 @@ using UserManagementService.BusinessLogicLayer.Exceptions.Jwt;
 
 namespace UserManagementService.PresentationLayer.Middlewares
 {
-
-    // TODO:  I will add the logger when there is an ELC stack.
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
@@ -34,19 +34,50 @@ namespace UserManagementService.PresentationLayer.Middlewares
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = GetStatusCode(ex);
 
-            var errorResponse = new
+            var errorResponse = CreateErrorResponse(ex);
+            await context.Response.WriteAsJsonAsync(errorResponse, new JsonSerializerOptions
             {
-                ErrorCode = (ex as BusinessLogicException)?.ErrorCode ?? "internal_error",
-                Message = ex.Message
-            };
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            });
+        }
 
-            await context.Response.WriteAsJsonAsync(errorResponse);            
+        private static object CreateErrorResponse(Exception ex)
+        {
+            return ex switch
+            {
+                UserManagementService.BusinessLogicLayer.Exceptions.Core.ValidationException validationEx => new
+                {
+                    ErrorCode = validationEx.ErrorCode,
+                    Message = validationEx.Message,
+                    Errors = validationEx.Errors.Select(e => new
+                    {
+                        Property = e.PropertyName,
+                        Code = e.Code,
+                        Message = e.Message
+                    })
+                },
+
+                BusinessLogicException businessEx => new
+                {
+                    ErrorCode = businessEx.ErrorCode,
+                    Message = businessEx.Message
+                },
+
+                _ => new
+                {
+                    ErrorCode = "internal_error",
+                    Message = "An unexpected error occurred"
+                }
+            };
         }
 
         private static int GetStatusCode(Exception ex)
         {
             return ex switch
             {
+                UserManagementService.BusinessLogicLayer.Exceptions.Core.ValidationException => StatusCodes.Status400BadRequest,
+
                 // Auth
                 InvalidCredentialsException => StatusCodes.Status401Unauthorized,
                 InvalidRefreshTokenException => StatusCodes.Status401Unauthorized,

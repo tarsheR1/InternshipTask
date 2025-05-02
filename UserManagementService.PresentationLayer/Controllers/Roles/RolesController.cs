@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
-using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
 
 [ApiController]

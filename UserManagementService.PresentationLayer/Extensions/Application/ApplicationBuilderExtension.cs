@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementService.BusinessLogicLayer.Extensions;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Validators;
@@ -24,6 +25,9 @@ namespace UserManagementService.PresentationLayer.Extensions.Application
                 .AddSwaggerWithJwtAuth()
                 .AddValidatorsFromAssemblyContaining<LoginRequestDtoValidator>(ServiceLifetime.Scoped)
                 .AddAutoMapper(typeof(UserProfile))
+                .AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters()
+                .AddValidatorsFromAssemblyContaining<LoginRequestDtoValidator>()
                 .Configure<ApiBehaviorOptions>(options =>
                 {
                     options.SuppressModelStateInvalidFilter = true;
