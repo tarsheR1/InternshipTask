@@ -8,6 +8,8 @@ namespace UserManagementService.PresentationLayer.Extensions.Configuration
     {
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
+            var jwtSettings = configuration.GetSection("JwtSettings");
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -17,10 +19,10 @@ namespace UserManagementService.PresentationLayer.Extensions.Configuration
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = configuration["JwtSettings:Issuer"],
-                        ValidAudience = configuration["JwtSettings:Audience"],
+                        ValidIssuer = jwtSettings["JwtSettings:Issuer"],
+                        ValidAudience = jwtSettings["JwtSettings:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]))
+                            Encoding.UTF8.GetBytes(jwtSettings["JwtSettings:Secret"]))
                     };
                 });
 

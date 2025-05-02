@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
-using UserManagementService.BusinessLogicLayer.Models.Commands;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 using UserManagementService.DataAccessLayer.Entities.Role;
 using UserManagementService.DataAccessLayer.Interfaces;
@@ -20,7 +20,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             _mapper = mapper;
         }
 
-        public async Task CreateRoleAsync(RoleCreateCommand command, CancellationToken cancellationToken)
+        public async Task CreateRoleAsync(RoleCreateRequest command, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync(cancellationToken);
 
@@ -48,7 +48,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             }
         }
 
-        public async Task<Role> UpdateRoleAsync(int roleId, RoleUpdateCommand command, CancellationToken cancellationToken)
+        public async Task<Role> UpdateRoleAsync(int roleId, RoleUpdateRequest command, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync(cancellationToken);
 

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
-using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Exceptions.Auth;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
@@ -9,6 +8,7 @@ using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.DataAccessLayer.Interfaces;
 using UserManagementService.DataAccessLayer.Entities.Users;
 using UserManagementService.DataAccessLayer.Entities.Relations;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {
@@ -35,7 +35,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             _mapper = mapper;
         }
 
-        public async Task<AuthResult> RegisterAsync(UserRegistrationCommand request, CancellationToken cancellationToken)
+        public async Task<AuthResult> RegisterAsync(RegisterUserRequestDto request, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync(cancellationToken);
 
@@ -72,7 +72,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 await _unitOfWork.UserRoles.AddAsync(assignedRole, cancellationToken);
 
                 var accessToken = _tokenGenerator.GenerateToken(user);
-                var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellationToken);
+                var refreshToken = await _refreshTokenService.GenerateAndSaveRefreshTokenAsync(user.Id, cancellationToken);
 
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
@@ -86,7 +86,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             }
         }
 
-        public async Task<AuthResult> LoginAsync(UserLoginCommand request, CancellationToken cancellationToken)
+        public async Task<AuthResult> LoginAsync(LoginRequestDto request, CancellationToken cancellationToken)
         {
             var userEntity = await _unitOfWork.Users.GetByEmailAsync(request.Email, cancellationToken);
 
@@ -101,7 +101,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
             var accessToken = _tokenGenerator.GenerateToken(user);
              
-            var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellationToken);
+            var refreshToken = await _refreshTokenService.GenerateAndSaveRefreshTokenAsync(user.Id, cancellationToken);
 
             return new AuthResult(accessToken, refreshToken);
         }
@@ -123,7 +123,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
             var user = _mapper.Map<User>(userEntity);
             var newAccessToken = _tokenGenerator.GenerateToken(user);
-            var newRefreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellationToken);
+            var newRefreshToken = await _refreshTokenService.GenerateAndSaveRefreshTokenAsync(user.Id, cancellationToken);
 
             return new AuthResult(newAccessToken, newRefreshToken);
         }

@@ -1,13 +1,13 @@
 using AutoMapper;
 using Shared.Pagination;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
-using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.DataAccessLayer.Interfaces;
 using UserManagementService.DataAccessLayer.Specifications.Users;
 using Microsoft.EntityFrameworkCore;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {
@@ -40,7 +40,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             var totalCount = await _unitOfWork.Users.CountBySpecAsync(spec);
 
             var usersEntity = await query
-                .Skip(5)
+                .Skip(paginationParameters.PageNumber)
                 .Take(paginationParameters.PageSize)
                 .ToListAsync(cancellationToken);
 
@@ -85,7 +85,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         public async Task UpdateUserAsync(
             Guid userId,
-            UserUpdateCommand updateRequest,
+            UpdateUserRequest updateRequest,
             CancellationToken cancellationToken)
         {
             var spec = new UserByIdSpecification(userId);
