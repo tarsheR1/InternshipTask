@@ -1,8 +1,9 @@
-﻿using UserManagementService.DataAccessLayer.Entities.Role;
+﻿using UserManagementService.DataAccessLayer.Entities.Base;
+using UserManagementService.DataAccessLayer.Entities.Role;
 
 namespace UserManagementService.DataAccessLayer.Entities.Relations
 {
-    public class RolePermissionEntity
+    public class RolePermissionEntity : BaseEntity<int>
     {
         public int RoleId { get; set; }
         public RoleEntity Role { get; set; }

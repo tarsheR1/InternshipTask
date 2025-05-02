@@ -1,4 +1,4 @@
-﻿namespace UserManagementService.PresentationLayer.DTO.Request
+﻿namespace UserManagementService.BusinessLogicLayer.Models.DTO.Request
 {
     public sealed record RegisterUserRequestDto
     {

@@ -1,8 +1,9 @@
-﻿namespace UserManagementService.DataAccessLayer.Entities.Users
+﻿using UserManagementService.DataAccessLayer.Entities.Base;
+
+namespace UserManagementService.DataAccessLayer.Entities.Users
 {
-    public class RefreshTokenEntity
+    public class RefreshTokenEntity : BaseEntity<Guid>
     {
-        public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public string Token { get; set; }
         public DateTime Expires { get; set; }

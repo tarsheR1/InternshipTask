@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 
-namespace UserManagementService.PresentationLayer.Controllers
+namespace UserManagementService.PresentationLayer.Controllers.Relations
 {
     [ApiController]
     [Route("api/users/{userId}/roles")]
@@ -31,6 +30,7 @@ namespace UserManagementService.PresentationLayer.Controllers
             CancellationToken cancellationToken)
         {
             await _userRoleService.AssignRoleToUserAsync(userId, roleId, cancellationToken);
+            
             return NoContent();
         }
 
@@ -41,6 +41,7 @@ namespace UserManagementService.PresentationLayer.Controllers
             CancellationToken cancellationToken)
         {
             await _userRoleService.RemoveRoleFromUserAsync(userId, roleId, cancellationToken);
+           
             return NoContent();
         }
     }

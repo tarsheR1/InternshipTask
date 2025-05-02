@@ -17,6 +17,7 @@ public class PermissionsController : ControllerBase
     public async Task<ActionResult<List<Permission>>> GetAllPermissions(CancellationToken cancellationToken)
     {
         var permissions = await _permissionService.GetAllPermissionsAsync(cancellationToken);
+       
         return Ok(permissions);
     }
 
@@ -24,6 +25,7 @@ public class PermissionsController : ControllerBase
     public async Task<ActionResult<Permission>> GetPermissionById([FromHeader]int id, CancellationToken cancellationToken)
     {
         var permission = await _permissionService.GetById(id, cancellationToken);
+       
         return Ok(permission);
     }
 }

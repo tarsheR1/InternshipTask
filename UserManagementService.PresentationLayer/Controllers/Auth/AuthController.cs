@@ -1,23 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UserManagementService.PresentationLayer.DTO.Request;
-using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
-using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
-using UserManagementService.PresentationLayer.DTO.Response;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Response;
 
-namespace UserManagementService.PresentationLayer.Controllers
+namespace UserManagementService.PresentationLayer.Controllers.Auth
 {
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly IMapper _mapper;
 
-        public AuthController(IAuthService authService, IMapper mapper)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
-            _mapper = mapper;
         }
 
         [HttpPost("registrations")]
@@ -25,15 +21,9 @@ namespace UserManagementService.PresentationLayer.Controllers
             [FromBody] RegisterUserRequestDto request,
             CancellationToken cancellationToken)
         {
-            var command = _mapper.Map<UserRegistrationCommand>(request);
+            var authResult = await _authService.RegisterAsync(request, cancellationToken);
 
-            var authResult = await _authService.RegisterAsync(command, cancellationToken);
-
-            var response = new AuthResponseDto(
-                AccessToken: authResult.AccessToken,
-                RefreshToken: authResult.RefreshToken);
-
-            return Ok(response);
+            return Ok(authResult);
         }
 
         [HttpPost("sessions")]
@@ -41,15 +31,9 @@ namespace UserManagementService.PresentationLayer.Controllers
             [FromBody] LoginRequestDto request,
             CancellationToken cancellationToken)
         {
-            var command = _mapper.Map<UserLoginCommand>(request);
+            var authResult = await _authService.LoginAsync(request, cancellationToken);
 
-            var authResult = await _authService.LoginAsync(command, cancellationToken);
-
-            var response = new AuthResponseDto(
-                AccessToken: authResult.AccessToken,
-                RefreshToken: authResult.RefreshToken);
-
-            return Ok(response);  
+            return Ok(authResult);  
         }
 
         [HttpPost("tokens/refresh")]
@@ -59,11 +43,7 @@ namespace UserManagementService.PresentationLayer.Controllers
         {
             var authResult = await _authService.RefreshTokenAsync(request.RefreshToken, request.UserId, cancellationToken);
 
-            var response = new AuthResponseDto(
-                AccessToken: authResult.AccessToken,
-                RefreshToken: authResult.RefreshToken);
-
-            return Ok(response);
+            return Ok(authResult);
         }
 
         [HttpPost("tokens/revoked")]

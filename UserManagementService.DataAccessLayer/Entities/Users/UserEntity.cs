@@ -1,10 +1,10 @@
-﻿using UserManagementService.DataAccessLayer.Entities.Relations;
+﻿using UserManagementService.DataAccessLayer.Entities.Base;
+using UserManagementService.DataAccessLayer.Entities.Relations;
 
 namespace UserManagementService.DataAccessLayer.Entities.Users
 {
-    public class UserEntity
+    public class UserEntity : BaseEntity<Guid>
     {
-        public Guid Id { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public string FirstName { get; set; }

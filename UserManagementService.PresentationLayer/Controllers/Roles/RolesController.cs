@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
-using UserManagementService.PresentationLayer.DTO.Request;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
 
 [ApiController]
 [Route("api/roles")]
@@ -14,6 +14,7 @@ public class RolesController : ControllerBase
     public RolesController(IRoleService roleService, IMapper mapper)
     {
         _roleService = roleService;
+      
         _mapper = mapper;
     }
 
@@ -21,6 +22,7 @@ public class RolesController : ControllerBase
     public async Task<IActionResult> GetAllRoles(CancellationToken cancellationToken)
     {
         var roles = await _roleService.GetAllRolesAsync(cancellationToken);
+        
         return Ok(roles);
     }
 
@@ -30,6 +32,7 @@ public class RolesController : ControllerBase
         CancellationToken cancellationToken)
     {
         var role = await _roleService.GetRoleByIdAsync(id, cancellationToken);
+        
         return Ok(role);
     }
 
@@ -38,8 +41,8 @@ public class RolesController : ControllerBase
         [FromBody] RoleCreateRequest request,
         CancellationToken cancellationToken)
     {
-        var command = _mapper.Map<RoleCreateCommand>(request);
-        await _roleService.CreateRoleAsync(command, cancellationToken);
+        await _roleService.CreateRoleAsync(request, cancellationToken);
+
         return Ok();
     }
 
@@ -49,8 +52,8 @@ public class RolesController : ControllerBase
         [FromBody] RoleUpdateRequest request,
         CancellationToken cancellationToken)
     {
-        var command = _mapper.Map<RoleUpdateCommand>(request);
-        var updatedRole = await _roleService.UpdateRoleAsync(id, command, cancellationToken);
+        var updatedRole = await _roleService.UpdateRoleAsync(id, request, cancellationToken);
+        
         return Ok(updatedRole);
     }
 

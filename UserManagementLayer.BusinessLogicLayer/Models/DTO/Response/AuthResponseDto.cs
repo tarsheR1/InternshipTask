@@ -1,4 +1,4 @@
-﻿namespace UserManagementService.PresentationLayer.DTO.Response
+﻿namespace UserManagementService.BusinessLogicLayer.Models.DTO.Response
 {
     public record AuthResponseDto(
     string AccessToken,

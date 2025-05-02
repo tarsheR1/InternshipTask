@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using UserManagementService.PresentationLayer.DTO.Request;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
 
-namespace UserManagementService.PresentationLayer.DTO.Validators
+namespace UserManagementService.BusinessLogicLayer.Models.DTO.Validators
 {
     public class RegisterUserRequestDtoValidator : AbstractValidator<RegisterUserRequestDto>
     {

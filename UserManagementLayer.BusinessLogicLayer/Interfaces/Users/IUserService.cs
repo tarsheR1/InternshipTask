@@ -1,5 +1,5 @@
 ﻿using Shared.Pagination;
-using UserManagementService.BusinessLogicLayer.Models.Commands;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.DataAccessLayer.Specifications.Users;
@@ -20,7 +20,7 @@ namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
 
         Task UpdateUserAsync(
             Guid userId, 
-            UserUpdateCommand updateRequest, 
+            UpdateUserRequest updateRequest, 
             CancellationToken cancellationToken);  
 
         Task DeleteUserAsync(Guid userId, CancellationToken cancellationToken);

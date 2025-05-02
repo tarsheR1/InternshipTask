@@ -20,6 +20,7 @@ public class RolePermissionsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var permissions = await _rolePermissionService.GetRolePermissionsAsync(roleId, cancellationToken);
+        
         return Ok(permissions);
     }
 
@@ -30,6 +31,7 @@ public class RolePermissionsController : ControllerBase
         CancellationToken cancellationToken)
     {
         await _rolePermissionService.AssignPermissionToRoleAsync(roleId, permissionId, cancellationToken);
+       
         return NoContent();
     }
 
@@ -40,6 +42,7 @@ public class RolePermissionsController : ControllerBase
         CancellationToken cancellationToken)
     {
         await _rolePermissionService.RemovePermissionFromRoleAsync(roleId, permissionId, cancellationToken);
+       
         return NoContent();
     }
 }

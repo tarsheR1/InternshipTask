@@ -1,25 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UserManagementService.PresentationLayer.DTO.Request;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using AutoMapper;
 using Shared.Pagination;
 using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.DataAccessLayer.Specifications.Users;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
 
-namespace UserManagementService.PresentationLayer.Controllers
+namespace UserManagementService.PresentationLayer.Controllers.Users
 {
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
 
         public UsersController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
-            _mapper = mapper;
         }
 
         [HttpGet("{userId}")]
@@ -28,6 +26,7 @@ namespace UserManagementService.PresentationLayer.Controllers
             CancellationToken cancellationToken)
         {
             var user = await _userService.GetUserByIdAsync(userId, cancellationToken);
+            
             return Ok(user);
         }
 
@@ -73,8 +72,8 @@ namespace UserManagementService.PresentationLayer.Controllers
             [FromBody] UpdateUserRequest request,
             CancellationToken cancellationToken)
         {
-            var command = _mapper.Map<UserUpdateCommand>(request);
-            await _userService.UpdateUserAsync(userId, command, cancellationToken);
+            await _userService.UpdateUserAsync(userId, request, cancellationToken);
+           
             return NoContent();
         }
 
@@ -84,6 +83,7 @@ namespace UserManagementService.PresentationLayer.Controllers
             CancellationToken cancellationToken)
         {
             await _userService.DeleteUserAsync(userId, cancellationToken);
+          
             return NoContent();
         }
     }
