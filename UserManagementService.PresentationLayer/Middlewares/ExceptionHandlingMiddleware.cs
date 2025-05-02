@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using System.Text.Json;
+﻿using System.Text.Json;
 using UserManagementService.BusinessLogicLayer.Exceptions.Auth;
 using UserManagementService.BusinessLogicLayer.Exceptions.Core;
 using UserManagementService.BusinessLogicLayer.Exceptions.Token;
@@ -46,7 +45,7 @@ namespace UserManagementService.PresentationLayer.Middlewares
         {
             return ex switch
             {
-                UserManagementService.BusinessLogicLayer.Exceptions.Core.ValidationException validationEx => new
+                ValidationException validationEx => new
                 {
                     ErrorCode = validationEx.ErrorCode,
                     Message = validationEx.Message,
@@ -76,7 +75,7 @@ namespace UserManagementService.PresentationLayer.Middlewares
         {
             return ex switch
             {
-                UserManagementService.BusinessLogicLayer.Exceptions.Core.ValidationException => StatusCodes.Status400BadRequest,
+                ValidationException => StatusCodes.Status400BadRequest,
 
                 // Auth
                 InvalidCredentialsException => StatusCodes.Status401Unauthorized,
