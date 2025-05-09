@@ -2,7 +2,7 @@
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.DataAccessLayer.Entities.Users;
 
-namespace UserManagementService.BusinessLogicLayer.Models.Settings.Mapping
+namespace UserManagementService.BusinessLogicLayer.Mapping
 {
     public class UserProfile : Profile
     {

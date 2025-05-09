@@ -2,8 +2,8 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementService.BusinessLogicLayer.Extensions;
-using UserManagementService.BusinessLogicLayer.Models.Settings.Mapping;
-using UserManagementService.BusinessLogicLayer.Models.Validators;
+using UserManagementService.BusinessLogicLayer.Mapping;
+using UserManagementService.BusinessLogicLayer.Validators.LoginRequestDtoValidator;
 using UserManagementService.DataAccessLayer.Extensions;
 using UserManagementService.PresentationLayer.Extensions.Configuration;
 

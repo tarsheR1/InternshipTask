@@ -3,7 +3,7 @@ using UserManagementService.DataAccessLayer.Interfaces.Repositories.Base;
 
 namespace UserManagementService.DataAccessLayer.Interfaces.Repositories.Users
 {
-    public interface IUserRepository : ISpecRepository <UserEntity, Guid>
+    public interface IUserRepository : IBaseRepository<UserEntity, Guid>
     {
         Task<UserEntity> GetByEmailAsync(
             string email, 

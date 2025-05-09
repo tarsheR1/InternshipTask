@@ -1,4 +1,7 @@
-﻿namespace UserManagementService.DataAccessLayer.Interfaces.Repositories.Base
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+
+namespace UserManagementService.DataAccessLayer.Interfaces.Repositories.Base
 {
     public interface IBaseRepository<TEntity, TKey> where TEntity : class
     {
@@ -9,5 +12,9 @@
         Task UpdateAsync(TEntity entity, CancellationToken cancellationToken);
 
         Task DeleteAsync(TEntity entity, CancellationToken cancellationToken);
+
+        public Task<IEnumerable<TDestination>> GetAllAsync<TDestination>(
+        Expression<Func<TEntity, bool>> predicate,
+        CancellationToken cancellationToken = default);
     }
 }

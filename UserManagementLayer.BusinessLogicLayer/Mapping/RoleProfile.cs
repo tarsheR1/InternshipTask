@@ -2,7 +2,7 @@
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 using UserManagementService.DataAccessLayer.Entities.Role;
 
-namespace UserManagementService.BusinessLogicLayer.Models.Settings.Mapping
+namespace UserManagementService.BusinessLogicLayer.Mapping
 {
     public class RoleProfile : Profile
     {
