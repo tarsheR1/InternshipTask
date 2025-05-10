@@ -1,5 +1,5 @@
 ﻿using UserManagementService.DataAccessLayer.Entities.Base;
-using UserManagementService.DataAccessLayer.Entities.Relations;
+using UserManagementService.DataAccessLayer.Entities.Role;
 
 namespace UserManagementService.DataAccessLayer.Entities.Users
 {
@@ -15,8 +15,6 @@ namespace UserManagementService.DataAccessLayer.Entities.Users
         public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; }
 
-        public ICollection<UserRoleEntity> UserRoles { get; set; } = new List<UserRoleEntity>();
-
-        public UserEntity() { }
+        public ICollection<RoleEntity> Roles{ get; set; } = new List<RoleEntity>();
     }
 }

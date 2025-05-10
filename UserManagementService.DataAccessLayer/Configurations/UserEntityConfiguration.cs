@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using UserManagementService.DataAccessLayer.Entities.Role;
 using UserManagementService.DataAccessLayer.Entities.Users;
 
 namespace UserManagementService.DataAccessLayer.Configurations
@@ -50,6 +51,15 @@ namespace UserManagementService.DataAccessLayer.Configurations
 
             entity.Property(u => u.IsActive)
                 .HasColumnName("is_active");
+
+            entity.HasMany(u => u.Roles)
+                .WithMany(r => r.Users)
+                .UsingEntity<Dictionary<string, object>>(
+                    "user_roles",  
+                    j => j.HasOne<RoleEntity>().WithMany().HasForeignKey("role_id"),
+                    j => j.HasOne<UserEntity>().WithMany().HasForeignKey("user_id")
+                );
+
         }
     }
 }

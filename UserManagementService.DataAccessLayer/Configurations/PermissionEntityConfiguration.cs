@@ -14,8 +14,9 @@ namespace UserManagementService.DataAccessLayer.Configurations
                 .HasName("pk_permissions_id");
 
             entity.Property(p => p.Id)
-                .HasColumnName("id");
-
+                .HasColumnName("id")
+                .ValueGeneratedOnAdd();
+    
             entity.Property(p => p.Name)
                 .HasColumnName("name")
                 .IsRequired();

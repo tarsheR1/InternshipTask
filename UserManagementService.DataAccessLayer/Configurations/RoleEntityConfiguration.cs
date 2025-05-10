@@ -19,6 +19,14 @@ namespace UserManagementService.DataAccessLayer.Configurations
             entity.Property(r => r.Name)
                 .HasColumnName("name")
                 .IsRequired();
+
+            entity.HasMany(r => r.Permissions)
+                .WithMany(p => p.Roles)
+                .UsingEntity<Dictionary<string, object>>(
+                    "role_permissions",  
+                    j => j.HasOne<PermissionEntity>().WithMany().HasForeignKey("permission_id"),
+                    j => j.HasOne<RoleEntity>().WithMany().HasForeignKey("role_id")
+                );
         }
     }
 }

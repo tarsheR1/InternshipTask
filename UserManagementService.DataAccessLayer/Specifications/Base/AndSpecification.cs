@@ -1,0 +1,26 @@
+﻿using Shared.Interfaces;
+
+namespace UserManagementService.DataAccessLayer.Specifications.Base
+{
+    public class AndSpecification<T> : Specification<T>
+    {
+        private readonly ISpecification<T> _left;
+        private readonly ISpecification<T> _right;
+
+        public AndSpecification(ISpecification<T> left, ISpecification<T> right)
+        {
+            _left = left;
+            _right = right;
+
+            // Переносим сортировку и пагинацию из первой спецификации
+            OrderBy = left.OrderBy;
+            OrderByDescending = left.OrderByDescending;
+            Skip = left.Skip;
+            Take = left.Take;
+        }
+
+        public override bool IsSatisfiedBy(T candidate)
+            => _left.IsSatisfiedBy(candidate) && _right.IsSatisfiedBy(candidate);
+    }
+
+}

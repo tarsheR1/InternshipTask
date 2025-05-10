@@ -3,6 +3,7 @@ using UserManagementService.DataAccessLayer.Entities.Role;
 using UserManagementService.DataAccessLayer.Repositories.Base;
 using UserManagementService.DataAccessLayer.Persistence;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories.Roles;
+using UserManagementService.DataAccessLayer.Entities.Users;
 
 namespace UserManagementService.DataAccessLayer.Repositories.Roles
 {
@@ -20,8 +21,23 @@ namespace UserManagementService.DataAccessLayer.Repositories.Roles
         public async Task<RoleEntity> GetByNameAsync(string roleName, CancellationToken cancellationToken)
         {
             return await _context.Roles
-                .Include(r => r.RolePermissions)
+                .Include(r => r.Permissions)
                 .FirstOrDefaultAsync(r => r.Name == roleName, cancellationToken);
+        }
+
+        public async Task<List<UserEntity>> GetUsersForRoleAsync(int roleId, CancellationToken cancellationToken)
+        {
+            return await _context.Users
+              .Where(u => u.Roles.Any(r => r.Id == roleId))
+              .ToListAsync(cancellationToken);
+        }
+
+        public async Task<List<PermissionEntity>> GetPermissionsForRoleAsync(int roleId, CancellationToken cancellationToken = default)
+        {
+            return await _context.Permissions
+                .Where(r => r.Id == roleId)
+                .Include(r => r.Roles)
+                .ToListAsync(cancellationToken);
         }
     }
 }

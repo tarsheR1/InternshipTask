@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using UserManagementService.DataAccessLayer.Entities.Role;
 using UserManagementService.DataAccessLayer.Entities.Users;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories.Users;
 using UserManagementService.DataAccessLayer.Persistence;
@@ -15,21 +16,18 @@ namespace UserManagementService.DataAccessLayer.Repositories.Users
         public async Task<UserEntity> GetByEmailAsync(string email, CancellationToken cancellationToken)
         {
             return await _context.Users
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                .ThenInclude(rp => rp.RolePermissions)
-                .ThenInclude(p => p.Permission)
+                .Include(u => u.Roles)
+                .ThenInclude(r => r.Permissions)
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<List<string>> GetUserRolesAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<List<RoleEntity>> GetRolesForUserAsync(Guid userId, CancellationToken cancellationToken)
         {
-            var roleNames = await _context.Users
-                .Where(u => u.Id == userId)
-                .SelectMany(u => u.UserRoles.Select(ur => ur.Role.Name))
+            return await _context.UserRoles
+                .Where(ur => ur.UserId == userId)
+                .Include(ur => ur.Role)
+                .Select(ur => ur.Role)
                 .ToListAsync(cancellationToken);
-
-            return roleNames;
         }
     }
 }

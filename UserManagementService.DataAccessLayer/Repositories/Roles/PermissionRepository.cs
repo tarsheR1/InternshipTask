@@ -34,5 +34,13 @@ namespace UserManagementService.DataAccessLayer.Repositories.Roles
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Name == permissionName, cancellationToken);
         }
+
+        public async Task<List<RoleEntity>> GetRolesForPermissionAsync(int permissionId, CancellationToken cancellationToken)
+        {
+            return await _context.Roles
+                .Where(p => p.Id == permissionId)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
+        }
     }
 }
