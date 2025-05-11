@@ -1,6 +1,7 @@
 ﻿using Shared.Interfaces;
+using UserManagementService.DataAccessLayer.Specifications.Base;
 
-namespace UserManagementService.DataAccessLayer.Specifications.Base
+namespace UserManagementService.DataAccessLayer.Specifications.Composite
 {
     public class AndNotSpecification<T> : Specification<T>
     {

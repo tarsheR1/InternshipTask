@@ -1,6 +1,7 @@
 ﻿using Shared.Interfaces;
+using UserManagementService.DataAccessLayer.Specifications.Base;
 
-namespace UserManagementService.DataAccessLayer.Specifications.Base
+namespace UserManagementService.DataAccessLayer.Specifications.Composite
 {
     public class AndSpecification<T> : Specification<T>
     {
@@ -11,12 +12,6 @@ namespace UserManagementService.DataAccessLayer.Specifications.Base
         {
             _left = left;
             _right = right;
-
-            // Переносим сортировку и пагинацию из первой спецификации
-            OrderBy = left.OrderBy;
-            OrderByDescending = left.OrderByDescending;
-            Skip = left.Skip;
-            Take = left.Take;
         }
 
         public override bool IsSatisfiedBy(T candidate)

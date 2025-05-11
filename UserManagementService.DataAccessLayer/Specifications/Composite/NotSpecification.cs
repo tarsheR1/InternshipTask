@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UserManagementService.DataAccessLayer.Specifications.Base;
 
-namespace UserManagementService.DataAccessLayer.Specifications.Base
+namespace UserManagementService.DataAccessLayer.Specifications.Composite
 {
     public class NotSpecification<T> : Specification<T>
     {
@@ -14,11 +15,6 @@ namespace UserManagementService.DataAccessLayer.Specifications.Base
         public NotSpecification(ISpecification<T> specification)
         {
             _spec = specification;
-
-            OrderBy = specification.OrderBy;
-            OrderByDescending = specification.OrderByDescending;
-            Skip = specification.Skip;
-            Take = specification.Take;
         }
 
         public override bool IsSatisfiedBy(T candidate)

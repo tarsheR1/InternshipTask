@@ -1,6 +1,7 @@
 ﻿using Shared.Interfaces;
+using UserManagementService.DataAccessLayer.Specifications.Base;
 
-namespace UserManagementService.DataAccessLayer.Specifications.Base
+namespace UserManagementService.DataAccessLayer.Specifications.Composite
 {
     public class OrNotSpecification<T> : Specification<T>
     {
@@ -11,11 +12,6 @@ namespace UserManagementService.DataAccessLayer.Specifications.Base
         {
             _left = left;
             _right = right;
-
-            OrderBy = left.OrderBy;
-            OrderByDescending = left.OrderByDescending;
-            Skip = left.Skip;
-            Take = left.Take;
         }
 
         public override bool IsSatisfiedBy(T candidate)
