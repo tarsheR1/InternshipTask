@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using System.Data;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
-using UserManagementService.BusinessLogicLayer.Models.Entities.Users; 
-using UserManagementService.DataAccessLayer.Entities.Relations;
+using UserManagementService.DataAccessLayer.Entities.Role;
 using UserManagementService.DataAccessLayer.Interfaces;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
@@ -36,23 +36,19 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     throw new NotFoundException(userId.ToString());
                 }
 
-                await _roleService.GetRoleByIdAsync(roleId, cancellationToken);
-
-                var existingAssignment = await _unitOfWork.UserRoles.GetAsync(userId, roleId, cancellationToken);
-                if (existingAssignment != null)
+                var role = await _roleService.GetRoleByIdAsync(roleId, cancellationToken);
+                if (role == null)
                 {
-                    throw new AlreadyExistsException(roleId.ToString());
+                    throw new NotFoundException(userId.ToString());
                 }
-
-                var userRole = new UserRole
+                
+                var roleEntity = _mapper.Map<RoleEntity>(role);
+                if (user.Roles.Contains(roleEntity))
                 {
-                    UserId = userId,
-                    RoleId = roleId,
-                };
+                    throw new AlreadyExistsException(roleEntity.Id.ToString());
+                }
+                user.Roles.Add(roleEntity);
 
-                var userRoleEntity = _mapper.Map<UserRoleEntity>(userRole);
-
-                await _unitOfWork.UserRoles.AddAsync(userRoleEntity, cancellationToken);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
             }
@@ -69,13 +65,25 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
             try
             {
-                var userRole = await _unitOfWork.UserRoles.GetAsync(userId, roleId, cancellationToken);
-                if (userRole == null)
+                var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
+                if (user == null)
                 {
-                    throw new NotFoundException(roleId.ToString());
+                    throw new NotFoundException(userId.ToString());
                 }
 
-                await _unitOfWork.UserRoles.DeleteAsync(userRole, cancellationToken);
+                var role = await _roleService.GetRoleByIdAsync(roleId, cancellationToken);
+                if (role == null)
+                {
+                    throw new NotFoundException(userId.ToString());
+                }
+
+                var roleEntity = _mapper.Map<RoleEntity>(role);
+                if (!user.Roles.Contains(roleEntity))
+                {
+                    throw new NotFoundException(roleEntity.Id.ToString());
+                }
+                user.Roles.Remove(roleEntity);
+
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
             }
@@ -88,14 +96,15 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         public async Task<List<Role>> GetUserRolesAsync(Guid userId, CancellationToken cancellationToken)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
-            if (user == null)
+            var userEntity = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
+            if (userEntity == null)
             {
                 throw new NotFoundException(userId.ToString());
             }
 
-            var roles = await _unitOfWork.UserRoles.GetRolesForUserAsync(userId, cancellationToken);
-            return _mapper.Map<List<Role>>(roles);
+            var roles = _mapper.Map<List<Role>>(userEntity.Roles);
+
+            return roles;
         }
     }
 

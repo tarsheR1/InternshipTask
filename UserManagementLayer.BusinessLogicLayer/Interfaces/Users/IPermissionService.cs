@@ -6,6 +6,6 @@ namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
     {
         Task<List<Permission>> GetAllPermissionsAsync(CancellationToken cancellationToken);
 
-        Task<Permission> GetById(int permissionId, CancellationToken cancellationToken);
+        Task<Permission> GetPermissionByIdAsync(int permissionId, CancellationToken cancellationToken);
     }
 }

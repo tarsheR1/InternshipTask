@@ -7,7 +7,6 @@ using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.DataAccessLayer.Interfaces;
 using UserManagementService.DataAccessLayer.Entities.Users;
-using UserManagementService.DataAccessLayer.Entities.Relations;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
@@ -57,19 +56,12 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     IsActive = false
                 };
 
-                var defaultRole = await _unitOfWork.Roles.GetByNameAsync(defaultRoleForUser, cancellationToken);
 
                 var userEntity = _mapper.Map<UserEntity>(user);
                 await _unitOfWork.Users.AddAsync(userEntity, cancellationToken);
 
-                var assignedRole = new UserRoleEntity
-                {
-                    UserId = user.Id,
-                    RoleId = defaultRole.Id,
-                };
-
-
-                await _unitOfWork.UserRoles.AddAsync(assignedRole, cancellationToken);
+                var defaultRole = await _unitOfWork.Roles.GetByNameAsync(defaultRoleForUser, cancellationToken);
+                userEntity.Roles.Add(defaultRole);
 
                 var accessToken = _tokenGenerator.GenerateToken(user);
                 var refreshToken = await _refreshTokenService.GenerateAndSaveRefreshTokenAsync(user.Id, cancellationToken);

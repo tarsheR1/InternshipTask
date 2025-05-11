@@ -5,22 +5,26 @@ using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.DataAccessLayer.Interfaces;
-using UserManagementService.DataAccessLayer.Specifications.Users;
-using Microsoft.EntityFrameworkCore;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
+using UserManagementService.DataAccessLayer.Entities.Role;
+using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRoleService _roleService;
         private readonly IMapper _mapper;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IRoleService roleService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _roleService = roleService;
         }
+
+        #region Get Methods
 
         public async Task<PagedResponse<User>> GetUsersPaginatedAsync(
             PaginationParameters paginationParameters,
@@ -55,9 +59,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         public async Task<User> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
-            var spec = new UserByIdSpecification(userId);
-            var userEntity = await _unitOfWork.Users.GetBySpecAsync(spec, cancellationToken);
-
+            var userEntity = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
             if (userEntity == null)
             {
                 throw new UserNotFoundException(userId.ToString());
@@ -78,19 +80,21 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             return _mapper.Map<User>(userEntity);
         }
 
-        public async Task<List<string>> GetUserRolesAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<List<Role>> GetUserRolesAsync(Guid userId, CancellationToken cancellationToken)
         {
             return await _unitOfWork.Users.GetUserRolesAsync(userId, cancellationToken);
         }
+
+        #endregion
+
+        #region Update Methods
 
         public async Task UpdateUserAsync(
             Guid userId,
             UpdateUserRequest updateRequest,
             CancellationToken cancellationToken)
         {
-            var spec = new UserByIdSpecification(userId);
-            var user = await _unitOfWork.Users.GetBySpecAsync(spec, cancellationToken);
-
+            var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
             if (user == null)
             {
                 throw new UserNotFoundException(userId.ToString());
@@ -103,19 +107,99 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             user.Phone = updateRequest.Phone;
 
             await _unitOfWork.Users.UpdateAsync(user, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
+
+        #endregion
+
+        #region Role Management
+
+        public async Task AssignRoleToUserAsync(Guid userId, int roleId, CancellationToken cancellationToken)
+        {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
+            try
+            {
+                var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
+                if (user == null)
+                {
+                    throw new NotFoundException(userId.ToString());
+                }
+
+                var role = await _roleService.GetRoleByIdAsync(roleId, cancellationToken);
+                if (role == null)
+                {
+                    throw new NotFoundException(userId.ToString());
+                }
+
+                var roleEntity = _mapper.Map<RoleEntity>(role);
+                if (user.Roles.Contains(roleEntity))
+                {
+                    throw new AlreadyExistsException(roleEntity.Id.ToString());
+                }
+                user.Roles.Add(roleEntity);
+
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+            }
+            catch
+            {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                throw;
+            }
+        }
+
+        public async Task RemoveRoleFromUserAsync(Guid userId, int roleId, CancellationToken cancellationToken)
+        {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
+            try
+            {
+                var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
+                if (user == null)
+                {
+                    throw new NotFoundException(userId.ToString());
+                }
+
+                var role = await _roleService.GetRoleByIdAsync(roleId, cancellationToken);
+                if (role == null)
+                {
+                    throw new NotFoundException(userId.ToString());
+                }
+
+                var roleEntity = _mapper.Map<RoleEntity>(role);
+                if (!user.Roles.Contains(roleEntity))
+                {
+                    throw new NotFoundException(roleEntity.Id.ToString());
+                }
+                user.Roles.Remove(roleEntity);
+
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+            }
+            catch
+            {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Delete Methods
 
         public async Task DeleteUserAsync(Guid userId, CancellationToken cancellationToken)
         {
-            var spec = new UserByIdSpecification(userId);
-            var user = await _unitOfWork.Users.GetBySpecAsync(spec, cancellationToken);
-
+            var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
             if (user == null)
             {
                 throw new UserNotFoundException(userId.ToString());
             }
 
             await _unitOfWork.Users.DeleteAsync(user, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
+
+        #endregion
     }
 }

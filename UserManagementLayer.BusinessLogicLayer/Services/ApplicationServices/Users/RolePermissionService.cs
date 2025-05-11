@@ -3,7 +3,6 @@ using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 using UserManagementService.DataAccessLayer.Interfaces;
-using UserManagementService.DataAccessLayer.Entities.Relations;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {
@@ -26,65 +25,40 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             _permissionService = permissionService;
         }
 
-        public async Task AssignPermissionToRoleAsync(int roleId, int permissionId, CancellationToken cancellationToken)
-        {
-            await _unitOfWork.BeginTransactionAsync(cancellationToken);
-
-            try
-            {
-                await _roleService.GetRoleByIdAsync(roleId, cancellationToken);
-
-                var permissions = await _permissionService.GetAllPermissionsAsync(cancellationToken);
-                if (!permissions.Any(p => p.Id == permissionId))
-                {
-                    throw new NotFoundException($"Разрешение с ID {permissionId} не найдено");
-                }
-
-                var existingAssignment = await _unitOfWork.RolePermission.GetAsync(roleId, permissionId, cancellationToken);
-                if (existingAssignment != null)
-                {
-                    throw new AlreadyExistsException($"Разрешение уже назначено для роли");
-                }
-
-                var rolePermission = new RolePermission
-                {
-                    RoleId = roleId,
-                    PermissionId = permissionId,
-                };
-
-                var rolePermissionEntity = _mapper.Map<RolePermissionEntity>(rolePermission);
-
-                await _unitOfWork.RolePermission.AddAsync(rolePermissionEntity, cancellationToken);
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
-                await _unitOfWork.CommitTransactionAsync(cancellationToken);
-            }
-            catch
-            {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                throw;
-            }
-        }
+        
 
         public async Task RemovePermissionFromRoleAsync(int roleId, int permissionId, CancellationToken cancellationToken)
         {
-            
-            var rolePermission = await _unitOfWork.RolePermission.GetAsync(roleId, permissionId, cancellationToken);
-            if (rolePermission == null)
+            var permission = await _permissionService.GetPermissionByIdAsync(permissionId, cancellationToken);
+            if (permission == null)
             {
-                throw new NotFoundException($"Разрешение не назначено к роли");
-            } 
+                throw new NotFoundException(permissionId.ToString());
+            }
 
-            await _unitOfWork.RolePermission.DeleteAsync(rolePermission, cancellationToken);
+            var role = await _roleService.GetRoleByIdAsync(roleId, cancellationToken);
+            if (role == null)
+            {
+                throw new NotFoundException(roleId.ToString());
+            }
+
+            role.Permissions.Remove(permission);
+
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<List<Permission>> GetRolePermissionsAsync(int roleId, CancellationToken cancellationToken)
         {
-            await _roleService.GetRoleByIdAsync(roleId, cancellationToken);
+            var role = await _unitOfWork.Roles.GetByIdAsync(roleId, cancellationToken);
+            if(role == null)
+            {
+                throw new NotFoundException(roleId.ToString());
+            }
 
-            var permissions = await _unitOfWork.RolePermission.GetPermissionsForRoleAsync(roleId, cancellationToken);
+            var permissions = role.Permissions;
+
             return _mapper.Map<List<Permission>>(permissions);
         }
+        
     }
 
 }

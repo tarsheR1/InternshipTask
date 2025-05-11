@@ -1,5 +1,4 @@
-﻿using UserManagementService.DataAccessLayer.Entities.Relations;
-using UserManagementService.DataAccessLayer.Entities.Role;
+﻿using UserManagementService.DataAccessLayer.Entities.Role;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories.Base;
 
 namespace UserManagementService.DataAccessLayer.Interfaces.Repositories.Relations

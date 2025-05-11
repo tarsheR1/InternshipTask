@@ -57,7 +57,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 var role = await _unitOfWork.Roles.GetByIdAsync(roleId, cancellationToken);
                 if (role == null)
                 {
-                    throw new NotFoundException($"Роль с Id {roleId} не найдена");
+                    throw new NotFoundException(roleId.ToString());
                 }
 
                 if (!string.Equals(role.Name, command.Name, StringComparison.OrdinalIgnoreCase))

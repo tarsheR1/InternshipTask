@@ -1,4 +1,6 @@
-﻿namespace UserManagementService.BusinessLogicLayer.Models.Entities.Users
+﻿using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
+
+namespace UserManagementService.BusinessLogicLayer.Models.Entities.Users
 {
     public class User
     {
@@ -15,6 +17,6 @@
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsActive { get; set; }
 
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public ICollection<Role> Roles { get; set; } = new List<Role>();
     }
 }

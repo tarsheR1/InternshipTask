@@ -1,4 +1,5 @@
-﻿using UserManagementService.DataAccessLayer.Entities.Users;
+﻿using UserManagementService.DataAccessLayer.Entities.Role;
+using UserManagementService.DataAccessLayer.Entities.Users;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories.Base;
 
 namespace UserManagementService.DataAccessLayer.Interfaces.Repositories.Users
@@ -9,7 +10,7 @@ namespace UserManagementService.DataAccessLayer.Interfaces.Repositories.Users
             string email, 
             CancellationToken cancellationToken);
 
-        Task<List<string>> GetUserRolesAsync(
+        Task<List<RoleEntity>> GetUserRolesAsync(
             Guid userId,
             CancellationToken cancellationToken);
     }

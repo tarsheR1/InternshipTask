@@ -21,7 +21,7 @@ namespace UserManagementService.DataAccessLayer.Repositories.Users
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<List<RoleEntity>> GetRolesForUserAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<List<RoleEntity>> GetUserRolesAsync(Guid userId, CancellationToken cancellationToken)
         {
             return await _context.UserRoles
                 .Where(ur => ur.UserId == userId)

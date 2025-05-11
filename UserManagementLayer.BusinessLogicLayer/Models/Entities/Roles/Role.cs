@@ -9,7 +9,7 @@ namespace UserManagementService.BusinessLogicLayer.Models.Entities.Roles
         public int Id { get; set; }
         public string Name { get; set; }               
 
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-        public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
+        public ICollection<User> Users { get; set; } = new List<User>();
+        public ICollection<Permission> Permissions { get; set; } = new List<Permission>();
     }
 }
