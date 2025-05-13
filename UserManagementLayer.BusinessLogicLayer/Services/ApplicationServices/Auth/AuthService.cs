@@ -7,7 +7,7 @@ using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.DataAccessLayer.Interfaces;
 using UserManagementService.DataAccessLayer.Entities.Users;
-using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Auth;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {

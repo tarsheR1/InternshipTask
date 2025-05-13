@@ -1,4 +1,4 @@
-﻿namespace UserManagementService.BusinessLogicLayer.Models.DTO.Request
+﻿namespace UserManagementService.BusinessLogicLayer.Models.DTO.Request.Auth
 {
     public sealed record LoginRequestDto(
         string Email,

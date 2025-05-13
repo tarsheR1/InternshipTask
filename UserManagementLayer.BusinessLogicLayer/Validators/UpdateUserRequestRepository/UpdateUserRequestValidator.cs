@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Users;
 
 namespace UserManagementService.BusinessLogicLayer.Validators.UpdateUserRequestRepository
 {

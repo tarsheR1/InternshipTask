@@ -3,7 +3,7 @@ using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using AutoMapper;
 using Shared.Pagination;
 using UserManagementService.BusinessLogicLayer.Models.Queries;
-using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Users;
 
 namespace UserManagementService.PresentationLayer.Controllers.Users
 {

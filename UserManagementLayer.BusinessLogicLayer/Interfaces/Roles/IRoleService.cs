@@ -1,5 +1,5 @@
 ﻿using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
-using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Roles;
 
 namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
 {

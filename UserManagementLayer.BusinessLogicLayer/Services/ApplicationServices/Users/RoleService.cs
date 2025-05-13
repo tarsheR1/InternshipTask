@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
-using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Roles;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 using UserManagementService.DataAccessLayer.Entities.Role;
 using UserManagementService.DataAccessLayer.Interfaces;

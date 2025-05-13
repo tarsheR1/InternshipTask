@@ -5,9 +5,9 @@ using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.DataAccessLayer.Interfaces;
-using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
 using UserManagementService.DataAccessLayer.Entities.Role;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Users;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {

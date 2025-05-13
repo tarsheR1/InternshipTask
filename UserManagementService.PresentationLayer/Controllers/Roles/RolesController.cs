@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
-using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Roles;
 
 [ApiController]
 [Route("api/roles")]

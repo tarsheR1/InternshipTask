@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
-using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Auth;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Response;
 
 namespace UserManagementService.PresentationLayer.Controllers.Auth
