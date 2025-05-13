@@ -3,7 +3,7 @@ using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
 
 namespace UserManagementService.BusinessLogicLayer.Validators.UpdateUserRequestRepository
 {
-    public class UpdateUserRequestValidator : AbstractValidator<UpdateUserRequest>
+    public class UpdateUserRequestValidator : AbstractValidator<UpdateUserRequestDto>
     {
         public UpdateUserRequestValidator()
         {

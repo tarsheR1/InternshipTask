@@ -7,9 +7,9 @@ namespace UserManagementService.DataAccessLayer.Interfaces.Repositories.Base
     {
         Task<TEntity> GetByIdAsync(TKey id, CancellationToken cancellationToken);
 
-        public Task<IReadOnlyList<TDestination>> GetAllAsync<TDestination>(
-        Specification<UserEntity> specification,
-        CancellationToken cancellationToken = default);
+        //public Task<IReadOnlyList<TDestination>> GetAllAsync<TDestination>(
+        //Specification<UserEntity> specification,
+        //CancellationToken cancellationToken = default);
 
         Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);
 

@@ -9,9 +9,9 @@ namespace UserManagementService.BusinessLogicLayer.Mapping
         public RoleProfile() 
         {
             CreateMap<Role, RoleEntity>()
-                    .ForMember(dest => dest.RolePermissions, opt => opt.MapFrom(src => src.RolePermissions))
+                    .ForMember(dest => dest.Permissions, opt => opt.MapFrom(src => src.Permissions))
                     .ReverseMap()
-                    .ForMember(dest => dest.RolePermissions, opt => opt.MapFrom(src => src.RolePermissions));
+                    .ForMember(dest => dest.Permissions, opt => opt.MapFrom(src => src.Permissions));
         }
     }
 }

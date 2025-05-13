@@ -37,7 +37,7 @@ public class RolesController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> CreateRole(
-        [FromBody] RoleCreateRequest request,
+        [FromBody] RoleCreateRequestDto request,
         CancellationToken cancellationToken)
     {
         await _roleService.CreateRoleAsync(request, cancellationToken);
@@ -48,7 +48,7 @@ public class RolesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateRole(
         [FromRoute] int id,
-        [FromBody] RoleUpdateRequest request,
+        [FromBody] RoleUpdateRequestDto request,
         CancellationToken cancellationToken)
     {
         var updatedRole = await _roleService.UpdateRoleAsync(id, request, cancellationToken);

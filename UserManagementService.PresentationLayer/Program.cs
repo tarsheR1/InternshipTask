@@ -1,18 +1,27 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using UserManagementService.BusinessLogicLayer.Extensions;
 using UserManagementService.BusinessLogicLayer.Mapping;
 using UserManagementService.BusinessLogicLayer.Models.Settings;
 using UserManagementService.BusinessLogicLayer.Validators.LoginRequestDtoValidator;
 using UserManagementService.DataAccessLayer.Extensions;
-using UserManagementService.PresentationLayer.Extensions.Application;
 using UserManagementService.PresentationLayer.Extensions.Configuration;
 using UserManagementService.PresentationLayer.Extensions.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.ConfigureServices();
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings"));
 
@@ -44,7 +53,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UseRouting();
 app.UseGlobalErrorHandling();
 app.UseAuthentication();

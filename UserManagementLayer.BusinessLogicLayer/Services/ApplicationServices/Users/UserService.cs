@@ -11,7 +11,7 @@ using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {
-    public class UserService : IUserService
+    public class UserService : IUserService, IUserRoleService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRoleService _roleService;
@@ -24,37 +24,46 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             _roleService = roleService;
         }
 
+
+        public async Task AddUserAsync(CancellationToken cancellationToken)
+        {
+
+        }
+
         #region Get Methods
 
         public async Task<PagedResponse<User>> GetUsersPaginatedAsync(
             PaginationParameters paginationParameters,
-            UserFilter filter = null,
+            //UserFilter filter = null,
             SortOptions sort = null,
             CancellationToken cancellationToken = default)
         {
-            var spec = new UserSpecification(filter);
+            //    var spec = new UserSpecification(filter);
 
-            if (sort != null)
-            {
-                spec.ApplyOrdering(sort.Field, sort.IsDescending);
-            }
+            //    if (sort != null)
+            //    {
+            //        spec.ApplyOrdering(sort.Field, sort.IsDescending);
+            //    }
 
-            var query = _unitOfWork.Users.GetAllBySpecAsync(spec);
+            //    var query = _unitOfWork.Users.GetAllBySpecAsync(spec);
 
-            var totalCount = await _unitOfWork.Users.CountBySpecAsync(spec);
+            //    var totalCount = await _unitOfWork.Users.CountBySpecAsync(spec);
 
-            var usersEntity = await query
-                .Skip(paginationParameters.PageNumber)
-                .Take(paginationParameters.PageSize)
-                .ToListAsync(cancellationToken);
+            //    var usersEntity = await query
+            //        .Skip(paginationParameters.PageNumber)
+            //        .Take(paginationParameters.PageSize)
+            //        .ToListAsync(cancellationToken);
 
-            var users = _mapper.Map<List<User>>(usersEntity);
+            //    var users = _mapper.Map<List<User>>(usersEntity);
 
-            return new PagedResponse<User>(
-                users,
-                paginationParameters.PageNumber,
-                paginationParameters.PageSize,
-                totalCount);
+            //    return new PagedResponse<User>(
+            //        users,
+            //        paginationParameters.PageNumber,
+            //        paginationParameters.PageSize,
+            //        totalCount);
+            //
+            return new PagedResponse<User>(new List<User>(), 3, 3,3);
+
         }
 
         public async Task<User> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
@@ -82,7 +91,8 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         public async Task<List<Role>> GetUserRolesAsync(Guid userId, CancellationToken cancellationToken)
         {
-            return await _unitOfWork.Users.GetUserRolesAsync(userId, cancellationToken);
+            var roleEnities = await _unitOfWork.Users.GetUserRolesAsync(userId, cancellationToken);
+            return _mapper.Map<List<Role>>(roleEnities);
         }
 
         #endregion
@@ -91,7 +101,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         public async Task UpdateUserAsync(
             Guid userId,
-            UpdateUserRequest updateRequest,
+            UpdateUserRequestDto updateRequest,
             CancellationToken cancellationToken)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
@@ -112,7 +122,23 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         #endregion
 
-        #region Role Management
+        #region Delete Methods
+
+        public async Task DeleteUserAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
+            if (user == null)
+            {
+                throw new UserNotFoundException(userId.ToString());
+            }
+
+            await _unitOfWork.Users.DeleteAsync(user, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+
+        #endregion
+
+        #region User-Role Management
 
         public async Task AssignRoleToUserAsync(Guid userId, int roleId, CancellationToken cancellationToken)
         {
@@ -182,22 +208,6 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 throw;
             }
-        }
-
-        #endregion
-
-        #region Delete Methods
-
-        public async Task DeleteUserAsync(Guid userId, CancellationToken cancellationToken)
-        {
-            var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
-            if (user == null)
-            {
-                throw new UserNotFoundException(userId.ToString());
-            }
-
-            await _unitOfWork.Users.DeleteAsync(user, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
         #endregion

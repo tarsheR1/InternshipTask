@@ -1,5 +1,4 @@
-﻿using UserManagementService.DataAccessLayer.Interfaces.Repositories.Relations;
-using UserManagementService.DataAccessLayer.Interfaces.Repositories.Roles;
+﻿using UserManagementService.DataAccessLayer.Interfaces.Repositories.Roles;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories.Users;
 
 namespace UserManagementService.DataAccessLayer.Interfaces
@@ -8,8 +7,6 @@ namespace UserManagementService.DataAccessLayer.Interfaces
     {
         IUserRepository Users { get; }
         IRoleRepository Roles { get; }
-        IUserRoleRepository UserRoles { get; }
-        IRolePermissionRepository RolePermission { get; }
         IPermissionRepository Permissions { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

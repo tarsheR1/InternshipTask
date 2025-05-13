@@ -22,7 +22,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             return _mapper.Map<List<Permission>>(permissions);
         }
 
-        public async Task<Permission> GetById(int id, CancellationToken cancellationToken)
+        public async Task<Permission> GetPermissionByIdAsync(int id, CancellationToken cancellationToken)
         {
             var permissionEntity = await _unitOfWork.Permissions.GetByIdAsync(id, cancellationToken);
 

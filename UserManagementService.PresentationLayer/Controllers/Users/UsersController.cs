@@ -3,7 +3,6 @@ using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using AutoMapper;
 using Shared.Pagination;
 using UserManagementService.BusinessLogicLayer.Models.Queries;
-using UserManagementService.DataAccessLayer.Specifications.Users;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Request;
 
 namespace UserManagementService.PresentationLayer.Controllers.Users
@@ -41,14 +40,14 @@ namespace UserManagementService.PresentationLayer.Controllers.Users
                 PageSize = request.PageSize
             };
 
-            var filter = new UserFilter
-            {
-                Search = request.Search,
-                IsActive = request.IsActive,
-                Roles = request.Roles,
-                CreatedFrom = request.CreatedFrom,
-                CreatedTo = request.CreatedTo
-            };
+            //var filter = new UserFilter
+            //{
+            //    Search = request.Search,
+            //    IsActive = request.IsActive,
+            //    Roles = request.Roles,
+            //    CreatedFrom = request.CreatedFrom,
+            //    CreatedTo = request.CreatedTo
+            //};
 
             var sort = new SortOptions 
             { 
@@ -58,7 +57,7 @@ namespace UserManagementService.PresentationLayer.Controllers.Users
 
             var result = await _userService.GetUsersPaginatedAsync(
                 pagination,
-                filter,
+               // filter,
                 sort,
                 cancellationToken);
 
@@ -68,7 +67,7 @@ namespace UserManagementService.PresentationLayer.Controllers.Users
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateUser(
             [FromRoute] Guid userId,
-            [FromBody] UpdateUserRequest request,
+            [FromBody] UpdateUserRequestDto request,
             CancellationToken cancellationToken)
         {
             await _userService.UpdateUserAsync(userId, request, cancellationToken);

@@ -1,6 +1,6 @@
 ﻿namespace UserManagementService.BusinessLogicLayer.Models.DTO.Request
 {
-    public sealed record UpdateUserRequest
+    public sealed record UpdateUserRequestDto
     {
         public string? Email { get; init; }
         public string? FirstName { get; init; }

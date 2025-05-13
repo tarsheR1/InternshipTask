@@ -12,11 +12,6 @@ namespace UserManagementService.DataAccessLayer.Specifications.Composite
         {
             _left = left;
             _right = right;
-
-            OrderBy = left.OrderBy;
-            OrderByDescending = left.OrderByDescending;
-            Skip = left.Skip;
-            Take = left.Take;
         }
 
         public override bool IsSatisfiedBy(T candidate)

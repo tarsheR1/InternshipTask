@@ -22,8 +22,6 @@ namespace UserManagementService.BusinessLogicLayer.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IRoleService, RoleService>();
-            services.AddScoped<IUserRoleService, UserRoleService>();
-            services.AddScoped<IRolePermissionAssignmentService, RolePermissionAssignmentService>();
 
             services.AddScoped<IPasswordHasher, PasswordHasher>();
 

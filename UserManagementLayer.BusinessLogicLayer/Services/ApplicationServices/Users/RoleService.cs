@@ -6,21 +6,44 @@ using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 using UserManagementService.DataAccessLayer.Entities.Role;
 using UserManagementService.DataAccessLayer.Interfaces;
 
-
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {
     public class RoleService : IRoleService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IPermissionService _permissionService;
 
-        public RoleService(IUnitOfWork unitOfWork, IMapper mapper)
+        public RoleService(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IPermissionService permissionService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _permissionService = permissionService;
         }
 
-        public async Task CreateRoleAsync(RoleCreateRequest command, CancellationToken cancellationToken)
+        #region Get Methods
+
+        public async Task<Role> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken)
+        {
+            var role = await _unitOfWork.Roles.GetByIdAsync(roleId, cancellationToken);
+            if (role == null)
+            {
+                throw new NotFoundException($"Роль с Id {roleId} не найдена");
+            }
+
+            return _mapper.Map<Role>(role);
+        }
+
+        public async Task<IEnumerable<Role>> GetAllRolesAsync(CancellationToken cancellationToken)
+        {
+            var roles = await _unitOfWork.Roles.GetAllAsync(cancellationToken);
+            return _mapper.Map<IEnumerable<Role>>(roles);
+        }
+
+        public async Task CreateRoleAsync(RoleCreateRequestDto command, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync(cancellationToken);
 
@@ -29,7 +52,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 var existingRole = await _unitOfWork.Roles.GetByNameAsync(command.Name, cancellationToken);
                 if (existingRole != null)
                 {
-                    throw new AlreadyExistsException($"Роль '{command.Name}' уже существует");
+                    throw new AlreadyExistsException(command.Name);
                 }
 
                 var role = new RoleEntity
@@ -48,7 +71,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             }
         }
 
-        public async Task<Role> UpdateRoleAsync(int roleId, RoleUpdateRequest command, CancellationToken cancellationToken)
+        public async Task<Role> UpdateRoleAsync(int roleId, RoleUpdateRequestDto command, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync(cancellationToken);
 
@@ -96,12 +119,6 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     throw new NotFoundException($"Роль с Id {roleId} не найдена");
                 }
 
-                var userRoles = await _unitOfWork.UserRoles.GetUsersForRoleAsync(roleId, cancellationToken);
-                if (userRoles.Any())
-                {
-                    throw new ConflictException($"Нельзя удалить роль '{role.Name}' так как она назначена {userRoles.Count()} пользователю");
-                }
-
                 await _unitOfWork.Roles.DeleteAsync(role, cancellationToken);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
@@ -113,21 +130,77 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             }
         }
 
-        public async Task<Role> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken)
+        #endregion
+
+        #region Role Query Operations
+
+        
+
+        #endregion
+
+        #region Role-Permission Management
+
+        public async Task AssignPermissionToRoleAsync(int roleId, int permissionId, CancellationToken cancellationToken)
+        {
+            var permission = await _permissionService.GetPermissionByIdAsync(permissionId, cancellationToken);
+            if (permission == null)
+            {
+                throw new NotFoundException(permissionId.ToString());
+            }
+
+            var roleEntity = await _unitOfWork.Roles.GetByIdAsync(roleId, cancellationToken);
+            if (roleEntity == null)
+            {
+                throw new NotFoundException(roleId.ToString());
+            }
+
+            var role = _mapper.Map<Role>(roleEntity);
+
+            if (role.Permissions.Contains(permission))
+            {
+                throw new AlreadyExistsException(permissionId.ToString());
+            }
+
+            role.Permissions.Add(permission);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task RemovePermissionFromRoleAsync(int roleId, int permissionId, CancellationToken cancellationToken)
+        {
+            var permission = await _permissionService.GetPermissionByIdAsync(permissionId, cancellationToken);
+            if (permission == null)
+            {
+                throw new NotFoundException(permissionId.ToString());
+            }
+
+            var roleEntity = await _unitOfWork.Roles.GetByIdAsync(roleId, cancellationToken);
+            if (roleEntity == null)
+            {
+                throw new NotFoundException(roleId.ToString());
+            }
+
+            var role = _mapper.Map<Role>(roleEntity);
+
+            if (!role.Permissions.Contains(permission))
+            {
+                throw new NotFoundException(permissionId.ToString());
+            }
+
+            role.Permissions.Remove(permission);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<List<Permission>> GetRolePermissionsAsync(int roleId, CancellationToken cancellationToken)
         {
             var role = await _unitOfWork.Roles.GetByIdAsync(roleId, cancellationToken);
             if (role == null)
             {
-                throw new NotFoundException($"Роль с Id {roleId} не найдена");
+                throw new NotFoundException(roleId.ToString());
             }
 
-            return _mapper.Map<Role>(role);
+            return _mapper.Map<List<Permission>>(role.Permissions);
         }
 
-        public async Task<IEnumerable<Role>> GetAllRolesAsync(CancellationToken cancellationToken)
-        {
-            var roles = await _unitOfWork.Roles.GetAllAsync(cancellationToken);
-            return _mapper.Map<IEnumerable<Role>>(roles);
-        }
+        #endregion
     }
 }

@@ -23,11 +23,10 @@ namespace UserManagementService.DataAccessLayer.Repositories.Users
 
         public async Task<List<RoleEntity>> GetUserRolesAsync(Guid userId, CancellationToken cancellationToken)
         {
-            return await _context.UserRoles
-                .Where(ur => ur.UserId == userId)
-                .Include(ur => ur.Role)
-                .Select(ur => ur.Role)
-                .ToListAsync(cancellationToken);
+            return await _context.Users
+                 .Where(u => u.Id == userId)
+                 .SelectMany(u => u.Roles)
+                 .ToListAsync(cancellationToken);
         }
     }
 }

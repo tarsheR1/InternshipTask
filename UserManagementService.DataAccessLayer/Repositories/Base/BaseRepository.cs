@@ -44,20 +44,20 @@ namespace UserManagementService.DataAccessLayer.Repositories.Base
             await Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<TDestination>> GetAllAsync<TDestination>(
-            ISpecification<TEntity> specification,
-            CancellationToken cancellationToken = default)
-        {
-            var query = _dbSet
-                .Where(specification.Criteria)
-                .ApplySpecification(specification);
+        //public async Task<IEnumerable<TDestination>> GetAllAsync<TDestination>(
+        //    ISpecification<TEntity> specification,
+        //    CancellationToken cancellationToken = default)
+        //{
+        //    //var query = _dbSet
+        //    //    .Where(specification.Criteria)
+        //    //    .ApplySpecification(specification);
 
-            var projectedQuery = typeof(TDestination) == typeof(TEntity)
-                ? query as IQueryable<TDestination>
-                : query.ProjectTo<TDestination>(_mapper.ConfigurationProvider);
+        //    //var projectedQuery = typeof(TDestination) == typeof(TEntity)
+        //    //    ? query as IQueryable<TDestination>
+        //    //    : query.ProjectTo<TDestination>(_mapper.ConfigurationProvider);
 
-            return await projectedQuery!
-                .ToListAsync(cancellationToken);
-        }
+        //    return await projectedQuery!
+        //        .ToListAsync(cancellationToken);
+        //}
     }
 }

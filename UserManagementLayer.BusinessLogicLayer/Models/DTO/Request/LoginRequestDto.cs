@@ -1,6 +1,6 @@
 ﻿namespace UserManagementService.BusinessLogicLayer.Models.DTO.Request
 {
-    public record LoginRequestDto(
+    public sealed record LoginRequestDto(
         string Email,
         string Password
     );  

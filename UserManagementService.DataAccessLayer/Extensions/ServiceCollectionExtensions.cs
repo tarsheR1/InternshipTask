@@ -5,8 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using UserManagementService.DataAccessLayer.Interfaces;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories.Users;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories.Roles;
-using UserManagementService.DataAccessLayer.Interfaces.Repositories.Relations;
-using UserManagementService.DataAccessLayer.Repositories.Relations;
 using UserManagementService.DataAccessLayer.Repositories.Roles;
 using UserManagementService.DataAccessLayer.Repositories.Users;
 
@@ -20,15 +18,13 @@ namespace UserManagementService.DataAccessLayer.Extensions
         {
             services.AddDbContext<UserManagementDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+           
+            
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IPermissionRepository, PermissionRepository>();
-
-            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
-            services.AddScoped<IRolePermissionRepository, RolePermissionsRepository>();
-
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
             return services;

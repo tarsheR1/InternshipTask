@@ -5,9 +5,9 @@ namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
 {
     public interface IRoleService
     {
-        Task CreateRoleAsync(RoleCreateRequest command, CancellationToken cancellationToken);
+        Task CreateRoleAsync(RoleCreateRequestDto command, CancellationToken cancellationToken);
 
-        Task<Role> UpdateRoleAsync(int roleId, RoleUpdateRequest command, CancellationToken cancellationToken);
+        Task<Role> UpdateRoleAsync(int roleId, RoleUpdateRequestDto command, CancellationToken cancellationToken);
 
         Task DeleteRoleAsync(int roleId, CancellationToken cancellationToken);
 
