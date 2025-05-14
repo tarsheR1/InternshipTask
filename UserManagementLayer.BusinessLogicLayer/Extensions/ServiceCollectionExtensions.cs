@@ -20,7 +20,9 @@ namespace UserManagementService.BusinessLogicLayer.Extensions
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRoleService, UserService>();
             services.AddScoped<IPermissionService, PermissionService>();
+            services.AddScoped<IRolePermissionAssignmentService, RoleService>();
             services.AddScoped<IRoleService, RoleService>();
 
             services.AddScoped<IPasswordHasher, PasswordHasher>();

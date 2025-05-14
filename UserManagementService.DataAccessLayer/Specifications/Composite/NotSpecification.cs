@@ -1,9 +1,5 @@
 ﻿using Shared.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 using UserManagementService.DataAccessLayer.Specifications.Base;
 
 namespace UserManagementService.DataAccessLayer.Specifications.Composite
@@ -19,5 +15,15 @@ namespace UserManagementService.DataAccessLayer.Specifications.Composite
 
         public override bool IsSatisfiedBy(T candidate)
             => !_spec.IsSatisfiedBy(candidate);
+
+        public override Expression<Func<T, bool>> ToExpression()
+        {
+            var expression = _spec.ToExpression();
+            var notExpression = Expression.Not(expression.Body);
+
+            return Expression.Lambda<Func<T, bool>>(
+                notExpression,
+                expression.Parameters.Single());
+        }
     }
 }

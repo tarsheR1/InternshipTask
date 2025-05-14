@@ -5,6 +5,7 @@ namespace Shared.Interfaces
     public interface ISpecification<T>
     {
         bool IsSatisfiedBy(T candidate);
+        Expression<Func<T, bool>> ToExpression();
 
         ISpecification<T> And(ISpecification<T> other);
         ISpecification<T> AndNot(ISpecification<T> other);

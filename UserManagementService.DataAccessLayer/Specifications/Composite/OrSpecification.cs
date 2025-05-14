@@ -1,4 +1,5 @@
 ﻿using Shared.Interfaces;
+using System.Linq.Expressions;
 using UserManagementService.DataAccessLayer.Specifications.Base;
 
 namespace UserManagementService.DataAccessLayer.Specifications.Composite
@@ -16,5 +17,19 @@ namespace UserManagementService.DataAccessLayer.Specifications.Composite
 
         public override bool IsSatisfiedBy(T candidate)
             => _left.IsSatisfiedBy(candidate) || _right.IsSatisfiedBy(candidate);
+
+        public override Expression<Func<T, bool>> ToExpression()
+        {
+            var leftExpression = _left.ToExpression();
+            var rightExpression = _right.ToExpression();
+
+            var orExpression = Expression.OrElse(
+                leftExpression.Body,
+                rightExpression.Body);
+
+            return Expression.Lambda<Func<T, bool>>(
+                orExpression,
+                leftExpression.Parameters.Single());
+        }
     }
 }

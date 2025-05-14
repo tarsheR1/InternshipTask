@@ -8,7 +8,7 @@ using UserManagementService.DataAccessLayer.Interfaces;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {
-    public class RoleService : IRoleService
+    public class RoleService : IRoleService, IRolePermissionAssignmentService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;

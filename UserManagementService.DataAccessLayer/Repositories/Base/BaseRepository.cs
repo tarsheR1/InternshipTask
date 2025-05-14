@@ -3,6 +3,7 @@ using UserManagementService.DataAccessLayer.Persistence;
 using UserManagementService.DataAccessLayer.Extensions;
 using Shared.Interfaces;
 using Shared.Pagination;
+using UserManagementService.DataAccessLayer.Specifications.Base;
 
 namespace UserManagementService.DataAccessLayer.Repositories.Base
 {
@@ -44,20 +45,10 @@ namespace UserManagementService.DataAccessLayer.Repositories.Base
             await Task.CompletedTask;
         }
 
-        //public async Task<IEnumerable<TDestination>> GetAllAsync<TDestination>(
-        //    ISpecification<TEntity> specification,
-        //    CancellationToken cancellationToken = default)
-        //{
-        //    //var query = _dbSet
-        //    //    .Where(specification.Criteria)
-        //    //    .ApplySpecification(specification);
-
-        //    //var projectedQuery = typeof(TDestination) == typeof(TEntity)
-        //    //    ? query as IQueryable<TDestination>
-        //    //    : query.ProjectTo<TDestination>(_mapper.ConfigurationProvider);
-
-        //    return await projectedQuery!
-        //        .ToListAsync(cancellationToken);
-        //}
+        public virtual async Task<IReadOnlyList<TEntity>> Find(Specification<TEntity> specification, CancellationToken cancellationToken = default)
+        {
+            return _dbSet.Where(specification)
+           .ToList();
+        }
     }
 }

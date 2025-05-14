@@ -13,5 +13,4 @@
             PropertyName = propertyName;
         }
     }
-
 }
