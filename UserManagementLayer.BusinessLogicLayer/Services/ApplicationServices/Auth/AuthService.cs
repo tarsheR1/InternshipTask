@@ -8,6 +8,8 @@ using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.DataAccessLayer.Interfaces;
 using UserManagementService.DataAccessLayer.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Auth;
+using UserManagementService.BusinessLogicLayer.Interfaces.Users;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Users;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {
@@ -17,20 +19,22 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         private readonly IJwtTokenGenerator _tokenGenerator;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IRefreshTokenService _refreshTokenService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        private readonly string defaultRoleForUser = "User";
 
         public AuthService(
             IUnitOfWork unitOfWork,
             IJwtTokenGenerator tokenGenerator,
             IPasswordHasher passwordHasher,
             IRefreshTokenService refreshTokenService,
+            IUserService userService,
             IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _tokenGenerator = tokenGenerator;
             _passwordHasher = passwordHasher;
             _refreshTokenService = refreshTokenService;
+            _userService = userService;
             _mapper = mapper;
         }
 
@@ -40,28 +44,26 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
             try
             {
-                var existingUser = await _unitOfWork.Users.GetByEmailAsync(request.Email, cancellationToken);
+                var existingUser = await _userService.GetUserByEmailAsync(request.Email, cancellationToken);
                 if (existingUser != null)
                     throw new EmailAlreadyExistsException(request.Email);
 
-                var user = new User
+                var passwordHash = _passwordHasher.HashPassword(request.Password);
+
+                var createUserRequest = new CreateUserRequestDto
                 {
-                    Id = Guid.NewGuid(),
                     Email = request.Email,
-                    PasswordHash = _passwordHasher.HashPassword(request.Password),
+                    PasswordHash = passwordHash,
                     FirstName = request.FirstName,
-                    LastName = request.LastName,
                     MiddleName = request.MiddleName,
-                    Phone = request.Phone,
-                    IsActive = false
+                    LastName = request.LastName,
+                    Phone = request.Phone
                 };
 
-
+                _userService.
                 var userEntity = _mapper.Map<UserEntity>(user);
                 await _unitOfWork.Users.AddAsync(userEntity, cancellationToken);
 
-                var defaultRole = await _unitOfWork.Roles.GetByNameAsync(defaultRoleForUser, cancellationToken);
-                userEntity.Roles.Add(defaultRole);
 
                 var accessToken = _tokenGenerator.GenerateToken(user);
                 var refreshToken = await _refreshTokenService.GenerateAndSaveRefreshTokenAsync(user.Id, cancellationToken);

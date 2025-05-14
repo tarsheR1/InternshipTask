@@ -8,6 +8,8 @@ using UserManagementService.DataAccessLayer.Interfaces;
 using UserManagementService.DataAccessLayer.Entities.Role;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Roles;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Users;
+using Azure.Core;
+using UserManagementService.DataAccessLayer.Entities.Users;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {
@@ -25,9 +27,43 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         }
 
 
-        public async Task AddUserAsync(CancellationToken cancellationToken)
+        public async Task AddUserAsync(CreateUserRequestDto requestDto, CancellationToken cancellationToken)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
 
+            try
+            {
+                var user = new User
+                {
+                    Id = Guid.NewGuid(),
+                    Email = requestDto.Email,
+                    PasswordHash = requestDto.PasswordHash,
+                    FirstName = requestDto.FirstName,
+                    LastName = requestDto.LastName,
+                    MiddleName = requestDto.MiddleName,
+                    Phone = requestDto.Phone,
+                    IsActive = false
+                };
+
+                var defaultRole = await _roleService.GetDefaultRoleAsync(cancellationToken);
+                if (defaultRole == null)
+                {
+                    // Написать exception
+                    throw new InvalidOperationException("Default role not configured");
+                }
+
+                user.Roles.Add(defaultRole);
+
+                var userEntity = _mapper.Map<UserEntity>(user);
+                await _unitOfWork.Users.AddAsync(userEntity, cancellationToken);
+
+                await transaction.CommitAsync(cancellationToken);
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
         }
 
         #region Get Methods

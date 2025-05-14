@@ -13,6 +13,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IPermissionService _permissionService;
+        private readonly string defaultRoleForUser = "User";
 
         public RoleService(
             IUnitOfWork unitOfWork,
@@ -31,7 +32,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             var role = await _unitOfWork.Roles.GetByIdAsync(roleId, cancellationToken);
             if (role == null)
             {
-                throw new NotFoundException($"Роль с Id {roleId} не найдена");
+                throw new NotFoundException(roleId.ToString());
             }
 
             return _mapper.Map<Role>(role);
@@ -42,6 +43,17 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             var roles = await _unitOfWork.Roles.GetAllAsync(cancellationToken);
             return _mapper.Map<IEnumerable<Role>>(roles);
         }
+
+        public async Task<Role> GetDefaultRoleAsync(CancellationToken cancellationToken)
+        {
+            var roleEntity = await _unitOfWork.Roles.GetByNameAsync(defaultRoleForUser, cancellationToken);
+
+            return _mapper.Map<Role>(roleEntity);
+        }
+
+        #endregion
+
+        #region Role Query Operations
 
         public async Task CreateRoleAsync(RoleCreateRequestDto command, CancellationToken cancellationToken)
         {
@@ -130,11 +142,6 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             }
         }
 
-        #endregion
-
-        #region Role Query Operations
-
-        
 
         #endregion
 

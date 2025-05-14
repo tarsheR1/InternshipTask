@@ -47,8 +47,9 @@ namespace UserManagementService.DataAccessLayer.Repositories.Base
 
         public virtual async Task<IReadOnlyList<TEntity>> Find(Specification<TEntity> specification, CancellationToken cancellationToken = default)
         {
-            return _dbSet.Where(specification)
-           .ToList();
+            return await _dbSet.Where(specification.ToExpression())
+                .ToListAsync(cancellationToken);
         }
+
     }
 }

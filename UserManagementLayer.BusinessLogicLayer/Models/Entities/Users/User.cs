@@ -15,7 +15,7 @@ namespace UserManagementService.BusinessLogicLayer.Models.Entities.Users
         public string? Phone { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = false;
 
         public ICollection<Role> Roles { get; set; } = new List<Role>();
     }
