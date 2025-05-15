@@ -27,9 +27,9 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         }
 
 
-        public async Task AddUserAsync(CreateUserRequestDto requestDto, CancellationToken cancellationToken)
+        public async Task<User> CreateUserAsync(CreateUserRequestDto requestDto, CancellationToken cancellationToken)
         {
-            await using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
 
             try
             {
@@ -48,7 +48,6 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 var defaultRole = await _roleService.GetDefaultRoleAsync(cancellationToken);
                 if (defaultRole == null)
                 {
-                    // Написать exception
                     throw new InvalidOperationException("Default role not configured");
                 }
 
@@ -57,11 +56,14 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 var userEntity = _mapper.Map<UserEntity>(user);
                 await _unitOfWork.Users.AddAsync(userEntity, cancellationToken);
 
-                await transaction.CommitAsync(cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+
+                return user;
             }
             catch
             {
-                await transaction.RollbackAsync(cancellationToken);
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 throw;
             }
         }

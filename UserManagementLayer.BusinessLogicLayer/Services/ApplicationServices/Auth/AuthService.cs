@@ -6,8 +6,8 @@ using UserManagementService.BusinessLogicLayer.Exceptions.Auth;
 using UserManagementService.BusinessLogicLayer.Exceptions.Users;
 using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.DataAccessLayer.Interfaces;
-using UserManagementService.DataAccessLayer.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Auth;
+using UserManagementService.BusinessLogicLayer.Models.DTO.Response;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Users;
 
@@ -38,7 +38,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             _mapper = mapper;
         }
 
-        public async Task<AuthResult> RegisterAsync(RegisterUserRequestDto request, CancellationToken cancellationToken)
+        public async Task<RegisterUserResponseDto> RegisterAsync(RegisterUserRequestDto request, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync(cancellationToken);
 
@@ -60,10 +60,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     Phone = request.Phone
                 };
 
-                _userService.
-                var userEntity = _mapper.Map<UserEntity>(user);
-                await _unitOfWork.Users.AddAsync(userEntity, cancellationToken);
-
+                var user = await _userService.CreateUserAsync(createUserRequest, cancellationToken);
 
                 var accessToken = _tokenGenerator.GenerateToken(user);
                 var refreshToken = await _refreshTokenService.GenerateAndSaveRefreshTokenAsync(user.Id, cancellationToken);
@@ -71,7 +68,12 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
-                return new AuthResult(accessToken, refreshToken);
+                return new RegisterUserResponseDto
+                {
+                    Message = "User registered successfully",
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
+                };
             }
             catch
             {

@@ -5,13 +5,15 @@ namespace UserManagementService.DataAccessLayer.Interfaces
 {
     public interface IUnitOfWork
     {
-        IUserRepository Users { get; }
-        IRoleRepository Roles { get; }
         IPermissionRepository Permissions { get; }
+        IRefreshTokenRepository RefreshTokens { get; }
+        IRoleRepository Roles { get; }
+        IUserRepository Users { get; }
 
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         Task BeginTransactionAsync(CancellationToken cancellationToken = default);
         Task CommitTransactionAsync(CancellationToken cancellationToken = default);
+        void Dispose();
         Task RollbackTransactionAsync(CancellationToken cancellationToken = default);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
