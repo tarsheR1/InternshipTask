@@ -62,8 +62,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
                 var user = await _userService.CreateUserAsync(createUserRequest, cancellationToken);
 
-                var accessToken = _tokenGenerator.GenerateToken(user);
-                var refreshToken = await _refreshTokenService.GenerateAndSaveRefreshTokenAsync(user.Id, cancellationToken);
+             
 
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
@@ -71,8 +70,6 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                 return new RegisterUserResponseDto
                 {
                     Message = "User registered successfully",
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken
                 };
             }
             catch
