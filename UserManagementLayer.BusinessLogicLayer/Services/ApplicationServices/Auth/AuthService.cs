@@ -10,7 +10,10 @@ using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Auth;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Response;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Users;
-\
+using Microsoft.AspNetCore.Mvc;
+using Hangfire;
+using Microsoft.AspNetCore.Http;
+
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {
     public class AuthService : IAuthService
@@ -21,6 +24,9 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly IBackgroundJobClient _backgroundJob;
+        private readonly IUrlHelper _urlHelper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AuthService(
             IUnitOfWork unitOfWork,
@@ -28,7 +34,10 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             IPasswordHasher passwordHasher,
             IRefreshTokenService refreshTokenService,
             IUserService userService,
-            IMapper mapper)
+            IMapper mapper,
+            IBackgroundJobClient backgroundJob,
+            IUrlHelper urlHelper,
+            IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _tokenGenerator = tokenGenerator;
@@ -36,6 +45,9 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             _refreshTokenService = refreshTokenService;
             _userService = userService;
             _mapper = mapper;
+            _backgroundJob = backgroundJob;
+            _urlHelper = urlHelper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<RegisterUserResponseDto> RegisterAsync(RegisterUserRequestDto request, CancellationToken cancellationToken)
@@ -49,7 +61,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
                     throw new EmailAlreadyExistsException(request.Email);
 
                 var passwordHash = _passwordHasher.HashPassword(request.Password);
-
+                 
                 var createUserRequest = new CreateUserRequestDto
                 {
                     Email = request.Email,
@@ -62,14 +74,24 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
                 var user = await _userService.CreateUserAsync(createUserRequest, cancellationToken);
 
-             
+                var token = await GenerateEmailConfirmationTokenAsync(user.Id, cancellationToken);
+
+                var callbackUrl = _urlHelper.Action(
+                     "ConfirmEmail",
+                     "Auth",
+                     new { userId = user.Id, token },
+                     protocol: _httpContextAccessor.HttpContext?.Request.Scheme ?? "https");
+
+                _backgroundJob.Enqueue<IEmailService>(x =>
+                    x.SendConfirmationEmailAsync(user.Email, user.Id, callbackUrl));
 
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 return new RegisterUserResponseDto
                 {
-                    Message = "User registered successfully",
+                    Message = "User registered successfully. Please check your email for confirmation.",
+                    UserId = user.Id
                 };
             }
             catch
@@ -162,6 +184,5 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
             return token;
         }
-
     }
 }

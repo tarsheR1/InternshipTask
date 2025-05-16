@@ -2,7 +2,9 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using Serilog.Events;
 using UserManagementService.BusinessLogicLayer.Extensions;
+using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
 using UserManagementService.BusinessLogicLayer.Mapping;
 using UserManagementService.BusinessLogicLayer.Models.Settings;
 using UserManagementService.BusinessLogicLayer.Validators.LoginRequestDtoValidator;
@@ -12,9 +14,23 @@ using UserManagementService.PresentationLayer.Extensions.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File(
+        path: "logs/log-.txt",
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 7,
+        shared: true)
+    .CreateLogger();
 
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings"));
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -26,7 +42,9 @@ builder.Services
     .AddJwtAuthentication(builder.Configuration)
     .AddCustomAuthorizationPolicies()
     .AddCustomHangfire(builder.Configuration)
+    .AddTransient<IEmailService, EmailService>()
     .AddSwaggerWithJwtAuth()
+    .ConfigureUrlHelpers()
     .AddValidatorsFromAssemblyContaining<LoginRequestDtoValidator>(ServiceLifetime.Scoped)
     .AddAutoMapper(typeof(UserProfile))
     .AddFluentValidationAutoValidation()

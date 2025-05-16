@@ -11,7 +11,6 @@ namespace UserManagementService.BusinessLogicLayer.Interfaces.Auth
         Task RevokeTokenAsync(string refreshToken, CancellationToken cancellation);
         Task<AuthResult> RefreshTokenAsync(string refreshToken, Guid userId, CancellationToken cancellation);
         Task<string> GenerateEmailConfirmationTokenAsync(Guid userId, CancellationToken cancellationToken);
-        Task<bool> ConfirmEmailAsync(Guid userId, string token, CancellationToken cancellationToken)
-
+        Task<bool> ConfirmEmailAsync(Guid userId, string token, CancellationToken cancellationToken);
     }
 };
