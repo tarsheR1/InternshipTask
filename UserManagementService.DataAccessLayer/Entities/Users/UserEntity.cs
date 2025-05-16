@@ -11,6 +11,7 @@ namespace UserManagementService.DataAccessLayer.Entities.Users
         public string LastName { get; set; }
         public string? MiddleName { get; set; }
         public string? Phone { get; set; }
+        public string? EmailConfirmationToken { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; }

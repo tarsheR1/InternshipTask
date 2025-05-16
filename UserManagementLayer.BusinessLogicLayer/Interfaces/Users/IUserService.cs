@@ -14,9 +14,10 @@ namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
             //UserFilter filter = null,
             SortOptions sort = null,
             CancellationToken cancellationToken = default);
-       
-        Task<User> CreateUserAsync(CreateUserRequestDto requestDto, CancellationToken cancellationToken)
+
+        Task<User> CreateUserAsync(CreateUserRequestDto requestDto, CancellationToken cancellationToken);
         Task UpdateUserAsync(Guid userId, UpdateUserRequestDto updateRequest, CancellationToken cancellationToken);
+        Task ActivateUserAsync(Guid userId, CancellationToken cancellationToken);
         Task DeleteUserAsync(Guid userId, CancellationToken cancellationToken);
     }
 }

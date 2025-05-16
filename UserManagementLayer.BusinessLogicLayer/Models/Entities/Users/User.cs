@@ -13,6 +13,7 @@ namespace UserManagementService.BusinessLogicLayer.Models.Entities.Users
         public string LastName { get; set; } = string.Empty;
         public string? MiddleName { get; set; }
         public string? Phone { get; set; }
+        public string? EmailConfirmationToken { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsActive { get; set; } = false;

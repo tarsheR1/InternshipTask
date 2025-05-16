@@ -10,7 +10,7 @@ using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Auth;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Response;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.DTO.Request.Users;
-
+\
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {
     public class AuthService : IAuthService
@@ -81,7 +81,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         public async Task<AuthResult> LoginAsync(LoginRequestDto request, CancellationToken cancellationToken)
         {
-            var userEntity = await _unitOfWork.Users.GetByEmailAsync(request.Email, cancellationToken);
+            var userEntity = await _userService.GetUserByEmailAsync(request.Email, cancellationToken);
 
             bool isLoginValid = (userEntity == null || !_passwordHasher.Verify(request.Password, userEntity.PasswordHash));
 
@@ -125,5 +125,43 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         {
             await _refreshTokenService.RevokeRefreshTokenAsync(refreshToken, cancellationToken);
         }
+
+        public async Task<bool> ConfirmEmailAsync(Guid userId, string token, CancellationToken cancellationToken)
+        {
+            var user = await _userService.GetUserByIdAsync(userId, cancellationToken);
+            if (user == null) return false;
+
+            if (user.IsActive) return true; 
+
+            if (user.EmailConfirmationToken != token) 
+            {
+                return false; 
+            }
+
+            user.IsActive = true;
+            user.EmailConfirmationToken = null;
+
+            return true;
+        }   
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            var user = await _userService.GetUserByIdAsync(userId, cancellationToken);
+            if (user == null) throw new UserNotFoundException(userId.ToString());
+
+            var token = Guid.NewGuid().ToString("N");
+
+            user.EmailConfirmationToken = token;
+
+            UpdateUserRequestDto requestDto = new UpdateUserRequestDto
+            {
+                EmailActivationToken = token
+            };
+
+            await _userService.UpdateUserAsync(userId, requestDto, cancellationToken);
+
+            return token;
+        }
+
     }
 }

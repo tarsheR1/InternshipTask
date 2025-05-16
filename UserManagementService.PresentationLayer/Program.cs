@@ -25,6 +25,7 @@ builder.Services
     .AddBusinessLogicLayer(builder.Configuration)
     .AddJwtAuthentication(builder.Configuration)
     .AddCustomAuthorizationPolicies()
+    .AddCustomHangfire(builder.Configuration)
     .AddSwaggerWithJwtAuth()
     .AddValidatorsFromAssemblyContaining<LoginRequestDtoValidator>(ServiceLifetime.Scoped)
     .AddAutoMapper(typeof(UserProfile))

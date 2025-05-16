@@ -158,6 +158,20 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
+        public async Task ActivateUserAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(userId, cancellationToken);
+            if (user == null)
+            {
+                throw new UserNotFoundException(userId.ToString());
+            }
+
+            user.IsActive = true;
+
+            await _unitOfWork.Users.UpdateAsync(user, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+
         #endregion
 
         #region Delete Methods

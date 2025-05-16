@@ -7,5 +7,6 @@
         public string? LastName { get; init; }
         public string? MiddleName { get; init; }
         public string? Phone { get; init; }
+        public string? EmailActivationToken { get; init; }
     }
 }
