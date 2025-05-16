@@ -1,6 +1,6 @@
 @UserManagementService.PresentationLayer_HostAddress = http://localhost:5257
 
-GET {{UserManagementService.PresentationLayer_HostAddress}}/weatherforecast/
+GET {{UserManagementService.PresentationLayer_HostAddress}}/userservice/
 Accept: application/json
 
 ###
