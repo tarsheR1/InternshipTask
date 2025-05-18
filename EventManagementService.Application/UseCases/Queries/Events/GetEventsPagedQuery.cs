@@ -2,7 +2,7 @@
 using EventManagementService.Application.DTO.Events;
 using EventManagementService.Application.DTO.Pagination;
 
-namespace EventManagementService.Application.Queries
+namespace EventManagementService.Application.UseCases.Queries.Events
 {
     public record GetEventsPagedQuery(
         int PageNumber,

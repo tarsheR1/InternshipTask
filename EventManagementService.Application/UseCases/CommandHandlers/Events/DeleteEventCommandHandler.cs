@@ -1,9 +1,9 @@
-﻿using EventManagementService.Application.Сommands;
+﻿using EventManagementService.Application.UseCases.Сommands.Events;
 using EventManagementService.Domain.Interfaces;
 using EventManagementService.Domain.Models;
 using MediatR;
 
-namespace EventManagementService.Application.Handlers.CommandHandlers
+namespace EventManagementService.Application.UseCases.CommandHandlers.Events
 {
     
     public class DeleteEventCommandHandler

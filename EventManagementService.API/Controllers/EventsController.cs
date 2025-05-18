@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using EventManagementService.Application.Queries;
-using EventManagementService.Application.Сommands;
+using EventManagementService.Application.UseCases.Сommands.Events;
 
 namespace EventManagementService.API.Controllers
 {

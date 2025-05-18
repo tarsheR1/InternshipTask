@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace EventManagementService.Application.Сommands
+namespace EventManagementService.Application.UseCases.Сommands.Events
 {
     public class CreateEventCommand : IRequest<Guid>
     {

@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using EventManagementService.Domain.Interfaces;
 using EventManagementService.Domain.Models;
-using EventManagementService.Application.Сommands;
+using EventManagementService.Application.UseCases.Сommands.Events;
 
-namespace EventManagementService.Application.Handlers.CommandHandlers
+namespace EventManagementService.Application.UseCases.CommandHandlers.Events
 {
     public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, Guid>
     {

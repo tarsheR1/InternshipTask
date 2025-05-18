@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <Folder Include="Exceptions\" />
+    <Folder Include="Handlers\CommandHandlers\" />
+    <Folder Include="Handlers\QueryHandlers\" />
   </ItemGroup>
 
   <ItemGroup>

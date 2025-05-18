@@ -1,7 +1,7 @@
 ﻿using EventManagementService.Domain.Models;
 using MediatR;
 
-namespace EventManagementService.Application.Сommands
+namespace EventManagementService.Application.UseCases.Сommands.Events
 {
     public class DeactivateEventCommand : IRequest<EventEntity>
     {

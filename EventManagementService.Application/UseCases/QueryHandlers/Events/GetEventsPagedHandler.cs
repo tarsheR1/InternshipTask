@@ -1,12 +1,12 @@
 ﻿using EventManagementService.Application.DTO.Events;
 using EventManagementService.Application.DTO.Pagination;
-using EventManagementService.Application.Queries;
 using EventManagementService.Application.Specification.Events;
+using EventManagementService.Application.UseCases.Queries.Events;
 using EventManagementService.Domain.Interfaces;
 using EventManagementService.Domain.Models;
 using MediatR;
 
-namespace EventManagementService.Application.Handlers.QueryHandlers
+namespace EventManagementService.Application.UseCases.QueryHandlers.Events
 {
     public class GetEventsPagedHandler : IRequestHandler<GetEventsPagedQuery, PaginationResponse<EventDto>>
     {

@@ -1,14 +1,15 @@
-﻿using EventManagementService.Application.Сommands;
+﻿using EventManagementService.Application.UseCases.Сommands.Events;
 using EventManagementService.Domain.Interfaces;
+using EventManagementService.Domain.Models;
 using MediatR;
 
-namespace EventManagementService.Application.Handlers.CommandHandlers
+namespace EventManagementService.Application.UseCases.CommandHandlers.Events
 {
-    class ApproveEventCommandHandler : IRequestHandler<UpdateEventCommand, Guid>
+    public class UpdateEventCommandHandler : IRequestHandler<UpdateEventCommand, Guid>
     {
         private readonly IEventRepository _eventRepository;
 
-        public ApproveEventCommandHandler(IEventRepository eventRepository)
+        public UpdateEventCommandHandler(IEventRepository eventRepository)
         {
             _eventRepository = eventRepository;
         }
