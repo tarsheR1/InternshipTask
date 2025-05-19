@@ -2,7 +2,7 @@
 {
     public class CategoryEntity
     {
-        public int Id;
+        public Guid Id;
         public string Title;
      
         public List<EventEntity> Events { get; set; } 

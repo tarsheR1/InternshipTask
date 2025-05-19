@@ -7,9 +7,10 @@
         public string Description;
         public DateTime Date;
         public string Location;
-        public int CategoryId;
         public bool IsActive;
+        public DateTime CreatedAt;
 
-        public CategoryEntity Category;
+        
+        public ICollection<CategoryEntity> Categories;
     }
 }
