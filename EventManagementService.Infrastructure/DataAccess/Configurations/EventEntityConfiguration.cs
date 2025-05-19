@@ -1,6 +1,7 @@
 ﻿using EventManagementService.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace EventManagementService.Infrastructure.DataAccess.Configurations
 {
@@ -28,9 +29,13 @@ namespace EventManagementService.Infrastructure.DataAccess.Configurations
             builder.Property(e => e.IsActive)
                 .HasColumnName("is_active");
 
-            builder.HasOne(e => e.Categories)
-                .WithMany(c => c.E)
-                .HasForeignKey(e => e.CategoryId);
+            builder.HasMany(e => e.Categories)
+                .WithMany(c => c.Events)
+                .UsingEntity<Dictionary<string, object>>(
+                    "event_categories",
+                    j => j.HasOne<CategoryEntity>().WithMany().HasForeignKey("category_id"),
+                    j => j.HasOne<EventEntity>().WithMany().HasForeignKey("event_id")
+                );
         }
     }
 }

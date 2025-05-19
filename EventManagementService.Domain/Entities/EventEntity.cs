@@ -1,16 +1,17 @@
-﻿namespace EventManagementService.Domain.Models
-{
-    public class EventEntity
-    {
-        public Guid Id;
-        public string Title;
-        public string Description;
-        public DateTime Date;
-        public string Location;
-        public bool IsActive;
-        public DateTime CreatedAt;
+﻿using EventManagementService.Domain.Entities;
 
-        
-        public ICollection<CategoryEntity> Categories;
+namespace EventManagementService.Domain.Models
+{
+    public class EventEntity : BaseEntity <Guid>
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public DateTime Date { get; set; }
+        public string Location { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+
+        public ICollection<CategoryEntity> Categories { get; set; }
     }
 }

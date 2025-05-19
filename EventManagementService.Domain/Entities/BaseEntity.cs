@@ -1,7 +1,7 @@
 ﻿namespace EventManagementService.Domain.Entities
 {
-    class BaseEntity<T>
+    public abstract class BaseEntity<T>
     {
-        T Id { Ge}
+        public T Id { get; init; }
     }
 }

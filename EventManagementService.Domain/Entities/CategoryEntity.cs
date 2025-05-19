@@ -1,10 +1,11 @@
-﻿namespace EventManagementService.Domain.Models
+﻿using EventManagementService.Domain.Entities;
+
+namespace EventManagementService.Domain.Models
 {
-    public class CategoryEntity
+    public class CategoryEntity : BaseEntity<Guid>
     {
-        public Guid Id;
-        public string Title;
-     
-        public List<EventEntity> Events { get; set; } 
+        public string Title { get; set; }
+
+        public ICollection<EventEntity> Events { get; set; } 
     }
 }
