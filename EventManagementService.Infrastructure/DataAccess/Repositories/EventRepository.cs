@@ -1,6 +1,6 @@
 ﻿using EventManagementService.DataAccess.Persistence;
 using EventManagementService.Domain.Entities;
-using EventManagementService.Domain.Interfaces;
+using EventManagementService.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -47,7 +47,7 @@ namespace EventManagementService.DataAccess.Repositories
 
         public async Task<EventEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
             => await _events
-                .Include(e => e.Category)
+                .Include(e => e.Categories)
                 .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
         public async Task AddAsync(EventEntity entity, CancellationToken cancellationToken)

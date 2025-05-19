@@ -1,5 +1,5 @@
 ﻿using EventManagementService.Application.UseCases.Сommands.Events;
-using EventManagementService.Domain.Interfaces;
+using EventManagementService.Domain.Interfaces.Repositories;
 
 namespace EventManagementService.Application.UseCases.CommandHandlers.Events
 {

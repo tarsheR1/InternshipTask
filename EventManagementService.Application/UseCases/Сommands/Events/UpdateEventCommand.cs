@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using EventManagementService.Domain.Entities;
+using MediatR;
 
 namespace EventManagementService.Application.UseCases.Сommands.Events
 {
@@ -9,6 +10,7 @@ namespace EventManagementService.Application.UseCases.Сommands.Events
         public string Description { get; set; } 
         public DateTime Date { get; set; } 
         public string Location { get; set; } 
-        public int CategoryId { get; set; } 
+
+        public ICollection<CategoryEntity> Categories { get; set; } 
     }
 }

@@ -1,5 +1,5 @@
 ﻿using EventManagementService.Application.UseCases.Сommands.Events;
-using EventManagementService.Domain.Interfaces;
+using EventManagementService.Domain.Interfaces.Repositories;
 using EventManagementService.Domain.Models;
 using MediatR;
 

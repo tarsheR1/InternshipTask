@@ -1,7 +1,7 @@
 ﻿using EventManagementService.Domain.Entities;
 using System.Linq.Expressions;
 
-namespace EventManagementService.Domain.Interfaces
+namespace EventManagementService.Domain.Interfaces.Repositories
 {
     public interface IEventRepository
     {

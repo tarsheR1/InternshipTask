@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace EventManagementService.Domain.Interfaces
+namespace EventManagementService.Domain.Interfaces.Specification
 {
     public interface ISpecification<T>
     {

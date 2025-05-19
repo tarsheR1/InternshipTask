@@ -1,6 +1,6 @@
 ﻿using EventManagementService.Domain.Entities;
 
-namespace EventManagementService.Domain.Interfaces
+namespace EventManagementService.Domain.Interfaces.Repositories
 {
     public interface ICategoryRepository
     {
