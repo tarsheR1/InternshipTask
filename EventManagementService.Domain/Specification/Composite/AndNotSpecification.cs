@@ -1,4 +1,5 @@
 ﻿using EventManagementService.Domain.Interfaces.Specification;
+using EventManagementService.Domain.Specification.Base;
 using System.Linq.Expressions;
 
 namespace EventManagementService.Domain.Specification.Composite
