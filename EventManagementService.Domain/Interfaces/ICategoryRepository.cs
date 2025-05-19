@@ -1,4 +1,4 @@
-﻿using EventManagementService.Domain.Models;
+﻿using EventManagementService.Domain.Entities;
 
 namespace EventManagementService.Domain.Interfaces
 {

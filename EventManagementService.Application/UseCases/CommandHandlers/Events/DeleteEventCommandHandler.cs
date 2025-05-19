@@ -1,6 +1,6 @@
 ﻿using EventManagementService.Application.UseCases.Сommands.Events;
+using EventManagementService.Domain.Entities;
 using EventManagementService.Domain.Interfaces;
-using EventManagementService.Domain.Models;
 using MediatR;
 
 namespace EventManagementService.Application.UseCases.CommandHandlers.Events

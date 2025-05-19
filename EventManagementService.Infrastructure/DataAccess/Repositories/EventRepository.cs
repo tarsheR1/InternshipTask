@@ -1,6 +1,6 @@
 ﻿using EventManagementService.DataAccess.Persistence;
+using EventManagementService.Domain.Entities;
 using EventManagementService.Domain.Interfaces;
-using EventManagementService.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

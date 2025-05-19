@@ -1,4 +1,4 @@
-﻿using EventManagementService.Domain.Models;
+﻿using EventManagementService.Domain.Entities;
 using System.Linq.Expressions;
 
 namespace EventManagementService.Domain.Interfaces

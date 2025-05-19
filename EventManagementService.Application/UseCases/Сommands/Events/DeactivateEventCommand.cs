@@ -1,4 +1,4 @@
-﻿using EventManagementService.Domain.Models;
+﻿using EventManagementService.Domain.Entities;
 using MediatR;
 
 namespace EventManagementService.Application.UseCases.Сommands.Events

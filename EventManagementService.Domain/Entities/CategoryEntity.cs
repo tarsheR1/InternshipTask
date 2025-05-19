@@ -1,6 +1,4 @@
-﻿using EventManagementService.Domain.Entities;
-
-namespace EventManagementService.Domain.Models
+﻿namespace EventManagementService.Domain.Entities
 {
     public class CategoryEntity : BaseEntity<Guid>
     {

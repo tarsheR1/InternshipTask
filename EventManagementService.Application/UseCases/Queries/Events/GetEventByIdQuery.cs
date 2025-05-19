@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using EventManagementService.Domain.Models;
+using EventManagementService.Domain.Entities;
 
 namespace EventManagementService.Application.UseCases.Queries.Events
 {

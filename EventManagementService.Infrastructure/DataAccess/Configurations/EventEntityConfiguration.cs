@@ -1,7 +1,7 @@
-﻿using EventManagementService.Domain.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using EventManagementService.Domain.Entities;
 
 namespace EventManagementService.Infrastructure.DataAccess.Configurations
 {

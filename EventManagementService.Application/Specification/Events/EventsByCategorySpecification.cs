@@ -1,5 +1,5 @@
 ﻿using EventManagementService.Application.Specification.Base;
-using EventManagementService.Domain.Models;
+using EventManagementService.Domain.Entities;
 
 namespace EventManagementService.Application.Specification.Events
 {
