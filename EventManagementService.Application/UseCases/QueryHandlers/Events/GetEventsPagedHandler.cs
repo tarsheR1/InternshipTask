@@ -1,9 +1,9 @@
 ﻿using EventManagementService.Application.DTO.Events;
-using EventManagementService.Application.DTO.Pagination;
 using EventManagementService.Application.Specification.Events;
 using EventManagementService.Application.UseCases.Queries.Events;
 using EventManagementService.Domain.Interfaces.Repositories;
 using EventManagementService.Domain.Models;
+using EventManagementService.Domain.Pagination;
 using MediatR;
 
 namespace EventManagementService.Application.UseCases.QueryHandlers.Events

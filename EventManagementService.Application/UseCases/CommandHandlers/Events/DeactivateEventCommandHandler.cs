@@ -24,7 +24,7 @@ namespace EventManagementService.Application.UseCases.CommandHandlers.Events
             eventEntity.Description = request.Description;
             eventEntity.Date = request.Date;
             eventEntity.Location = request.Location;
-            eventEntity.CategoryId = request.CategoryId;
+            eventEntity.Categories = request.Categories;
 
             await _eventRepository.UpdateAsync(eventEntity, cancellationToken);
 

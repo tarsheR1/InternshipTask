@@ -1,4 +1,4 @@
-﻿namespace EventManagementService.Application.DTO.Pagination
+﻿namespace EventManagementService.Domain.Pagination
 {
     public record PaginationResponse<T>(
         List<T> Items,

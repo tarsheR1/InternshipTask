@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using EventManagementService.Application.DTO.Events;
-using EventManagementService.Application.DTO.Pagination;
+using EventManagementService.Domain.Pagination;
 
 namespace EventManagementService.Application.UseCases.Queries.Events
 {

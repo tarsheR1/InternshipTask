@@ -1,21 +1,9 @@
 ﻿using EventManagementService.Domain.Entities;
+using EventManagementService.Domain.Pagination;
 
 namespace EventManagementService.Domain.Interfaces.Repositories
 {
-    public interface ICategoryRepository
+    public interface ICategoryRepository : IRepository<CategoryEntity, Guid>
     {
-        Task<IEnumerable<CategoryEntity>> GetAllAsync();
-
-        Task<CategoryEntity> GetByIdAsync(int id);
-
-        Task AddAsync(CategoryEntity category);
-
-        Task UpdateAsync(CategoryEntity category);
-
-        Task DeleteAsync(int id);
-
-        Task<bool> ExistsAsync(int id);
-
-        Task<CategoryEntity> GetWithEventsAsync(int id);
     }
 }
