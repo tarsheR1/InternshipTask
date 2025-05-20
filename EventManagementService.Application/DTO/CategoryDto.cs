@@ -1,4 +1,4 @@
-﻿namespace EventManagementService.Application.DTO.Events
+﻿namespace EventManagementService.Application.DTO
 {
     public record CategoryDto
     {

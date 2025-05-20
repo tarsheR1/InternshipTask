@@ -1,4 +1,4 @@
-﻿using EventManagementService.Application.DTO.Events;
+﻿using EventManagementService.Application.DTO;
 using EventManagementService.Application.Specification.Events;
 using EventManagementService.Application.UseCases.Queries.Events;
 using EventManagementService.Domain.Interfaces.Repositories;
@@ -8,7 +8,7 @@ using MediatR;
 
 namespace EventManagementService.Application.UseCases.QueryHandlers.Events
 {
-    public class GetEventsPagedHandler : IRequestHandler<GetEventsPagedQuery, PaginationResponse<EventDto>>
+    public class GetEventsPagedHandler : IRequestHandler<GetEventsQuery, PaginationResponse<EventDto>>
     {
         private readonly IEventRepository _eventRepository;
 
@@ -16,7 +16,7 @@ namespace EventManagementService.Application.UseCases.QueryHandlers.Events
             => _eventRepository = repository;
 
         public async Task<PaginationResponse<EventDto>> Handle(
-            GetEventsPagedQuery request,
+            GetEventsQuery request,
             CancellationToken ct)
         {
             var spec = new EventsPagedSpecification(

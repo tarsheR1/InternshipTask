@@ -16,7 +16,7 @@ namespace EventManagementService.Application.UseCases.CommandHandlers.Events
             _eventRepository = eventRepository;
         }
 
-        public async Task<Guid> Handle(DeleteEventCommand request, CancellationToken cancellationToken)
+        public async Task<EventEntity> Handle(DeleteEventCommand request, CancellationToken cancellationToken)
         {
             var eventEntity = await _eventRepository.GetByIdAsync(request.Id, cancellationToken);
             if (eventEntity == null)
@@ -26,7 +26,7 @@ namespace EventManagementService.Application.UseCases.CommandHandlers.Events
 
             await _eventRepository.DeleteAsync(eventEntity, cancellationToken);
 
-            return eventEntity.Id;
+            return eventEntity;
         }
     }
 }

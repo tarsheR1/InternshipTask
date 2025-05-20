@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using EventManagementService.Application.DTO.Events;
 using EventManagementService.Domain.Pagination;
+using EventManagementService.Application.DTO;
 
 namespace EventManagementService.Application.UseCases.Queries.Events
 {
-    public record GetEventsPagedQuery(
+    public record GetEventsQuery(
         int PageNumber,
         int PageSize,
         int? CategoryId = null
