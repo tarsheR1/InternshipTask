@@ -10,6 +10,6 @@
         public int CategoryId;
         public bool IsActive;
 
-        public CategoryDto Category;
+        public ICollection<CategoryDto> Categories;
     }
 }
