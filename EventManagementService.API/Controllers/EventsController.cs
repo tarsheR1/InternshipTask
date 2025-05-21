@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using EventManagementService.Application.Queries;
 using EventManagementService.Application.UseCases.Сommands.Events;
+using EventManagementService.Application.DTO;
+using EventManagementService.Application.UseCases.Queries.Events;
 
 namespace EventManagementService.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/events")]
     public class EventsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -16,53 +18,64 @@ namespace EventManagementService.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<EventEntity>> GetEventById(Guid id, CancellationToken cancellation)
+        [HttpPost]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Create([FromBody] CreateEventCommand command)
         {
-            var query = new GetEventByIdQuery { Id = id };
-            var eventEntity = await _mediator.Send(query, cancellation);
-            return Ok(eventEntity);
+            var id = await _mediator.Send(command);
+            return CreatedAtAction(nameof(GetById), new { id }, id);
         }
 
-        [HttpGet("paged")]
-        public async Task<ActionResult<(List<EventEntity> Events, 
-            int TotalCount)>> GetPagedEvents(int pageNumber, 
-            int pageSize, 
-            CancellationToken cancellation)
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var query = new GetPagedEventsQuery { PageNumber = pageNumber, PageSize = pageSize };
+            var query = new GetEventByIdQuery(id);
             var result = await _mediator.Send(query);
             return Ok(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateEvent([FromBody] CreateEventCommand command, CancellationToken cancellation)
-        {
-            var eventId = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetEventById), new { id = eventId }, eventId);
-        }
-
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateEvent(
-            Guid id, 
-            [FromBody] UpdateEventCommand command, 
-            CancellationToken cancellation)
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Update(
+            Guid id,
+            [FromBody] UpdateEventCommand command)
         {
             if (id != command.Id)
-            {
-                return BadRequest("ID в маршруте и теле запроса не совпадают.");
-            }
+                return BadRequest("ID in route doesn't match ID in body");
 
-            await _mediator.Send(command, cancellation);
-            return Ok(); 
+            await _mediator.Send(command);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEvent(Guid id, CancellationToken cancellation)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var command = new DeleteEventCommand { Id = id };
-            await _mediator.Send(command);
-            return Ok(); 
+            await _mediator.Send(new DeleteEventCommand(id));
+            return NoContent();
+        }
+
+        [HttpPatch("{id}/approve")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Approve(Guid id)
+        {
+            await _mediator.Send(new ApproveEventCommand(id));
+            return NoContent();
+        }
+
+        [HttpPatch("{id}/deactivate")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Deactivate(Guid id)
+        {
+            await _mediator.Send(new DeactivateEventCommand(id));
+            return NoContent();
         }
     }
 }

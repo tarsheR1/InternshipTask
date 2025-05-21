@@ -1,4 +1,5 @@
-﻿using EventManagementService.Application.UseCases.Сommands.Categories;
+﻿using AutoMapper;
+using EventManagementService.Application.UseCases.Сommands.Categories;
 using EventManagementService.Domain.Entities;
 using EventManagementService.Domain.Interfaces.Repositories;
 using MediatR;

@@ -1,8 +1,6 @@
 ﻿using EventManagementService.Application.DTO;
-using EventManagementService.Application.Specification.Events;
 using EventManagementService.Application.UseCases.Queries.Events;
 using EventManagementService.Domain.Interfaces.Repositories;
-using EventManagementService.Domain.Models;
 using EventManagementService.Domain.Pagination;
 using MediatR;
 
@@ -19,14 +17,13 @@ namespace EventManagementService.Application.UseCases.QueryHandlers.Events
             GetEventsQuery request,
             CancellationToken ct)
         {
-            var spec = new EventsPagedSpecification(
-                request.PageNumber,
-                request.PageSize,
-                request.CategoryId
-            );
+            var paginationOptions = new PaginationOptions
+            {
+                
+            };
 
-            var items = await _eventRepository.GetAsync(spec, ct);
-            var totalCount = await _eventRepository.CountAsync(spec, ct); 
+            var items = await _eventRepository.GetListBySpecAsync(spec, ct);
+            var totalCount = await _eventRepository.СountBySpecAsync(spec, ct); 
 
             return new PaginationResponse<EventDto>(
                 Items: items.ConvertToDto(),

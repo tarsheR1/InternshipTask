@@ -1,4 +1,5 @@
-﻿using EventManagementService.Application.DTO;
+﻿using AutoMapper;
+using EventManagementService.Application.DTO;
 using EventManagementService.Application.UseCases.Queries.Categories;
 using EventManagementService.Domain.Interfaces.Repositories;
 using MediatR;
