@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using EventManagementService.Application.Queries;
+using EventManagementService.Application.UseCases.Queries;
 using EventManagementService.Application.UseCases.Сommands.Events;
 using EventManagementService.Application.DTO;
 using EventManagementService.Application.UseCases.Queries.Events;
