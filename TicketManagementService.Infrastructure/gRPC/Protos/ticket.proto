@@ -1,0 +1,18 @@
+syntax = "proto3";
+option csharp_namespace = "TicketService.Grpc";
+
+service TicketService {
+  rpc CreateTicketType (CreateTicketTypeRequest) returns (CreateTicketTypeResponse);
+}
+
+message CreateTicketTypeRequest {
+  string event_id = 1;
+  string ticket_type = 2;
+  int32 total_quantity = 3;
+}
+
+message CreateTicketTypeResponse {
+  bool success = 1;
+  string ticket_type_id = 2;
+  string error_message = 3;
+}
