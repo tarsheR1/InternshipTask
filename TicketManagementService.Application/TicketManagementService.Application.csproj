@@ -18,6 +18,14 @@
 </ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Services\" />
+	  <Folder Include="UseCases\CommandHandlers\Tickets\" />
+	  <Folder Include="UseCases\CommandHandlers\TicketInventories\" />
+	  <Folder Include="UseCases\Commands\TicketInventories\" />
+	  <Folder Include="UseCases\Commands\Tickets\" />
+	  <Folder Include="UseCases\Queries\TicketInventories\" />
+	  <Folder Include="UseCases\Queries\Tickets\" />
+	  <Folder Include="UseCases\QueryHandlers\TicketInventories\" />
+	  <Folder Include="UseCases\QueryHandlers\Tickets\" />
 	</ItemGroup>
 
 </Project>
