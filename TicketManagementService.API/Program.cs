@@ -1,9 +1,39 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using MongoDB.Driver;
+using System.Text;
+using TicketManagementService.Infrastructure.Settings;
+using TicketManagementService.Infrastructure.Extensions;
+using TicketManagementService.Application.UseCases;
+
+
 
 
 builder.Services.AddControllers();
 
-var app = builder.Build();
+// Database
+var mongoDbSettings = builder.Configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
+
+builder.Services.AddScoped<IMongoClient>(sp =>
+    new MongoClient(mongoDbSettings.ConnectionString));
+
+builder.Services.AddScoped<IMongoDatabase>(serviceProvider =>
+{
+    var client = serviceProvider.GetRequiredService<IMongoClient>();
+    var settings = serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value;
+    return client.GetDatabase(settings.DatabaseName);
+});
+
+
+builder.Services.AddRepositories();
+
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(ReserveTicketsCommandHandler).Assembly));
+
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+builder.Services.Configure<JwtSettings>(jwtSettings);
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -22,16 +52,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("ApproveEvent", policy =>
-        policy.RequireClaim("permission", "ApproveEvent"));
+    options.AddPolicy("BuyTicket", policy =>
+        policy.RequireClaim("permission", "BuyTicket"));
 
-    options.AddPolicy("ModerateEvents", policy =>
-        policy.RequireClaim("permission", "ModerateEvents"));
+    options.AddPolicy("ManageTickets", policy =>
+        policy.RequireClaim("permission", "ManageTickets"));
 });
+
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.MapControllers();
 

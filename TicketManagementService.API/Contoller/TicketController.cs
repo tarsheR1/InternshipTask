@@ -1,0 +1,48 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using MediatR;
+using TicketManagementService.Application.Commands;
+using TicketManagementService.Application.Queries;
+using Microsoft.AspNetCore.Authorization;
+using TicketManagementService.Domain.Aggregates;
+
+[ApiController]
+[Route("api/[controller]")]
+public class TicketsController : ControllerBase
+{
+    private readonly IMediator _mediator;
+
+    public TicketsController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    [HttpGet("inventories/{eventId:guid}")]
+    public async Task<ActionResult<IReadOnlyList<TicketInventory>>> GetInventories(Guid eventId)
+    {
+        var query = new GetTicketInventoriesForEventQuery(eventId);
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+
+    [HttpPost("tickets/reservations")]
+    public async Task<IActionResult> ReserveTickets([FromBody] ReserveTicketsCommand command)
+    {
+        await _mediator.Send(command);
+        return Ok();
+    }
+
+    [HttpDelete("tickets/reservations/{reservationId}")]
+    public async Task<IActionResult> ReleaseTickets([FromBody] ReleaseTicketCommand command)
+    {
+        await _mediator.Send(command);
+        return Ok();
+    }
+
+    [HttpPut("inventory")]
+    [Authorize(Policy = "AdminPolicy")]
+    public async Task<IActionResult> UpdateInventory([FromBody] UpdateTicketInventoryCommand command)
+    {
+        await _mediator.Send(command);
+        return Ok();
+    }
+}
