@@ -8,7 +8,7 @@ using TicketManagementService.Infrastructure.Extensions;
 using TicketManagementService.Application.UseCases;
 
 
-var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddControllers();
 
@@ -58,9 +58,6 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ManageTickets", policy =>
         policy.RequireClaim("permission", "ManageTickets"));
 });
-
-
-var app = builder.Build();
 
 
 app.UseHttpsRedirection();
