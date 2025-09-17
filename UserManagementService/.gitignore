@@ -1,0 +1,43 @@
+### VisualStudio ###
+## Файлы и папки IDE
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Файлы сборки
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+## NuGet
+.nuget/
+packages/
+*.nupkg
+nuget.exe
+
+## Тесты
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+## Файлы разработчика
+*.swp
+*.*~
+*.bak
+*.tmp
+*.temp
+
+## Конфигурации (кроме основного)
+appsettings.*.json
+!appsettings.json
+secrets.json
