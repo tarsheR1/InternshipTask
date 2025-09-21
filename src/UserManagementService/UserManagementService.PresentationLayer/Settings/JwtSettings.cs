@@ -1,4 +1,4 @@
-﻿namespace UserManagementService.BusinessLogicLayer.Models.Settings
+﻿namespace UserManagementService.PresentationLayer.Settings
 {
     public class JwtSettings
     {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EventManagementService.DataAccess.Persistence.Configurations
+namespace EventManagementService.Infrastructure.DataAccess.Configurations
 {
     public class CategoryEntityConfiguration : IEntityTypeConfiguration<CategoryEntity>
     {

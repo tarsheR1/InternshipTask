@@ -4,7 +4,7 @@ using EventManagementService.DataAccess.Persistence.Configurations;
 using EventManagementService.Infrastructure.DataAccess.Configurations;
 using EventManagementService.Domain.Entities;
 
-namespace EventManagementService.DataAccess.Persistence
+namespace EventManagementService.Infrastructure.DataAccess.Persistence
 {
     public class EventDbContext : DbContext
     {

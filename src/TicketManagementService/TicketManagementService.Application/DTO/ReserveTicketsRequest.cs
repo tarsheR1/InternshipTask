@@ -1,4 +1,4 @@
-﻿namespace TicketManagementService.API.DTOs
+﻿namespace TicketManagementService.Application.DTO
 {
     public record ReserveTicketsRequest(
     Guid EventId,
