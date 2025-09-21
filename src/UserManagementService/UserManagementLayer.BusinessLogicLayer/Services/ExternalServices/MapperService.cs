@@ -2,7 +2,7 @@
 
 namespace UserManagementService.BusinessLogicLayer.Services.ExternalServices
 {
-    public class MapperService : IMapper
+    public class MapperService : IMapper, IMapperService
     {
         private readonly IMapper _mapper;
 

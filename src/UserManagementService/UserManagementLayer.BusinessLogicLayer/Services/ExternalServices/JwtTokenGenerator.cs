@@ -17,7 +17,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ExternalServices
         {
             _jwtSettings = jwtSettings?.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
 
-                if (string.IsNullOrWhiteSpace(_jwtSettings.Secret))
+            if (string.IsNullOrWhiteSpace(_jwtSettings.Secret))
                 throw new ArgumentException("JWT Secret is not configured");
 
             if (_jwtSettings.ExpiryMinutes <= 0)
@@ -43,7 +43,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ExternalServices
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Email, user.Email) 
+                new Claim(ClaimTypes.Email, user.Email)
             };
 
             foreach (var role in user.UserRoles.Select(ur => ur.Role))
@@ -64,7 +64,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ExternalServices
                 Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256),
                 Issuer = _jwtSettings.Issuer,
-                Audience = _jwtSettings.Audience 
+                Audience = _jwtSettings.Audience
             };
         }
     }

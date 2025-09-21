@@ -14,8 +14,4 @@
     <ProjectReference Include="..\UserManagementService.DataAccessLayer\UserManagementService.DataAccessLayer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interfaces\Infrastructure\" />
-  </ItemGroup>
-
 </Project>
