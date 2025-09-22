@@ -2,9 +2,8 @@
 using UserManagementService.PresentationLayer.DTO.Request;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
-using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
-using UserManagementService.BusinessLogicLayer.Models.Responses;
 using System.Security;
+using AutoMapper;
 
 namespace UserManagementService.PresentationLayer.Controllers
 {
@@ -35,7 +34,7 @@ namespace UserManagementService.PresentationLayer.Controllers
                 {
                     AccessToken = authResult.AccessToken,
                     RefreshToken = authResult.RefreshToken,
-                    ExpiresIn = (int)authResult.ExpiresAt.Subtract(DateTime.UtcNow).TotalSeconds
+                    ExpiresIn = (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalSeconds
                 };
 
                 return Ok(response);
@@ -60,7 +59,7 @@ namespace UserManagementService.PresentationLayer.Controllers
                 {
                     AccessToken = authResult.AccessToken,
                     RefreshToken = authResult.RefreshToken,
-                    ExpiresIn = (int)authResult.ExpiresAt.Subtract(DateTime.UtcNow).TotalSeconds
+                    ExpiresIn = (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalSeconds
                 };
 
                 return Ok(response);
@@ -74,17 +73,18 @@ namespace UserManagementService.PresentationLayer.Controllers
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken(
             [FromBody] RefreshTokenRequestDto request,
+            Guid userId,
             CancellationToken cancellationToken)
         {
             try
             {
-                var authResult = await _authService.RefreshTokenAsync(request.RefreshToken, cancellationToken);
+                var authResult = await _authService.RefreshTokenAsync(request.RefreshToken, userId, cancellationToken);
 
                 var response = new AuthResponseDto
                 {
                     AccessToken = authResult.AccessToken,
                     RefreshToken = authResult.RefreshToken,
-                    ExpiresIn = (int)authResult.ExpiresAt.Subtract(DateTime.UtcNow).TotalSeconds
+                    ExpiresIn = (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalSeconds
                 };
 
                 return Ok(response);
@@ -112,7 +112,6 @@ namespace UserManagementService.PresentationLayer.Controllers
         }
     }
 
-    // DTO для запросов и ответов
     public class RefreshTokenRequestDto
     {
         public string RefreshToken { get; set; }

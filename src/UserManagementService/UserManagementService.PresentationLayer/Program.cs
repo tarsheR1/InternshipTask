@@ -4,7 +4,6 @@ using System.Text;
 using UserManagementService.BusinessLogicLayer.Extensions;
 using UserManagementService.BusinessLogicLayer.Models.Settings;
 using UserManagementService.DataAccessLayer.Extensions;
-using UserManagementService.PresentationLayer.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 

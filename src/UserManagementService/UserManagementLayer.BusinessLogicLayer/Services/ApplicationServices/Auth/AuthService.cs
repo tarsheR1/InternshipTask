@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Options;
+﻿using AutoMapper;
+using Microsoft.Extensions.Options;
 using System.Security;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
+using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Models.Queries;

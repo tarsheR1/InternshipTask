@@ -2,7 +2,7 @@ using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ExternalServices
 {
-    public class PasswordHasher : IPasswordHasher, IPasswordHasher
+    public class PasswordHasher : IPasswordHasher
     {
         public string HashPassword(string password)
         {

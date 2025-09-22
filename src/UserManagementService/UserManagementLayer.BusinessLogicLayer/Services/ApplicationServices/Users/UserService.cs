@@ -1,9 +1,8 @@
-using UserManagementService.DataAccessLayer.Entities;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
-using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
+using AutoMapper;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Users
 {

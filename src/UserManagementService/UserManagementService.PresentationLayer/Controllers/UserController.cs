@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UserManagementService.PresentationLayer.DTO.Request;
-using UserManagementService.BusinessLogicLayer.Services.Interfaces.Infrastructure;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
 using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
+using AutoMapper;
 
 namespace UserManagementService.PresentationLayer.Controllers
 {
