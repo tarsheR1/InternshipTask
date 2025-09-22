@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories;
+using UserManagementService.DataAccessLayer.Persistence;
 using UserManagementService.DataAccessLayer.Repositories;
 
 namespace UserManagementService.DataAccessLayer.Extensions
@@ -13,5 +16,13 @@ namespace UserManagementService.DataAccessLayer.Extensions
 
             return services;
         }
+
+        public static IServiceCollection AddUsersDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<UserManagementDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            return services;
+        }
+
     }
 }

@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using UserManagementService.BusinessLogicLayer.Extensions;
 using UserManagementService.BusinessLogicLayer.Models.Settings;
 using UserManagementService.DataAccessLayer.Extensions;
+using UserManagementService.DataAccessLayer.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddUsersDbContext(builder.Configuration);
 
 builder.Services.AddRepositories();
 builder.Services.AddServices();

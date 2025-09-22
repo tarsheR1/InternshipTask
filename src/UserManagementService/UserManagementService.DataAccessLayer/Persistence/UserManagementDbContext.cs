@@ -45,6 +45,5 @@ namespace UserManagementService.DataAccessLayer.Persistence
                 .WithMany(p => p.RolePermissions)
                 .HasForeignKey(rp => rp.PermissionId);
         }
-
     }
 }
