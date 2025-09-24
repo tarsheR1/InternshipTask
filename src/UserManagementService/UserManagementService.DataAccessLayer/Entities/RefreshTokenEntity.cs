@@ -9,5 +9,4 @@
         public DateTime Created { get; set; }
         public DateTime? Revoked { get; set; }
     }
-
 }
