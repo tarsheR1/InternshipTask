@@ -1,5 +1,5 @@
-﻿using UserManagementService.BusinessLogicLayer.Models.Commands;
-using UserManagementService.BusinessLogicLayer.Models.Queries;
+﻿using UserManagementService.BusinessLogicLayer.Commands;
+using UserManagementService.BusinessLogicLayer.Queries;
 
 namespace UserManagementService.BusinessLogicLayer.Interfaces.Auth
 {

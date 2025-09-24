@@ -1,4 +1,4 @@
-﻿namespace UserManagementService.BusinessLogicLayer.Models.Commands
+﻿namespace UserManagementService.BusinessLogicLayer.Commands
 {
     public class UserLoginCommand
     {

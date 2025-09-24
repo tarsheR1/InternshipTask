@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Options;
 using System.Security;
+using UserManagementService.BusinessLogicLayer.Commands;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
-using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
-using UserManagementService.BusinessLogicLayer.Models.Queries;
 using UserManagementService.BusinessLogicLayer.Models.Settings;
+using UserManagementService.BusinessLogicLayer.Queries;
 using UserManagementService.DataAccessLayer.Entities;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 

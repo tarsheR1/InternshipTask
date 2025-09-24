@@ -16,4 +16,9 @@
     <ProjectReference Include="..\UserManagementService.DataAccessLayer\UserManagementService.DataAccessLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\Handlers\" />
+    <Folder Include="Queries\Handlers\" />
+  </ItemGroup>
+
 </Project>

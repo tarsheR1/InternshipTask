@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using UserManagementService.DataAccessLayer.Entities;
-using UserManagementService.BusinessLogicLayer.Models.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
+using UserManagementService.BusinessLogicLayer.Commands;
 
 namespace UserManagementService.BusinessLogicLayer.MappingProfiles
 {

@@ -1,4 +1,4 @@
-﻿using UserManagementService.BusinessLogicLayer.Models.Commands;
+﻿using UserManagementService.BusinessLogicLayer.Commands;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 
 namespace UserManagementService.BusinessLogicLayer.Interfaces.Users

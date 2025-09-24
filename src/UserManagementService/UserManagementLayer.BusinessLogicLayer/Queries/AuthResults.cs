@@ -1,4 +1,4 @@
-﻿namespace UserManagementService.BusinessLogicLayer.Models.Queries
+﻿namespace UserManagementService.BusinessLogicLayer.Queries
 {
     public sealed record AuthResult(
     string AccessToken,
