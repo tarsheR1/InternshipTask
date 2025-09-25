@@ -3,17 +3,17 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using UserManagementService.BusinessLogicLayer.Models.Settings;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
+using UserManagementService.BusinessLogicLayer.Interfaces.Settings;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ExternalServices
 {
     public class JwtTokenGenerator : IJwtTokenGenerator
     {
-        private readonly JwtSettings _jwtSettings;
+        private readonly IJwtSettings _jwtSettings;
 
-        public JwtTokenGenerator(IOptions<JwtSettings> jwtSettings)
+        public JwtTokenGenerator(IOptions<IJwtSettings> jwtSettings)
         {
             _jwtSettings = jwtSettings?.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
 

@@ -91,7 +91,7 @@ namespace UserManagementService.PresentationLayer.Controllers
             }
             catch (SecurityException ex)
             {
-                return Unautho rized(new { Error = ex.Message });
+                return Unauthorized(new { Error = ex.Message });
             }
         }
 

@@ -10,7 +10,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         private readonly IRefreshTokenRepository _tokenRepository;
         private readonly TimeSpan _tokenLifetime = TimeSpan.FromDays(30);
 
-        public RefreshTokenService(IRefreshTokenRepository tokenRepository, CancellationToken cancellationToken)
+        public RefreshTokenService(IRefreshTokenRepository tokenRepository)
         {
             _tokenRepository = tokenRepository;
         }

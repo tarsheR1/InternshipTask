@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="15.0.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.7.0" />
   </ItemGroup>
 
@@ -18,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Commands\Handlers\" />
+    <Folder Include="MappingProfiles\" />
     <Folder Include="Models\Settings\" />
     <Folder Include="Queries\Handlers\" />
   </ItemGroup>

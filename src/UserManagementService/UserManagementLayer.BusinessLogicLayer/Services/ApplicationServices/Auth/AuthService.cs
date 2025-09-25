@@ -4,8 +4,8 @@ using System.Security;
 using UserManagementService.BusinessLogicLayer.Commands;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
+using UserManagementService.BusinessLogicLayer.Interfaces.Settings;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
-using UserManagementService.BusinessLogicLayer.Models.Settings;
 using UserManagementService.BusinessLogicLayer.Queries;
 using UserManagementService.DataAccessLayer.Entities;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories;
@@ -19,14 +19,14 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         private readonly IPasswordHasher _passwordHasher;
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly IMapper _mapper;
-        private readonly JwtSettings _jwtSettings;
+        private readonly IJwtSettings _jwtSettings;
 
         public AuthService(
             IUserRepository userRepository,
             IJwtTokenGenerator tokenGenerator,
             IPasswordHasher passwordHasher,
             IRefreshTokenService refreshTokenService,
-            IOptions<JwtSettings> jwtSettings,
+            IOptions<IJwtSettings> jwtSettings,
             IMapper mapper)
         {
             _userRepository = userRepository;

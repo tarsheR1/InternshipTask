@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using AutoMapper;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
