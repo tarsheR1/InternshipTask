@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="Commands\Handlers\" />
+    <Folder Include="Models\Settings\" />
     <Folder Include="Queries\Handlers\" />
   </ItemGroup>
 
