@@ -20,7 +20,6 @@
   <ItemGroup>
     <Folder Include="Commands\Handlers\" />
     <Folder Include="MappingProfiles\" />
-    <Folder Include="Models\Settings\" />
     <Folder Include="Queries\Handlers\" />
   </ItemGroup>
 
