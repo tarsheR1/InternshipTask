@@ -1,27 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UserManagementService.PresentationLayer.DTO.Request;
-using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
 using System.Security;
 using AutoMapper;
 using UserManagementService.BusinessLogicLayer.Commands;
+using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
+using UserManagementService.PresentationLayer.DTO.Response;
+using UserManagementService.PresentationLayer.DTO.Request;
 
 namespace UserManagementService.PresentationLayer.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
-        public AuthController(IAuthService authService, IMapper mapper)
+        public AuthenticationController(IAuthService authService, IMapper mapper)
         {
             _authService = authService;
             _mapper = mapper;
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(
+        [HttpPost("users")]
+        public async Task<IActionResult> RegisterAsync(
             [FromBody] RegisterUserRequestDto request,
             CancellationToken cancellationToken)
         {
@@ -30,12 +31,12 @@ namespace UserManagementService.PresentationLayer.Controllers
                 var command = _mapper.Map<UserRegistrationCommand>(request);
                 var authResult = await _authService.RegisterAsync(command, cancellationToken);
 
-                var response = new AuthResponseDto
-                {
-                    AccessToken = authResult.AccessToken,
-                    RefreshToken = authResult.RefreshToken,
-                    ExpiresIn = (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalSeconds
-                };
+                var response = new AuthResponseDto(
+                    AccessToken: authResult.AccessToken,
+                    RefreshToken: authResult.RefreshToken,
+                    Expires: (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalSeconds,
+                    TokenType: "Bearer"
+                );
 
                 return Ok(response);
             }
@@ -45,8 +46,8 @@ namespace UserManagementService.PresentationLayer.Controllers
             }
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(
+        [HttpPost("tokens")]
+        public async Task<IActionResult> LoginAsync(
             [FromBody] LoginRequestDto request,
             CancellationToken cancellationToken)
         {
@@ -55,12 +56,12 @@ namespace UserManagementService.PresentationLayer.Controllers
                 var command = _mapper.Map<UserLoginCommand>(request);
                 var authResult = await _authService.LoginAsync(command, cancellationToken);
 
-                var response = new AuthResponseDto
-                {
-                    AccessToken = authResult.AccessToken,
-                    RefreshToken = authResult.RefreshToken,
-                    ExpiresIn = (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalSeconds
-                };
+                var response = new AuthResponseDto(
+                    AccessToken: authResult.AccessToken,
+                    RefreshToken: authResult.RefreshToken,
+                    Expires: (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalSeconds,
+                    TokenType: "Bearer"
+                );
 
                 return Ok(response);
             }
@@ -70,8 +71,8 @@ namespace UserManagementService.PresentationLayer.Controllers
             }
         }
 
-        [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken(
+        [HttpPut("tokens")]
+        public async Task<IActionResult> RefreshTokenAsync(
             [FromBody] RefreshTokenRequestDto request,
             Guid userId,
             CancellationToken cancellationToken)
@@ -80,12 +81,12 @@ namespace UserManagementService.PresentationLayer.Controllers
             {
                 var authResult = await _authService.RefreshTokenAsync(request.RefreshToken, userId, cancellationToken);
 
-                var response = new AuthResponseDto
-                {
-                    AccessToken = authResult.AccessToken,
-                    RefreshToken = authResult.RefreshToken,
-                    ExpiresIn = (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalSeconds
-                };
+                var response = new AuthResponseDto(
+                    AccessToken: authResult.AccessToken,
+                    RefreshToken: authResult.RefreshToken,
+                    Expires: (int)authResult.AccessTokenExpiry.Subtract(DateTime.UtcNow).TotalSeconds,
+                    TokenType: "Bearer"
+                );
 
                 return Ok(response);
             }
@@ -95,8 +96,8 @@ namespace UserManagementService.PresentationLayer.Controllers
             }
         }
 
-        [HttpPost("revoke-token")]
-        public async Task<IActionResult> RevokeToken(
+        [HttpDelete("tokens")]
+        public async Task<IActionResult> RevokeTokenAsync(
             [FromBody] RefreshTokenRequestDto request,
             CancellationToken cancellationToken)
         {
@@ -110,18 +111,5 @@ namespace UserManagementService.PresentationLayer.Controllers
                 return BadRequest(new { Error = ex.Message });
             }
         }
-    }
-
-    public class RefreshTokenRequestDto
-    {
-        public string RefreshToken { get; set; }
-    }
-
-    public class AuthResponseDto
-    {
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
-        public int ExpiresIn { get; set; }
-        public string TokenType { get; } = "Bearer";
     }
 }
