@@ -9,6 +9,7 @@ using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Queries;
 using UserManagementService.DataAccessLayer.Entities;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories;
+using UserManagementService.BusinessLogicLayer.Settings;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {
@@ -19,14 +20,14 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         private readonly IPasswordHasher _passwordHasher;
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly IMapper _mapper;
-        private readonly IJwtSettings _jwtSettings;
+        private readonly JwtSettings _jwtSettings;
 
         public AuthService(
             IUserRepository userRepository,
             IJwtTokenGenerator tokenGenerator,
             IPasswordHasher passwordHasher,
             IRefreshTokenService refreshTokenService,
-            IOptions<IJwtSettings> jwtSettings,
+            IOptions<JwtSettings> jwtSettings,
             IMapper mapper)
         {
             _userRepository = userRepository;
