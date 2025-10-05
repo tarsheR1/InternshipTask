@@ -30,6 +30,12 @@ namespace UserManagementService.DataAccessLayer.Repositories
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        public async Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken = default)
+        {
+            return await _context.Users
+                .AnyAsync(u => u.Email == email, cancellationToken);
+        }
+
         public async Task AddAsync(UserEntity user, CancellationToken cancellation)
         {
             await _context.Users.AddAsync(user, cancellation);

@@ -8,6 +8,8 @@ namespace UserManagementService.DataAccessLayer.Interfaces.Repositories
 
         Task<UserEntity> GetByEmailAsync(string email, CancellationToken cancellationToken);
 
+        Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken = default);
+
         Task AddAsync(UserEntity user, CancellationToken cancellationToken);
 
         Task UpdateAsync(UserEntity user, CancellationToken cancellationToken);

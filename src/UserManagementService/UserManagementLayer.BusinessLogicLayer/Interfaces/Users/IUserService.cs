@@ -5,13 +5,18 @@ namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
 {
     public interface IUserService
     {
-        Task<User> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken);
+        Task<bool> IsEmailAvailableAsync(string email, CancellationToken cancellationToken = default);
+        Task<User> GetUserByEmailAsync(string email, CancellationToken cancellationToken = default);
+
+        Task<User> CreateUserAsync(CreateUserCommand, CancellationToken cancellationToken = default);
+
+        Task<User> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken = default);
                
         Task UpdateUserAsync(
             Guid userId, 
             UserUpdateCommand updateRequest, 
             CancellationToken cancellationToken);
         
-        Task DeleteUserAsync(Guid userId, CancellationToken cancellationToken);
+        Task DeleteUserAsync(Guid userId, CancellationToken cancellationToken = default);
     }
 }

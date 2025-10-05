@@ -4,18 +4,19 @@ using System.Security;
 using UserManagementService.BusinessLogicLayer.Commands;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
-using UserManagementService.BusinessLogicLayer.Interfaces.Settings;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Queries;
 using UserManagementService.DataAccessLayer.Entities;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 using UserManagementService.BusinessLogicLayer.Settings;
+using UserManagementService.BusinessLogicLayer.Interfaces.Users;
+using System.Threading;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {
     public class AuthService : IAuthService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
         private readonly IJwtTokenGenerator _tokenGenerator;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IRefreshTokenService _refreshTokenService;
@@ -23,14 +24,14 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         private readonly JwtSettings _jwtSettings;
 
         public AuthService(
-            IUserRepository userRepository,
+            IUserService userService,
             IJwtTokenGenerator tokenGenerator,
             IPasswordHasher passwordHasher,
             IRefreshTokenService refreshTokenService,
             IOptions<JwtSettings> jwtSettings,
             IMapper mapper)
         {
-            _userRepository = userRepository;
+            _userService = userService;
             _tokenGenerator = tokenGenerator;
             _passwordHasher = passwordHasher;
             _refreshTokenService = refreshTokenService;
@@ -39,28 +40,30 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
         }
 
 
-        public async Task<AuthResult> RegisterAsync(UserRegistrationCommand request, CancellationToken cancellation)
+        public async Task<AuthResult> RegisterAsync(UserRegistrationCommand registrationCommand, CancellationToken cancellationToken)
         {
-            var existingUser = await _userRepository.GetByEmailAsync(request.Email, cancellation);
-            if (existingUser != null)
-                throw new ArgumentException("User with this email already exists");
+            var emailAvailable = await _userService.IsEmailAvailableAsync(registrationCommand.Email, cancellationToken);
 
-            var user = new User
+            if (!emailAvailable)
             {
-                Id = Guid.NewGuid(),
-                Email = request.Email,
-                PasswordHash = _passwordHasher.HashPassword(request.Password),
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                MiddleName = request.MiddleName,
-                Phone = request.Phone
-            };
+                throw new ArgumentException("User with this email already exists");
+            }
 
-            var userEntity = _mapper.Map<UserEntity>(user);
-            await _userRepository.AddAsync(userEntity, cancellation);
+            var passwordHash = _passwordHasher.HashPassword(registrationCommand.Password);
+
+            var createUserCommand = new CreateUserCommand(
+               email: registrationCommand.Email,
+               passwordHash: passwordHash,  
+               firstName: registrationCommand.FirstName,
+               lastName: registrationCommand.LastName,
+               middleName: registrationCommand.MiddleName,
+               phone: registrationCommand.Phone
+            );
+
+            var user = await _userService.CreateUserAsync(createUserCommand, cancellationToken);
 
             var accessToken = _tokenGenerator.GenerateToken(user);
-            var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellation);
+            var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellationToken);
 
             return new AuthResult(
                 accessToken, 
@@ -71,7 +74,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         public async Task<AuthResult> LoginAsync(UserLoginCommand request, CancellationToken cancellation)
         {
-            var userEntity = await _userRepository.GetByEmailAsync(request.Email, cancellation);
+            var userEntity = await _userService.GetUserByEmailAsync(request.Email, cancellation);
             if (userEntity == null || !_passwordHasher.Verify(request.Password, userEntity.PasswordHash))
                 throw new ArgumentException("Invalid email or password");
 
@@ -96,7 +99,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
             await _refreshTokenService.RevokeRefreshTokenAsync(refreshToken, cancellation);
 
-            var userEntity = await _userRepository.GetByIdAsync(userId, cancellation);
+            var userEntity = await _userService.GetUserByIdAsync(userId, cancellation);
             var user = _mapper.Map<User>(userEntity);
 
             var newAccessToken = _tokenGenerator.GenerateToken(user);
