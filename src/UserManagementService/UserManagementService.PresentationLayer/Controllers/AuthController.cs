@@ -28,6 +28,7 @@ namespace UserManagementService.PresentationLayer.Controllers
         {
             try
             {
+            
                 var command = _mapper.Map<UserRegistrationCommand>(request);
                 var authResult = await _authService.RegisterAsync(command, cancellationToken);
 

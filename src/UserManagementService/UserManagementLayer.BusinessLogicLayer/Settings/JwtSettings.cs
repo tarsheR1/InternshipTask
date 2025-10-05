@@ -1,8 +1,6 @@
-﻿using UserManagementService.BusinessLogicLayer.Interfaces.Settings;
-
-namespace UserManagementService.BusinessLogicLayer.Settings
+﻿namespace UserManagementService.BusinessLogicLayer.Settings
 {
-    public class JwtSettings : IJwtSettings
+    public class JwtSettings 
     {
         public string Secret { get; set; }
         public int ExpiryMinutes { get; set; }

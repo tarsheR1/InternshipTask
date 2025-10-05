@@ -1,11 +1,19 @@
-﻿using UserManagementService.BusinessLogicLayer.Extensions;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using UserManagementService.BusinessLogicLayer.Extensions;
 using UserManagementService.DataAccessLayer.Extensions;
-using UserManagementService.PresentationLayer.MappingProfiles;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddFluentValidationAutoValidation(fv =>
+{
+    fv.DisableDataAnnotationsValidation = true;
+}); 
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddSwaggerGen();
 

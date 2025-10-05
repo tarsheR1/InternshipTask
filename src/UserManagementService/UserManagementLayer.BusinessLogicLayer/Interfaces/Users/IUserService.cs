@@ -8,7 +8,7 @@ namespace UserManagementService.BusinessLogicLayer.Interfaces.Users
         Task<bool> IsEmailAvailableAsync(string email, CancellationToken cancellationToken = default);
         Task<User> GetUserByEmailAsync(string email, CancellationToken cancellationToken = default);
 
-        Task<User> CreateUserAsync(CreateUserCommand, CancellationToken cancellationToken = default);
+        Task<User> CreateUserAsync(CreateUserCommand command, CancellationToken cancellationToken = default);
 
         Task<User> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken = default);
                
