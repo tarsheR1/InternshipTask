@@ -1,4 +1,6 @@
-﻿namespace UserManagementService.BusinessLogicLayer.Models.Entities.Users
+﻿using UserManagementService.BusinessLogicLayer.Models.Entities.Auth;
+
+namespace UserManagementService.BusinessLogicLayer.Models.Entities.Users
 {
     public class User
     {
@@ -10,7 +12,9 @@
         public string? MiddleName { get; private set; }
         public string? Phone { get; private set; }
         public DateTime CreatedAt { get; private set; }
+
         public ICollection<UserRole> UserRoles { get; private set; } = new List<UserRole>();
+        public ICollection<RefreshToken> RefreshTokens { get; private set; }
 
         public User(
             string email,

@@ -10,7 +10,9 @@
         public string MiddleName { get; set; }
         public string Phone { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool IsActive { get; set; }
 
         public ICollection<UserRoleEntity> UserRoles { get; set; }
-    }
+        public ICollection<RefreshTokenEntity> RefreshTokens { get; set; }
+    } 
 }

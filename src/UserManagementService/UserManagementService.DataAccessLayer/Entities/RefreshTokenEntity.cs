@@ -8,5 +8,7 @@
         public DateTime Expires { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Revoked { get; set; }
+
+        public UserEntity User { get; set; }
     }
 }
