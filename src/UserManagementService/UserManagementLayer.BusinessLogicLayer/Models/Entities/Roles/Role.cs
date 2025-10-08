@@ -4,7 +4,7 @@ namespace UserManagementService.BusinessLogicLayer.Models.Entities.Roles
 {
     public class Role
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }               
 
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();

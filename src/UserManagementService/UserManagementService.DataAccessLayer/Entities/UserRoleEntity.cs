@@ -2,7 +2,7 @@
 {
     public class UserRoleEntity
     {
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public UserEntity User { get; set; }
 
         public int RoleId { get; set; }
