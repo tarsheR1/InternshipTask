@@ -34,6 +34,8 @@ builder.Services.AddServices();
 
 var app = builder.Build();
 
+app.UseCommonMiddlewares();
+
 if (app.Environment.IsDevelopment())
 { 
     app.UseSwagger();
