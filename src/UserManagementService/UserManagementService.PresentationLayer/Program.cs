@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.Data.SqlClient;
 using UserManagementService.BusinessLogicLayer.Extensions;
 using UserManagementService.DataAccessLayer.Extensions;
+using UserManagementService.PresentationLayer.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,7 +35,7 @@ builder.Services.AddServices();
 
 var app = builder.Build();
 
-app.UseCommonMiddlewares();
+app.UseCustomMiddlewares();
 
 if (app.Environment.IsDevelopment())
 { 

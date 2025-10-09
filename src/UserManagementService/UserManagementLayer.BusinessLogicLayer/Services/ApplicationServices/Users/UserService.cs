@@ -41,7 +41,7 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         public async Task<User> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
-            var userEntity = _userRepository.GetByIdAsync(userId, cancellationToken);
+            var userEntity = await _userRepository.GetByIdAsync(userId, cancellationToken);
             User user = _mapper.Map<User>(userEntity);
             return user;
         }

@@ -11,6 +11,6 @@ namespace UserManagementService.BusinessLogicLayer.Interfaces.Auth
 
         Task RevokeTokenAsync(string refreshToken, CancellationToken cancellation);
 
-        Task<AuthResult> RefreshTokenAsync(string refreshToken, Guid userId, CancellationToken cancellation);
+        Task<AuthResult> RefreshTokenAsync(string refreshToken, CancellationToken cancellation);
     }
 };

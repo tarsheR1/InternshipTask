@@ -2,6 +2,8 @@
 using UserManagementService.DataAccessLayer.Entities;
 using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
+using UserManagementService.BusinessLogicLayer.Models.Entities.Auth;
+using AutoMapper;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {
@@ -9,9 +11,11 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
     {
         private readonly IRefreshTokenRepository _tokenRepository;
         private readonly TimeSpan _tokenLifetime = TimeSpan.FromDays(30);
+        private readonly IMapper _mapper;
 
-        public RefreshTokenService(IRefreshTokenRepository tokenRepository)
+        public RefreshTokenService(IRefreshTokenRepository tokenRepository, IMapper mapper)
         {
+            _mapper = mapper;
             _tokenRepository = tokenRepository;
         }
 
@@ -31,13 +35,16 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
             return tokenValue;
         }
 
-        public async Task<bool> ValidateRefreshTokenAsync(string token, CancellationToken cancellationToken)
+        public async Task<RefreshToken> GetRefreshTokenAsync(string token, CancellationToken cancellationToken)
         {
-            var storedToken = await _tokenRepository.GetByTokenAsync(token, cancellationToken);
+            return  _mapper.Map<RefreshToken>(await _tokenRepository.GetByTokenAsync(token, cancellationToken));
+        }
 
-            return storedToken != null &&
-                   storedToken.Revoked == null &&
-                   storedToken.Expires > DateTime.UtcNow;
+        public async Task<bool> ValidateRefreshTokenAsync(RefreshToken token, CancellationToken cancellationToken)
+        {
+            return token != null &&
+                   token.Revoked == null &&
+                   token.Expires > DateTime.UtcNow;
         }
 
         public async Task RevokeRefreshTokenAsync(string token, CancellationToken cancellationToken)

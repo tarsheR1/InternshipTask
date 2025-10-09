@@ -6,11 +6,8 @@ using UserManagementService.BusinessLogicLayer.Interfaces.Auth;
 using UserManagementService.BusinessLogicLayer.Interfaces.Infrastructure;
 using UserManagementService.BusinessLogicLayer.Models.Entities.Users;
 using UserManagementService.BusinessLogicLayer.Queries;
-using UserManagementService.DataAccessLayer.Entities;
-using UserManagementService.DataAccessLayer.Interfaces.Repositories;
 using UserManagementService.BusinessLogicLayer.Settings;
 using UserManagementService.BusinessLogicLayer.Interfaces.Users;
-using System.Threading;
 
 namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.Auth
 {
@@ -91,16 +88,15 @@ namespace UserManagementService.BusinessLogicLayer.Services.ApplicationServices.
 
         public async Task<AuthResult> RefreshTokenAsync(
             string refreshToken, 
-            Guid userId, 
             CancellationToken cancellation)
         {
-            if (!await _refreshTokenService.ValidateRefreshTokenAsync(refreshToken, cancellation))
+            var storedToken = await _refreshTokenService.GetRefreshTokenAsync(refreshToken, cancellation);
+            if (!await _refreshTokenService.ValidateRefreshTokenAsync(storedToken, cancellation))
                 throw new SecurityException("Invalid refresh token");
 
-            await _refreshTokenService.RevokeRefreshTokenAsync(refreshToken, cancellation);
+            var user = await _userService.GetUserByIdAsync(storedToken.UserId);
 
-            var userEntity = await _userService.GetUserByIdAsync(userId, cancellation);
-            var user = _mapper.Map<User>(userEntity);
+            await _refreshTokenService.RevokeRefreshTokenAsync(refreshToken, cancellation);
 
             var newAccessToken = _tokenGenerator.GenerateToken(user);
             var newRefreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(user.Id, cancellation);

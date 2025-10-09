@@ -75,12 +75,11 @@ namespace UserManagementService.PresentationLayer.Controllers
         [HttpPut("tokens")]
         public async Task<IActionResult> RefreshTokenAsync(
             [FromBody] RefreshTokenRequestDto request,
-            Guid userId,
             CancellationToken cancellationToken)
         {
             try
             {
-                var authResult = await _authService.RefreshTokenAsync(request.RefreshToken, userId, cancellationToken);
+                var authResult = await _authService.RefreshTokenAsync(request.RefreshToken, cancellationToken);
 
                 var response = new AuthResponseDto(
                     AccessToken: authResult.AccessToken,
